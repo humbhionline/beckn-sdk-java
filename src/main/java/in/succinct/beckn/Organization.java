@@ -1,9 +1,6 @@
 package in.succinct.beckn;
 
 public class Organization extends BecknObject {
-    public Organization() {
-        super();
-    }
     public String getName(){
         return get("name");
     }

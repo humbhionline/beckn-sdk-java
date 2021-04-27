@@ -71,6 +71,9 @@ public class BecknObject extends BecknAware<JSONObject> {
     public void set(String key, Double value){
         set(key,value.toString());
     }
+    public void set(String key, int value){
+        set(key,Integer.toString(value));
+    }
     public Date getDate(String key, DateFormat format){
         String value = get(key);
         if (value == null){

@@ -28,7 +28,7 @@ public class Payment extends BecknObject {
         }
     }
     public Params getParams(){
-        return get("params");
+        return get(Params.class,"params");
     }
     public void setParams(Params params){
         set("params",params);
@@ -67,7 +67,7 @@ public class Payment extends BecknObject {
     }
 
     public Time getTime(){
-        return get("time");
+        return get(Time.class,"time");
     }
     public void setTime(Time time){
         set("time",time);

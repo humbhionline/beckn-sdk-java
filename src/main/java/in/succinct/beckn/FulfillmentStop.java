@@ -6,27 +6,26 @@ public class FulfillmentStop extends BecknObject {
     }
 
     public Location getLocation(){
-        return get("location");
+        return get(Location.class,"location");
     }
     public void setLocation(Location location){
         set("location",location);
     }
 
     public Time getTime(){
-        return get("time");
+        return get(Time.class, "time");
     }
     public void setTime(Time time){
         set("time",time);
     }
-
     public Descriptor getInstructions(){
-        return get("instructions");
+        return get(Descriptor.class,"instructions");
     }
     public void setInstructions(Descriptor instructions){
         set("instructions",instructions);
     }
     public Contact getContact(){
-        return get("contact");
+        return get(Contact.class,"contact");
     }
     public void setContact(Contact contact){
         set("contact",contact);

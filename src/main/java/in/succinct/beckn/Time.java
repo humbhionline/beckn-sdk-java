@@ -30,7 +30,7 @@ public class Time extends BecknObject {
     }
 
     public Range getRange(){
-        return get("range");
+        return get(Range.class,"range");
     }
     public void setRange(Range range){
         set("range",range);

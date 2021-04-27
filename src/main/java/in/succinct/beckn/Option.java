@@ -1,7 +1,5 @@
 package in.succinct.beckn;
 
-import org.json.simple.JSONObject;
-
 public class Option extends BecknObjectWithId {
     public Option() {
         super();
