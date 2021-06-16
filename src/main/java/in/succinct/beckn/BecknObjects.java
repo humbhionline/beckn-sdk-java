@@ -4,8 +4,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Iterator;
 
-public class BecknObjects<T extends BecknObject> extends BecknAware<JSONArray> {
+public class BecknObjects<T extends BecknObject> extends BecknAware<JSONArray> implements  Iterable<T>{
     Class<T> clazz ;
     public BecknObjects(){
         super(new JSONArray());
@@ -45,4 +46,19 @@ public class BecknObjects<T extends BecknObject> extends BecknAware<JSONArray> {
     }
 
 
+    @Override
+    public Iterator<T> iterator() {
+        return new Iterator<>() {
+            int i = 0;
+            @Override
+            public boolean hasNext() {
+                return i < size();
+            }
+
+            @Override
+            public T next() {
+                return get(i++);
+            }
+        };
+    }
 }
