@@ -2,16 +2,16 @@ package in.succinct.beckn;
 
 import com.venky.core.collections.IgnoreCaseMap;
 import com.venky.core.collections.SequenceMap;
+import com.venky.core.security.Crypt;
 import com.venky.core.util.ObjectHolder;
 import com.venky.extension.Registry;
 import org.bouncycastle.crypto.CryptoException;
 import org.bouncycastle.crypto.DataLengthException;
-import org.bouncycastle.crypto.Signer;
-import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
-import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
-import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.json.simple.JSONObject;
+import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
+import org.bouncycastle.math.ec.rfc8032.Ed25519;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -118,7 +118,7 @@ public class Request extends BecknObject {
         map.put("keyId",keyBuilder.toString());
         map.put("algorithm","xed25519");
         long created_at = System.currentTimeMillis()/1000L;
-        long expires_at = created_at + getContext().getTtl();
+        long expires_at = created_at + (getContext() == null ? 10 : getContext().getTtl());
         map.put("created",Long.toString(created_at));
         map.put("expires",Long.toString(expires_at));
         map.put("headers","(created) (expires) digest");
@@ -127,29 +127,22 @@ public class Request extends BecknObject {
     }
 
 
-    public static String generateSignature(String req, String pk) {
+    private static String SIGNATURE_ALGO = EdDSAParameterSpec.Ed25519;
+    public static String generateSignature(String req, String privateKey) {
         try {
-            Ed25519PrivateKeyParameters privateKey = new Ed25519PrivateKeyParameters(Base64.getDecoder().decode(pk.getBytes()), 0);
-            Signer sig = new Ed25519Signer();
-            sig.init(true, privateKey);
-            sig.update(req.getBytes(), 0, req.length());
-            byte[] s1 = sig.generateSignature();
-            return Base64.getEncoder().encodeToString(s1);
-        } catch (DataLengthException | CryptoException e) {
+            PrivateKey key = Crypt.getInstance().getPrivateKey(SIGNATURE_ALGO,privateKey);
+            return Crypt.getInstance().generateSignature(req,SIGNATURE_ALGO,key);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public static boolean verifySignature(String sign, String requestData, String dbPublicKey) {
+    public static boolean verifySignature(String sign, String requestData, String b64PublicKey) {
         boolean isVerified = false;
         try {
-            Ed25519PublicKeyParameters publicKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(dbPublicKey), 0);
-            Signer sv = new Ed25519Signer();
-            sv.init(false, publicKey);
-            sv.update(requestData.getBytes(), 0, requestData.length());
-            byte[] decodedSign = Base64.getDecoder().decode(sign);
-            return sv.verifySignature(decodedSign);
+            PublicKey key = Crypt.getInstance().getPublicKey(SIGNATURE_ALGO,b64PublicKey);
+            return Crypt.getInstance().verifySignature(requestData,sign,SIGNATURE_ALGO,key);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
