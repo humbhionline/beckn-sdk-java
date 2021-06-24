@@ -5,14 +5,10 @@ import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
 import com.venky.core.util.ObjectHolder;
 import com.venky.extension.Registry;
-import org.bouncycastle.crypto.CryptoException;
-import org.bouncycastle.crypto.DataLengthException;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
-import org.bouncycastle.math.ec.rfc8032.Ed25519;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Base64;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -50,7 +46,7 @@ public class Request extends BecknObject {
 
 
 
-    private String getSigningString(long created_at, long expires_at) {
+    public String getSigningString(long created_at, long expires_at) {
         StringBuilder builder = new StringBuilder();
         builder.append("(created): ").append(created_at);
         builder.append("\n(expires): ").append(expires_at);
@@ -92,7 +88,7 @@ public class Request extends BecknObject {
         return auth.toString();
     }
 
-    private Map<String, String> extractAuthorizationParams(String header, Map<String, String> httpRequestHeaders) {
+    public Map<String, String> extractAuthorizationParams(String header, Map<String, String> httpRequestHeaders) {
         String authorization = httpRequestHeaders.get(header).trim();
         String signatureToken  = "Signature ";
 

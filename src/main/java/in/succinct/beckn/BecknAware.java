@@ -1,12 +1,14 @@
 package in.succinct.beckn;
 
-import org.bouncycastle.crypto.digests.Blake2bDigest;
+import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
 
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.Security;
 import java.util.Base64;
 
@@ -54,13 +56,12 @@ public abstract class BecknAware<T extends JSONAware> implements Serializable {
     }
 
     public static String generateBlakeHash(String req) {
-        Blake2bDigest blake2bDigest = new Blake2bDigest(512);
-        byte[] test = req.getBytes();
-        blake2bDigest.update(test, 0, test.length);
-        byte[] hash = new byte[blake2bDigest.getDigestSize()];
-        blake2bDigest.doFinal(hash, 0);
+        MessageDigest digest = new Blake2b512();
+        digest.reset();
+        digest.update(req.getBytes(StandardCharsets.UTF_8));
+        byte[] hash = digest.digest();
         String hex = Hex.toHexString(hash);
-        String bs64 = Base64.getUrlEncoder().encodeToString(hex.getBytes());
+        String bs64 = Base64.getEncoder().encodeToString(hex.getBytes()) ;
         return bs64;
     }
 

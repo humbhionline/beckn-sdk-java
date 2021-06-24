@@ -1,15 +1,29 @@
 package in.succinct.beckn;
 
+import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
+import org.bouncycastle.crypto.digests.Blake2bDigest;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
+import org.bouncycastle.jcajce.provider.digest.Blake2b;
+import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b256;
+import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b384;
+import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.encoders.Hex;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
+import java.security.MessageDigest;
+import java.security.PrivateKey;
+import java.security.Security;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 
 public class SignatureTest {
@@ -29,6 +43,87 @@ public class SignatureTest {
 
 
         Assert.assertTrue(Request.verifySignature(sign,payload,publicKey));
+
+    }
+
+    @Test
+    public void testNirmal() throws Exception {
+        String payload = "{\n" +
+                "    \"context\": {\n" +
+                "      \"domain\": \"test\",\n" +
+                "      \"country\": \"string\",\n" +
+                "      \"city\": \"string\",\n" +
+                "      \"action\": \"on_support\",\n" +
+                "      \"core_version\": \"string\",\n" +
+                "      \"bap_id\": \"string\",\n" +
+                "      \"bap_uri\": \"string\",\n" +
+                "      \"bpp_id\": \"string\",\n" +
+                "      \"bpp_uri\": \"string\",\n" +
+                "      \"transaction_id\": \"string\",\n" +
+                "      \"message_id\": \"string\",\n" +
+                "      \"timestamp\": \"2021-03-30T12:25:31.333Z\",\n" +
+                "      \"key\": \"string\",\n" +
+                "      \"ttl\": \"string\"\n" +
+                "    },\n" +
+                "    \"message\": {\n" +
+                "      \"phone\": \"string\",\n" +
+                "      \"email\": \"user@example.com\",\n" +
+                "      \"uri\": \"string\"\n" +
+                "    }\n" +
+                "  }\n";
+
+        System.out.println("Request.hash :\n" + Request.generateBlakeHash(payload));
+
+
+        Map<String,String> header = new HashMap<>();
+        //header.put("Authorization","Signature keyId=\"MOCK_SUB_ID|key1|xed25519\" algorithm=\"xed25519\" created=\"1624423460\" expires=\"1624427060\" headers=\"(created) (expires) digest\" signature=\"VM5BwNtKk3wZy4a37lGMJDta-gEyIeOqbNCNR2rqqpy52ejsPuRAVcwZsTU7BdUQCyl8nQ-TXbr81YO8_NaOAA\"");
+
+        Request request = new Request(payload);
+        //KeyPair pair = Crypt.getInstance().generateKeyPair(EdDSAParameterSpec.Ed25519,256);
+
+        String privateKey = "MFECAQEwBQYDK2VwBCIEIHvkevAws5WgG7JQ/C92R/vnIyY7no66orNDNHATNp4xgSEAQTQgyHhsZC9xR9TDdjtkwFVGE6+J3LqeeRdUABWIXAU=";//Crypt.getInstance().getBase64Encoded(pair.getPrivate());
+        String publicKey  = "MCowBQYDK2VwAyEAQTQgyHhsZC9xR9TDdjtkwFVGE6+J3LqeeRdUABWIXAU=";//Crypt.getInstance().getBase64Encoded(pair.getPublic());
+
+        System.out.println("PrivateKey:" + privateKey);
+        System.out.println("PublicKey:" + publicKey);
+
+
+        Map<String,String> map = new SequenceMap<>();
+        StringBuilder keyBuilder = new StringBuilder();
+        keyBuilder.append("MOCK_SUB_ID").append('|')
+                .append("key1").append('|').append("xed25519");
+
+        map.put("keyId",keyBuilder.toString());
+        map.put("algorithm","xed25519");
+        long created_at = 1624423460;
+        long expires_at = 1624423460;
+        map.put("created",Long.toString(created_at));
+        map.put("expires",Long.toString(expires_at));
+        map.put("headers","(created) (expires) digest");
+        map.put("signature",Request.generateSignature(
+                Request.generateBlakeHash(request.getSigningString(created_at,expires_at)),privateKey));
+
+        StringBuilder auth = new StringBuilder("Signature");
+        map.forEach((k,v)-> auth.append(" ").append(k).append("=\"").append(v).append("\""));
+        System.out.println(auth);
+        header.put("Authorization",auth.toString());
+
+
+        Map<String,String> params = request.extractAuthorizationParams("Authorization",header);
+        String signature = params.get("signature");
+        String created = params.get("created");
+        String expires = params.get("expires");
+        String keyId = params.get("keyId");
+        StringTokenizer keyTokenizer = new StringTokenizer(keyId,"|");
+        String subscriberId = keyTokenizer.nextToken();
+        String uniqueKeyId = keyTokenizer.nextToken();
+
+        String hashedSigningString = request.generateBlakeHash(request.getSigningString(Long.valueOf(created),Long.valueOf(expires)));
+
+
+
+        Assert.assertTrue(Request.verifySignature(signature,hashedSigningString,publicKey));
+
 
     }
 
