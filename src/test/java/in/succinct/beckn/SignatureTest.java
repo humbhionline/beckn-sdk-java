@@ -2,7 +2,20 @@ package in.succinct.beckn;
 
 import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.digests.Blake2bDigest;
+import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
+import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
+import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.params.Ed448KeyGenerationParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.crypto.util.OpenSSHPrivateKeyUtil;
+import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
+import org.bouncycastle.jcajce.interfaces.EdDSAKey;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jcajce.provider.digest.Blake2b;
 import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b256;
@@ -10,15 +23,19 @@ import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b384;
 import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.math.ec.rfc8032.Ed25519;
 import org.bouncycastle.util.encoders.Hex;
 import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Base64;
 import java.util.HashMap;
@@ -27,6 +44,13 @@ import java.util.StringTokenizer;
 
 
 public class SignatureTest {
+    @org.junit.BeforeClass
+    public static void setup(){
+        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+            Security.addProvider(new BouncyCastleProvider());
+        }
+    }
+
     @Test
     public void testsign() throws Exception{
         String payload = "{\"subscriber_id\":\"mandi.succinct.in\",\"challenge\":\"P+3enc5zd44uKYIs3mg8yqOHpHPH+zJjap9buhrHg+Gx+rXFyRgVSoeXJADXmqbOGwXjJ9hkv\\/y++FG3LuSNcSw6GMv8uwhapuTbcdhIgZo6JUBgBaiHJMzaoes0euyogGyY7ktWWNiH7mti6b2N3ZTOtYlGkFM+rlImSEBEX\\/skaoH4mlvIu448sup1EjRwqQqVq\\/PMacrHJgoLk72QyOH41U\\/Gv46NBmB5lgqmrQc3O+WW5iCGht9yqC2cWaSytK0E7Xp7d2LKtQLgUGHj\\/DNk9i6\\/oPuIN5NSIwaUkC2H1UQ7N0iLEoTyS+X7zHYMcpXGDtQk5Y35iAuoozpuvA==\"}";
@@ -43,6 +67,18 @@ public class SignatureTest {
 
 
         Assert.assertTrue(Request.verifySignature(sign,payload,publicKey));
+
+    }
+    @Test
+    public void testKeySize() throws IOException {
+        byte[] blob = Base64.getDecoder().decode("D6P6S2zx8i/YMSrsi6+3oNTX7cTgbTY1iHX7TqW6moU=");
+        Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(blob,0);
+        String payload = "{\"subscriber_id\": \"beckn.org\", \"type\": \"BAP\", \"domain\": \"MOBILITY\", \"country\": \"IND\", \"city\": \"Pune\"}";
+        Ed25519Signer signer = new Ed25519Signer();
+        signer.init(false,publicKeyParameters);
+        byte[] pb = payload.getBytes(StandardCharsets.UTF_8);
+        signer.update(pb,0,pb.length);
+        Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode("4PwpO1COScfxzhBHNYwfKAvMvFMOQzcscyF/IGZlq26CR6dFpujLaZC8dezGvvWe+mJVvZOkJ7zHdmtWent6Dw==")));
 
     }
 
