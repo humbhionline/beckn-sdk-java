@@ -2,6 +2,11 @@ package in.succinct.beckn;
 
 import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.KeyGenerationParameters;
 import org.bouncycastle.crypto.digests.Blake2bDigest;
@@ -14,6 +19,7 @@ import org.bouncycastle.crypto.params.Ed448KeyGenerationParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.bouncycastle.crypto.util.OpenSSHPrivateKeyUtil;
 import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
+import org.bouncycastle.crypto.util.PrivateKeyFactory;
 import org.bouncycastle.jcajce.interfaces.EdDSAKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
@@ -22,7 +28,12 @@ import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b256;
 import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b384;
 import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
+import org.bouncycastle.jce.ECNamedCurveTable;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
+import org.bouncycastle.jce.spec.ECPrivateKeySpec;
+import org.bouncycastle.jce.spec.ECPublicKeySpec;
+import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.rfc8032.Ed25519;
 import org.bouncycastle.util.encoders.Hex;
 import org.json.simple.JSONObject;
@@ -31,12 +42,22 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.AlgorithmParameters;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +93,7 @@ public class SignatureTest {
     @Test
     public void testKeySize() throws IOException {
         byte[] blob = Base64.getDecoder().decode("D6P6S2zx8i/YMSrsi6+3oNTX7cTgbTY1iHX7TqW6moU=");
+        PublicKey key = Crypt.getInstance().getPublicKey("X25519","D6P6S2zx8i/YMSrsi6+3oNTX7cTgbTY1iHX7TqW6moU=");
         Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(blob,0);
         String payload = "{\"subscriber_id\": \"beckn.org\", \"type\": \"BAP\", \"domain\": \"MOBILITY\", \"country\": \"IND\", \"city\": \"Pune\"}";
         Ed25519Signer signer = new Ed25519Signer();
@@ -80,6 +102,98 @@ public class SignatureTest {
         signer.update(pb,0,pb.length);
         Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode("4PwpO1COScfxzhBHNYwfKAvMvFMOQzcscyF/IGZlq26CR6dFpujLaZC8dezGvvWe+mJVvZOkJ7zHdmtWent6Dw==")));
 
+
+    }
+    @Test
+    public void testKeySizeNew() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        String algo = "Ed25519";
+        KeyPair pair = Crypt.getInstance().generateKeyPair(algo,256);
+        String pbk  = Base64.getEncoder().encodeToString(pair.getPublic().getEncoded());
+        String pvk  = Base64.getEncoder().encodeToString(pair.getPrivate().getEncoded());
+
+
+
+        PublicKey key = Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO,pbk);
+        PrivateKey privateKey = Crypt.getInstance().getPrivateKey(Request.SIGNATURE_ALGO,pvk);
+
+        String payload = "Hello";
+        String sign1 = Crypt.getInstance().generateSignature(payload,Request.SIGNATURE_ALGO,privateKey);
+        System.out.println("Venky's Sign :" + sign1);
+        Crypt.getInstance().verifySignature(payload,sign1,Request.SIGNATURE_ALGO,key);
+
+        Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pbk),0);
+
+        Ed25519Signer signer2 = new Ed25519Signer();
+        signer2.init(false,publicKeyParameters);
+        signer2.update(payload.getBytes(StandardCharsets.UTF_8),0,payload.length());
+        signer2.verifySignature(Base64.getDecoder().decode(sign1));
+
+
+
+        Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(Base64.getDecoder().decode(pvk),0);
+        Ed25519Signer signer = new Ed25519Signer();
+        signer.init(true,privateKeyParameters);
+        signer.update(payload.getBytes(StandardCharsets.UTF_8),0,payload.length());
+        String sign2 = Base64.getEncoder().encodeToString(signer.generateSignature());
+
+
+        System.out.println("Sign2:" + sign2);
+
+        Crypt.getInstance().verifySignature(payload,sign2,Request.SIGNATURE_ALGO,key);
+
+        signer2.update(payload.getBytes(StandardCharsets.UTF_8),0,payload.length());
+        signer2.verifySignature(Base64.getDecoder().decode(sign2));
+
+        Assert.assertEquals(sign1,sign2);
+    }
+    @Test
+    public void testKeySizeNew2() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException, InvalidKeySpecException {
+        String algo = "Ed25519";
+        Ed25519KeyPairGenerator pairGenerator = new Ed25519KeyPairGenerator();
+        pairGenerator.init(new Ed25519KeyGenerationParameters(new SecureRandom()));
+        AsymmetricCipherKeyPair pair = pairGenerator.generateKeyPair();
+        Ed25519PrivateKeyParameters privateKeyParameters = (Ed25519PrivateKeyParameters) pair.getPrivate();
+        Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters)pair.getPublic();
+        KeyFactory keyFactory = KeyFactory.getInstance("Ed25519");
+        PublicKey key = keyFactory.generatePublic(
+                new X509EncodedKeySpec(new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                        publicKeyParameters.getEncoded()).getEncoded()));
+        PrivateKey privateKey = keyFactory.generatePrivate(
+                new PKCS8EncodedKeySpec(new PrivateKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                                new DEROctetString(privateKeyParameters.getEncoded())).getEncoded()));
+
+
+        /*
+        PublicKey key = Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO,pbk);
+        PrivateKey privateKey = Crypt.getInstance().getPrivateKey(Request.SIGNATURE_ALGO,pvk);
+        */
+
+        String payload = "Hello";
+        String sign1 = Crypt.getInstance().generateSignature(payload,Request.SIGNATURE_ALGO,privateKey);
+        System.out.println("Venky's Sign :" + sign1);
+        Crypt.getInstance().verifySignature(payload,sign1,Request.SIGNATURE_ALGO,key);
+
+        Ed25519Signer signer2 = new Ed25519Signer();
+        signer2.init(false,publicKeyParameters);
+        signer2.update(payload.getBytes(StandardCharsets.UTF_8),0,payload.length());
+        signer2.verifySignature(Base64.getDecoder().decode(sign1));
+
+
+
+        Ed25519Signer signer = new Ed25519Signer();
+        signer.init(true,privateKeyParameters);
+        signer.update(payload.getBytes(StandardCharsets.UTF_8),0,payload.length());
+        String sign2 = Base64.getEncoder().encodeToString(signer.generateSignature());
+
+
+        System.out.println("Sign2:" + sign2);
+
+        Crypt.getInstance().verifySignature(payload,sign2,Request.SIGNATURE_ALGO,key);
+
+        signer2.update(payload.getBytes(StandardCharsets.UTF_8),0,payload.length());
+        signer2.verifySignature(Base64.getDecoder().decode(sign2));
+
+        Assert.assertEquals(sign1,sign2);
     }
 
     @Test

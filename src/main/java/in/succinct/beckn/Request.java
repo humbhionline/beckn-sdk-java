@@ -124,6 +124,11 @@ public class Request extends BecknObject {
 
 
     public static String SIGNATURE_ALGO = EdDSAParameterSpec.Ed25519;
+    public static int SIGNATURE_ALGO_KEY_LENGTH = 256;
+
+    public static String ENCRYPTION_ALGO = Crypt.KEY_ALGO;
+    public static int ENCRYPTION_ALGO_KEY_LENGTH = 2048;
+
     public static String generateSignature(String req, String privateKey) {
         try {
             PrivateKey key = Crypt.getInstance().getPrivateKey(SIGNATURE_ALGO,privateKey);

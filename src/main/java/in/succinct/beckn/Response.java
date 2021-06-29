@@ -1,6 +1,9 @@
 package in.succinct.beckn;
 
 public class Response extends BecknObject {
+    public Response(String payload){
+        super(payload);
+    }
     public Response(Context context, Acknowledgement acknowledgement){
         super();
         setContext(context);
