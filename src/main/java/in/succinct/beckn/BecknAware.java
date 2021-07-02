@@ -46,7 +46,7 @@ public abstract class BecknAware<T extends JSONAware> implements Serializable {
     @Override
     public String toString() {
         if (payload == null){
-            payload = value.toJSONString();
+            return value.toJSONString();
         }
         return payload;
     }

@@ -25,10 +25,24 @@ public class Order extends BecknObjectWithId {
     public Items getItems(){
         return get(Items.class,"items");
     }
-
     public void setItems(Items  items){
         set("items",items.getInner());
     }
+
+    public AddOns getAddOns(){
+        return get(AddOns.class, "add_ons");
+    }
+    public void setAddOns(AddOns add_ons){
+        set("add_ons",add_ons);
+    }
+
+    public Offers getOffers(){
+        return get(Offers.class, "offers");
+    }
+    public void setOffers(Offers offers){
+        set("offers",offers);
+    }
+
 
     public Billing getBilling(){
         return get(Billing.class,"billing");
@@ -43,6 +57,7 @@ public class Order extends BecknObjectWithId {
     public void setFulfillment(Fulfillment fulfillment){
         set("fulfillment",fulfillment.getInner());
     }
+
     public Quote getQuote(){
         return get(Quote.class,"quote");
     }

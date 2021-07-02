@@ -4,6 +4,9 @@ public class Intent extends BecknObject {
     public Intent(){
         super();
     }
+    public Intent(String payload){
+        super(payload);
+    }
 
     public Fulfillment getFulfillment(){
         return get(Fulfillment.class, "fulfillment");

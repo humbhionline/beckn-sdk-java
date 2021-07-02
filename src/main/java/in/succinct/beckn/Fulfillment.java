@@ -48,11 +48,21 @@ public class Fulfillment extends BecknObjectWithId {
         set("agent",agent);
     }
 
-    public String getState(){
-        return get("state");
+    public State getState(){
+        return get(State.class, "state");
+    }
+    public void setState(State state){
+        set("state",state);
     }
     public void setState(String state){
-        set("state",state);
+        getState().getDescriptor().setCode(state);
+    }
+
+    public Customer getCustomer(){
+        return get(Customer.class, "customer");
+    }
+    public void setCustomer(Customer customer){
+        set("customer",customer);
     }
 
 }

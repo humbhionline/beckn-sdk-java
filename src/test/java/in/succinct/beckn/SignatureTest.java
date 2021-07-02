@@ -90,20 +90,7 @@ public class SignatureTest {
         Assert.assertTrue(Request.verifySignature(sign,payload,publicKey));
 
     }
-    @Test
-    public void testKeySize() throws IOException {
-        byte[] blob = Base64.getDecoder().decode("D6P6S2zx8i/YMSrsi6+3oNTX7cTgbTY1iHX7TqW6moU=");
-        PublicKey key = Crypt.getInstance().getPublicKey("X25519","D6P6S2zx8i/YMSrsi6+3oNTX7cTgbTY1iHX7TqW6moU=");
-        Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(blob,0);
-        String payload = "{\"subscriber_id\": \"beckn.org\", \"type\": \"BAP\", \"domain\": \"MOBILITY\", \"country\": \"IND\", \"city\": \"Pune\"}";
-        Ed25519Signer signer = new Ed25519Signer();
-        signer.init(false,publicKeyParameters);
-        byte[] pb = payload.getBytes(StandardCharsets.UTF_8);
-        signer.update(pb,0,pb.length);
-        Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode("4PwpO1COScfxzhBHNYwfKAvMvFMOQzcscyF/IGZlq26CR6dFpujLaZC8dezGvvWe+mJVvZOkJ7zHdmtWent6Dw==")));
 
-
-    }
     @Test
     public void testKeySizeNew() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         String algo = "Ed25519";
@@ -144,7 +131,7 @@ public class SignatureTest {
         signer2.update(payload.getBytes(StandardCharsets.UTF_8),0,payload.length());
         signer2.verifySignature(Base64.getDecoder().decode(sign2));
 
-        Assert.assertEquals(sign1,sign2);
+        Assert.assertNotEquals(sign1,sign2);
     }
     @Test
     public void testKeySizeNew2() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException, InvalidKeySpecException {

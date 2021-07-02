@@ -1,10 +1,10 @@
 package in.succinct.beckn;
 
 public class Quantity extends BecknObject{
-    public double getMeasure(){
-        return getDouble("measure");
+    public Measure getMeasure(){
+        return get(Measure.class, "measure");
     }
-    public void setMeasure(double measure){
+    public void setMeasure(Measure measure){
         set("measure",measure);
     }
     public int getCount(){

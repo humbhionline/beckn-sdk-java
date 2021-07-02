@@ -76,4 +76,11 @@ public class Address extends BecknObject {
         setPinCode(zipCode);
     }
 
+    public String getAreaCode(){
+        return getPinCode();
+    }
+    public void setAreaCode(String areaCode){
+        setPinCode(areaCode);
+    }
+
 }

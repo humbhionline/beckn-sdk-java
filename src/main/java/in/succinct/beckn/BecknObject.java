@@ -88,16 +88,16 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
     public double getDouble(String key){
-        return Double.valueOf(get(key,0.0D));
+        return Double.valueOf(String.valueOf(get(key,0.0D)));
     }
     public int getInteger(String key){
-        return Integer.valueOf(get(key,0));
+        return Integer.valueOf(String.valueOf(get(key,0)));
     }
     public long getLong(String key){
-        return Long.valueOf(get(key,0L));
+        return Long.valueOf(String.valueOf(get(key,0L)));
     }
     public boolean getBoolean(String key){
-        return Boolean.valueOf(get(key,false));
+        return Boolean.valueOf(String.valueOf(get(key,false)));
     }
 
 

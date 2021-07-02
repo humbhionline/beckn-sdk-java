@@ -5,11 +5,22 @@ public class Customer extends Person{
         super();
     }
 
-    public Contact getContact(){
-        return get(Contact.class,"contact");
+    public String getEmail(){
+        return get("email");
     }
-
-    public void setContact(Contact contact){
-        set("contact",contact);
+    public void setEmail(String email){
+        set("email",email);
+    }
+    public String getPhone(){
+        return get("phone");
+    }
+    public void setPhone(String phone){
+        set("phone",phone);
+    }
+    public Tags getTags(){
+        return get(Tags.class, "tags");
+    }
+    public void setTags(Tags tags){
+        set("tags",tags);
     }
 }

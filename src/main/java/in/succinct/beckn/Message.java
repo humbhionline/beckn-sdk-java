@@ -4,6 +4,9 @@ public class Message extends BecknObject {
     public Message() {
         super();
     }
+    public Message(String payload){
+        super(payload);
+    }
     public Intent getIntent(){
         return get(Intent.class,"intent");
     }
@@ -35,5 +38,12 @@ public class Message extends BecknObject {
     }
     public Quote getQuote(){
         return get(Quote.class,"quote");
+    }
+
+    public Initialized getInitialized(){
+        return get(Initialized.class, "initialized");
+    }
+    public void setInitialized(Initialized initialized){
+        set("initialized",initialized);
     }
 }

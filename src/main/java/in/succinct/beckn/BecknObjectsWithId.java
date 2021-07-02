@@ -8,6 +8,7 @@ import java.util.Map;
 public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObjects<T> {
     public BecknObjectsWithId(){
         super();
+        loadMap();
     }
 
     public void add(T t){

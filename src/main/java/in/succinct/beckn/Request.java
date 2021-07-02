@@ -118,7 +118,7 @@ public class Request extends BecknObject {
         map.put("created",Long.toString(created_at));
         map.put("expires",Long.toString(expires_at));
         map.put("headers","(created) (expires) digest");
-        map.put("signature",generateSignature(getSigningString(created_at,expires_at),getPrivateKey(subscriberId,uniqueKeyId)));
+        map.put("signature",generateSignature(generateBlakeHash(getSigningString(created_at,expires_at)),getPrivateKey(subscriberId,uniqueKeyId)));
         return map;
     }
 

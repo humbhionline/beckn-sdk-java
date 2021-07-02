@@ -1,7 +1,5 @@
 package in.succinct.beckn;
 
-import org.json.simple.JSONObject;
-
 import java.time.Duration;
 import java.util.Date;
 

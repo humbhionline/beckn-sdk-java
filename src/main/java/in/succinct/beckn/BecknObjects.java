@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 import java.lang.reflect.ParameterizedType;
 import java.util.Iterator;
 
-public class BecknObjects<T extends BecknObject> extends BecknAware<JSONArray> implements  Iterable<T>{
+public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<T>{
     Class<T> clazz ;
     public BecknObjects(){
         super(new JSONArray());
@@ -15,17 +15,30 @@ public class BecknObjects<T extends BecknObject> extends BecknAware<JSONArray> i
     }
 
     public void add(T t){
-        getInner().add(t.getInner());
+        if (t instanceof BecknObject){
+            getInner().add(((BecknObject)t).getInner());
+        }else {
+            getInner().add(t);
+        }
     }
     public void remove(T t){
-        getInner().remove(t.getInner());
+        if (t instanceof BecknObject){
+            getInner().remove(((BecknObject)t).getInner());
+        }else {
+            getInner().remove(t);
+        }
     }
 
     public T get(int index){
-        JSONObject element = (JSONObject) getInner().get(index);
+        Object element = getInner().get(index);
         try {
-            T t =  clazz.getConstructor().newInstance();
-            t.setInner(element);
+            T t ;
+            if (BecknObject.class.isAssignableFrom(clazz)){
+                t = clazz.getConstructor().newInstance();
+                ((BecknObject)t).setInner((JSONObject) element);
+            }else {
+                t = clazz.getConstructor().newInstance(String.valueOf(element));
+            }
             return t;
         }catch (Exception ex){
             throw new RuntimeException(ex);

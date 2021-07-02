@@ -1,34 +1,47 @@
 package in.succinct.beckn;
 
-import org.json.simple.JSONObject;
+import java.util.Date;
 
 public class Billing extends BecknObject {
     public Billing(){
         super();
     }
 
-    public Person getCustomer(){
-        return get(Person.class,"customer");
+    public String getName(){
+        return get("name");
     }
-    public void setCustomer(Person person){
-        set("customer",person);
+    public void setName(String name){
+        set("name",name);
     }
 
     public Organization getOrganization(){
         return get(Organization.class,"organization");
     }
-
     public void setOrganization(Organization organization){
         set("organization",organization);
     }
 
 
-    public BillToLocation getLocation(){
-        return get(BillToLocation.class,"location");
+    public Address getAddress(){
+        return get(Address.class, "address");
     }
-    public void setLocation(BillToLocation location){
-        set("location",location);
+    public void setAddress(Address address){
+        set("address",address);
     }
+
+    public String getEmail(){
+        return get("email");
+    }
+    public void setEmail(String email){
+        set("email",email);
+    }
+    public String getPhone(){
+        return get("phone");
+    }
+    public void setPhone(String phone){
+        set("phone",phone);
+    }
+
 
     public String getTaxNumber(){
         return get("tax_number");
@@ -44,20 +57,19 @@ public class Billing extends BecknObject {
     public void setTime(Time time){
         set("time",time);
     }
-
-    public static class BillToLocation extends Location {
-
-        public BillToLocation() {
-            super();
-        }
-
-        public String getEmail(){
-            return get("email");
-        }
-
-        public void setEmail(String email){
-            set("email",email);
-        }
-
+    
+    public Date getCreatedAt(){
+        return getDate("created_at",TIMESTAMP_FORMAT);
     }
+    public void setCreatedAt(Date created_at){
+        set("created_at",created_at,TIMESTAMP_FORMAT);
+    }
+
+    public Date getUpdatedAt(){
+        return getDate("updated_at",TIMESTAMP_FORMAT);
+    }
+    public void setUpdatedAt(Date updated_at){
+        set("updated_at",updated_at,TIMESTAMP_FORMAT);
+    }
+
 }
