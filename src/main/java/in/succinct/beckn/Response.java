@@ -19,11 +19,11 @@ public class Response extends BecknObject {
     }
 
     public void setContext(Context context){
-        set("context",context.toString());
+        set("context",context);
     }
 
     public void setAcknowledgement(Acknowledgement acknowledgement){
-        set("message",acknowledgement.toString());
+        set("message",acknowledgement);
     }
 
 }

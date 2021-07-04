@@ -1,42 +1,36 @@
 package in.succinct.beckn;
 
 public class QuantitySummary extends BecknObject{
-    public Allocated getAllocated(){
-        return get(Allocated.class,"allocated");
+    public Quantity getAllocated(){
+        return get(Quantity.class,"allocated");
     }
-    public void setAllocated(Allocated allocated){
+    public void setAllocated(Quantity allocated){
         set("allocated",allocated);
     }
-    public Available getAvailable(){
-        return get(Available.class,"available");
+    public Quantity getAvailable(){
+        return get(Quantity.class,"available");
     }
-    public void setAvailable(Available available){
+    public void setAvailable(Quantity available){
         set("available",available);
     }
-    public Maximum getMaximum(){
-        return get(Maximum.class, "maximum");
+    public Quantity getMaximum(){
+        return get(Quantity.class, "maximum");
     }
-    public void setMaximum(Maximum maximum){
+    public void setMaximum(Quantity maximum){
         set("maximum",maximum);
     }
-    public Minimum getMinimum(){
-        return get(Minimum.class, "minimum");
+    public Quantity getMinimum(){
+        return get(Quantity.class, "minimum");
     }
-    public void setMinimum(Minimum minimum){
+    public void setMinimum(Quantity minimum){
         set("minimum",minimum);
     }
 
-    public Selected getSelected(){
-        return get(Selected.class, "selected");
+    public Quantity getSelected(){
+        return get(Quantity.class, "selected");
     }
-    public void setSelected(Selected selected){
+    public void setSelected(Quantity selected){
         set("selected",selected);
     }
-
-    public static class Allocated extends Quantity {}
-    public static class Available extends Quantity {}
-    public static class Maximum extends Quantity {}
-    public static class Minimum extends Quantity {}
-    public static class Selected extends Quantity {}
 
 }

@@ -29,6 +29,13 @@ public class Message extends BecknObject {
         set("order",order.getInner());
     }
 
+    public Order getInitialized(){
+        return get(Order.class, "initialized");
+    }
+    public void setInitialized(Order initialized){
+        set("initialized",initialized);
+    }
+
     public Items getItems(){
         return get(Items.class,"items");
     }
@@ -40,10 +47,10 @@ public class Message extends BecknObject {
         return get(Quote.class,"quote");
     }
 
-    public Initialized getInitialized(){
-        return get(Initialized.class, "initialized");
+    public Order getSelected(){
+        return get(Order.class, "selected");
     }
-    public void setInitialized(Initialized initialized){
-        set("initialized",initialized);
+    public void setSelected(Order selected){
+        set("selected",selected);
     }
 }
