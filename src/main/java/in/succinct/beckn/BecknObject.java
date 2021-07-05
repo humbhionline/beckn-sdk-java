@@ -23,15 +23,22 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
     private Map<String,ObjectHolder<BecknAware>> attributeMap = new HashMap<>();
-
     public <T extends BecknAware> T get(Class<T> clazz,String name){
+        return get(clazz,name,false);
+    }
+    public <T extends BecknAware> T get(Class<T> clazz,String name,boolean createIfAbsent){
         JSONObject inner = getInner();
         JSONAware clazzInner = (JSONAware) inner.get(name);
         try {
-            T t = null;
-            if (clazzInner != null){
+            T t = null ;
+            if (clazzInner != null || createIfAbsent){
                 t = clazz.getConstructor().newInstance();
-                t.setInner(clazzInner);
+                if (clazzInner != null) {
+                    t.setInner(clazzInner);
+                }else {
+                    clazzInner = t.getInner();
+                    inner.put(name,clazzInner);
+                }
             }
             return t;
         } catch (Exception ex) {

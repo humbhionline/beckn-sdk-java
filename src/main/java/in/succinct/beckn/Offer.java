@@ -8,24 +8,24 @@ public class Offer extends BecknObjectWithId{
         set("descriptor",descriptor);
     }
 
-    public Ids getLocationIds(){
-        return get(Ids.class, "location_ids");
+    public BecknStrings getLocationIds(){
+        return get(BecknStrings.class, "location_ids");
     }
-    public void setLocationIds(Ids location_ids){
+    public void setLocationIds(BecknStrings location_ids){
         set("location_ids",location_ids);
     }
     
-    public Ids getCategoryIds(){
-        return get(Ids.class, "category_ids");
+    public BecknStrings getCategoryIds(){
+        return get(BecknStrings.class, "category_ids");
     }
-    public void setCategoryIds(Ids category_ids){
+    public void setCategoryIds(BecknStrings category_ids){
         set("category_ids",category_ids);
     }
 
-    public Ids getItemIds(){
-        return get(Ids.class, "item_ids");
+    public BecknStrings getItemIds(){
+        return get(BecknStrings.class, "item_ids");
     }
-    public void setItemIds(Ids item_ids){
+    public void setItemIds(BecknStrings item_ids){
         set("item_ids",item_ids);
     }
 

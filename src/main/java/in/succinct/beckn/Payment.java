@@ -57,7 +57,7 @@ public class Payment extends BecknObject {
 
     static final Set<String> STATUSES = new HashSet<>(){{
        add("PAID");
-       add("NOT_PAID");
+       add("NOT-PAID");
     }};
     public void setStatus(String status){
         if (!STATUSES.contains(status)){

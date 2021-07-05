@@ -8,6 +8,9 @@ public class State extends BecknObject{
     public Descriptor getDescriptor(){
         return get(Descriptor.class, "descriptor");
     }
+    public Descriptor getDescriptor(boolean create){
+        return get(Descriptor.class, "descriptor",create);
+    }
     public void setDescriptor(Descriptor descriptor){
         set("descriptor",descriptor);
     }

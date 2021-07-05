@@ -7,7 +7,7 @@ public class Organization extends BecknObject {
     public String getEmail(){
         return get("email");
     }
-    public Phones getPhones(){
-        return get(Phones.class,"phones");
+    public BecknStrings getPhones(){
+        return get(BecknStrings.class,"phones");
     }
 }
