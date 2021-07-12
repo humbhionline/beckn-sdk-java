@@ -68,18 +68,18 @@ public class BecknObject extends BecknAware<JSONObject> {
         getInner().put(key,value);
     }
 
-    public static final DateFormat TIMESTAMP_FORMAT = DateUtils.getFormat("dd/MM/yyyy HH:mm:ssXXX");
-    public static final DateFormat DATE_FORMAT = DateUtils.getFormat("dd/MM/yyyy");
+    public static final DateFormat TIMESTAMP_FORMAT = DateUtils.getFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    public static final DateFormat DATE_FORMAT = DateUtils.getFormat(DateUtils.ISO_DATE_FORMAT_STR);
 
 
     public void set(String key, Date date, DateFormat format){
         set(key,format.format(date));
     }
     public void set(String key, Double value){
-        set(key,value.toString());
+        getInner().put(key,value);
     }
     public void set(String key, int value){
-        set(key,Integer.toString(value));
+        getInner().put(key,value);
     }
     public Date getDate(String key, DateFormat format){
         String value = get(key);

@@ -1,26 +1,22 @@
 package in.succinct.beckn;
 
-public class Customer extends Person{
+public class Customer extends BecknObject{
+
     public Customer() {
         super();
     }
 
-    public String getEmail(){
-        return get("email");
+    public Person getPerson(){
+        return get(Person.class, "person");
     }
-    public void setEmail(String email){
-        set("email",email);
+    public void setPerson(Person person){
+        set("person",person);
     }
-    public String getPhone(){
-        return get("phone");
+    public Contact getContact(){
+        return get(Contact.class, "contact");
     }
-    public void setPhone(String phone){
-        set("phone",phone);
+    public void setContact(Contact contact){
+        set("contact",contact);
     }
-    public Tags getTags(){
-        return get(Tags.class, "tags");
-    }
-    public void setTags(Tags tags){
-        set("tags",tags);
-    }
+
 }

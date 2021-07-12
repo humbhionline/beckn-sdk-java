@@ -4,6 +4,7 @@ import com.venky.core.collections.IgnoreCaseMap;
 import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
 import com.venky.core.util.ObjectHolder;
+import com.venky.core.util.ObjectUtil;
 import com.venky.extension.Registry;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
 
@@ -89,6 +90,10 @@ public class Request extends BecknObject {
     }
 
     public Map<String, String> extractAuthorizationParams(String header, Map<String, String> httpRequestHeaders) {
+        Map<String,String> params = new IgnoreCaseMap<>();
+        if (!httpRequestHeaders.containsKey(header)){
+            return params;
+        }
         String authorization = httpRequestHeaders.get(header).trim();
         String signatureToken  = "Signature ";
 
@@ -97,7 +102,6 @@ public class Request extends BecknObject {
         }
         Matcher matcher = Pattern.compile("([A-z]+=\"[^\"]*\"[ ]*)").matcher(authorization);
         Pattern variableExtractor = Pattern.compile("([A-z]+)(=\")([^\"]*)(\")");
-        Map<String,String> params = new IgnoreCaseMap<>();
         matcher.results().forEach(mr->{
             variableExtractor.matcher(mr.group()).results().forEach(r->{
                 params.put(r.group(1),r.group(3));
@@ -149,5 +153,15 @@ public class Request extends BecknObject {
         }
     }
 
+    String uri ;
+    public String getCallBackUri(){
+        if (ObjectUtil.isVoid(this.uri )){
+            return getContext().getBapUri();
+        }
+        return this.uri;
+    }
+    public void setCallBackUri(String uri){
+        this.uri = uri;
+    }
 
 }

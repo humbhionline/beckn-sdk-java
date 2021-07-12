@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONObject;
+
 public class Response extends BecknObject {
     public Response(String payload){
         super(payload);
@@ -23,7 +25,9 @@ public class Response extends BecknObject {
     }
 
     public void setAcknowledgement(Acknowledgement acknowledgement){
-        set("message",acknowledgement);
+        JSONObject ack = new JSONObject();
+        ack.put("ack",acknowledgement.getInner());
+        set("message",ack);
     }
 
 }

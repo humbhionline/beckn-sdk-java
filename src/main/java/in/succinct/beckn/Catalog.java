@@ -6,21 +6,27 @@ public class Catalog extends BecknObjectWithId {
     }
 
     public Descriptor getDescriptor(){
-        return get(Descriptor.class,"descriptor");
+        return get(Descriptor.class,"bpp/descriptor");
     }
     public void setDescriptor(Descriptor descriptor){
-        set("descriptor", descriptor);
+        set("bpp/descriptor", descriptor);
     }
 
     public Providers getProviders(){
-        return get(Providers.class,"providers");
+        return get(Providers.class,"bpp/providers");
     }
 
     public void setProviders(Providers providers){
-        set("providers",providers);
+        set("bpp/providers",providers);
     }
 
 
 
+    public Fulfillments getFulfillments(){
+        return get(Fulfillments.class, "bpp/fulfillments");
+    }
+    public void setFulfillments(Fulfillments fulfillments){
+        set("bpp/fulfillments",fulfillments);
+    }
 
 }

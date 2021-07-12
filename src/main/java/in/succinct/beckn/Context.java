@@ -17,6 +17,9 @@ public class Context extends BecknObject {
     public String getDomain(){
         return get("domain");
     }
+    public void setDomain(String domain){
+        set("domain", domain);
+    }
 
     public Country getCountry(){
         return get(Country.class,"country");

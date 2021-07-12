@@ -33,6 +33,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.bouncycastle.jce.spec.ECPrivateKeySpec;
 import org.bouncycastle.jce.spec.ECPublicKeySpec;
+import org.bouncycastle.jce.spec.OpenSSHPrivateKeySpec;
+import org.bouncycastle.jce.spec.OpenSSHPublicKeySpec;
 import org.bouncycastle.math.ec.ECPoint;
 import org.bouncycastle.math.ec.rfc8032.Ed25519;
 import org.bouncycastle.util.encoders.Hex;
@@ -56,6 +58,7 @@ import java.security.Security;
 import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -70,6 +73,11 @@ public class SignatureTest {
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
             Security.addProvider(new BouncyCastleProvider());
         }
+    }
+
+    @Test
+    public void genKeys(){
+
     }
 
     @Test
@@ -92,12 +100,11 @@ public class SignatureTest {
     }
 
     @Test
-    public void testKeySizeNew() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+    public void testKeySizeNew() throws Exception {
         String algo = "Ed25519";
         KeyPair pair = Crypt.getInstance().generateKeyPair(algo,256);
         String pbk  = Base64.getEncoder().encodeToString(pair.getPublic().getEncoded());
         String pvk  = Base64.getEncoder().encodeToString(pair.getPrivate().getEncoded());
-
 
 
         PublicKey key = Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO,pbk);
@@ -108,7 +115,11 @@ public class SignatureTest {
         System.out.println("Venky's Sign :" + sign1);
         Crypt.getInstance().verifySignature(payload,sign1,Request.SIGNATURE_ALGO,key);
 
+
+
         Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pbk),0);
+
+
 
         Ed25519Signer signer2 = new Ed25519Signer();
         signer2.init(false,publicKeyParameters);
@@ -141,7 +152,10 @@ public class SignatureTest {
         AsymmetricCipherKeyPair pair = pairGenerator.generateKeyPair();
         Ed25519PrivateKeyParameters privateKeyParameters = (Ed25519PrivateKeyParameters) pair.getPrivate();
         Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters)pair.getPublic();
+
+
         KeyFactory keyFactory = KeyFactory.getInstance("Ed25519");
+
         PublicKey key = keyFactory.generatePublic(
                 new X509EncodedKeySpec(new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
                         publicKeyParameters.getEncoded()).getEncoded()));

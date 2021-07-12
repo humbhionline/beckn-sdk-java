@@ -6,8 +6,12 @@ public class Error extends BecknObject {
     }
 
     public Type getType(){
-        return get("type",Type.DOMAIN_ERROR);
+        return Type.valueOf(get("type",Type.DOMAIN_ERROR.toString()));
     }
+    public void setType(Type type){
+        set("type",type.toString());
+    }
+
     public String getCode(){
         return get("code");
     }

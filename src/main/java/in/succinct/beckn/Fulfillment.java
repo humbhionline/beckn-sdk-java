@@ -8,6 +8,9 @@ public class Fulfillment extends BecknObjectWithId {
 
 
     public FulfillmentType getType(){
+        if (get("type") == null){
+            setType(FulfillmentType.home_delivery);
+        }
         return FulfillmentType.valueOf(get("type"));
     }
 
