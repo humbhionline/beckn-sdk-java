@@ -86,6 +86,7 @@ public class SignatureTest {
 
         Request request = new Request();
         KeyPair pair = Crypt.getInstance().generateKeyPair(EdDSAParameterSpec.Ed25519,256);
+        KeyPair pair2 = Crypt.getInstance().generateKeyPair("X25519",256);
 
         String privateKey = Crypt.getInstance().getBase64Encoded(pair.getPrivate());
         String publicKey  = Crypt.getInstance().getBase64Encoded(pair.getPublic());

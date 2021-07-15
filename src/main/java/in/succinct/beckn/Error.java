@@ -27,10 +27,39 @@ public class Error extends BecknObject {
 
 
     public enum Type {
-        CONTEXT_ERROR,
-        CORE_ERROR,
-        DOMAIN_ERROR,
-        POLICY_ERROR,
-        JSON_SCHEMA_ERROR,
+        CONTEXT_ERROR(){
+            @Override
+            public String toString() {
+                return "CONTEXT-ERROR";
+            }
+
+        },
+        CORE_ERROR(){
+            @Override
+            public String toString() {
+                return "CORE-ERROR";
+            }
+
+        },
+        DOMAIN_ERROR(){
+            @Override
+            public String toString() {
+                return "DOMAIN-ERROR";
+            }
+        },
+        POLICY_ERROR(){
+            @Override
+            public String toString() {
+                return "POLICY-ERROR";
+            }
+
+        },
+        JSON_SCHEMA_ERROR(){
+            @Override
+            public String toString() {
+                return "JSON-SCHEMA-ERROR";
+            }
+
+        },
     }
 }
