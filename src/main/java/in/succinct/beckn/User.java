@@ -1,8 +1,8 @@
 package in.succinct.beckn;
 
-public class Customer extends BecknObject{
+public class User extends BecknObject{
 
-    public Customer() {
+    public User() {
         super();
     }
 
@@ -12,6 +12,7 @@ public class Customer extends BecknObject{
     public void setPerson(Person person){
         set("person",person);
     }
+
     public Contact getContact(){
         return get(Contact.class, "contact");
     }
@@ -19,4 +20,12 @@ public class Customer extends BecknObject{
         set("contact",contact);
     }
 
+    /** Not in Spec **/
+
+    public Location getLocation(){
+        return get(Location.class, "location");
+    }
+    public void setLocation(Location location){
+        set("location",location);
+    }
 }

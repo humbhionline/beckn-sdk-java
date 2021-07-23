@@ -7,6 +7,9 @@ public class BecknObjectWithId extends BecknObject {
     public BecknObjectWithId(){
         super();
     }
+    public BecknObjectWithId(String payload){
+        super(payload);
+    }
 
     public String getId(){
         return get("id");

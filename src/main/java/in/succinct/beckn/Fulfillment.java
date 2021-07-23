@@ -64,10 +64,10 @@ public class Fulfillment extends BecknObjectWithId {
         getState(true).getDescriptor(true).setCode(state);
     }
 
-    public Customer getCustomer(){
-        return get(Customer.class, "customer");
+    public User getCustomer(){
+        return get(User.class, "customer");
     }
-    public void setCustomer(Customer customer){
+    public void setCustomer(User customer){
         set("customer",customer);
     }
 

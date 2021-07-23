@@ -14,6 +14,9 @@ public class Location extends BecknObjectWithId {
     public Location() {
         super();
     }
+    public Location(String payload){
+        super(payload);
+    }
 
 
     ObjectHolder<GeoCoordinate> gps = null ;

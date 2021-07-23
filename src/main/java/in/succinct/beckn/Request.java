@@ -7,6 +7,8 @@ import com.venky.core.util.ObjectHolder;
 import com.venky.core.util.ObjectUtil;
 import com.venky.extension.Registry;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -162,6 +164,16 @@ public class Request extends BecknObject {
     }
     public void setCallBackUri(String uri){
         this.uri = uri;
+    }
+
+    public String getSubscriberId(Map<String,String> authParams){
+        if (!authParams.isEmpty()){
+            String keyId = authParams.get("keyId");
+            StringTokenizer keyTokenizer = new StringTokenizer(keyId,"|");
+            String subscriberId = keyTokenizer.nextToken();
+            return subscriberId;
+        }
+        return null;
     }
 
 }

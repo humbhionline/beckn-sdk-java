@@ -107,4 +107,10 @@ public class Context extends BecknObject {
         set("ttl",Duration.ofSeconds(ttl).toString());
     }
 
+    public User getUser(){
+        return get(User.class, "user");
+    }
+    public void setUser(User user){
+        set("user",user);
+    }
 }
