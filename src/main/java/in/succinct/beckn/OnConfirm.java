@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONObject;
+
 public class OnConfirm extends Request{
     public OnConfirm() {
         super();
@@ -9,6 +11,9 @@ public class OnConfirm extends Request{
         super(payLoad);
     }
 
+    public OnConfirm(JSONObject obj){
+        super(obj);
+    }
 
 
 

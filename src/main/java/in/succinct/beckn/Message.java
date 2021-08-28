@@ -30,10 +30,10 @@ public class Message extends BecknObject {
     }
 
     public Order getInitialized(){
-        return get(Order.class, "initialized");
+        return getOrder();
     }
     public void setInitialized(Order initialized){
-        set("initialized",initialized);
+        setOrder(initialized);
     }
 
     public Items getItems(){
@@ -48,9 +48,9 @@ public class Message extends BecknObject {
     }
 
     public Order getSelected(){
-        return get(Order.class, "selected");
+        return getOrder();
     }
     public void setSelected(Order selected){
-        set("selected",selected);
+        setOrder(selected);
     }
 }

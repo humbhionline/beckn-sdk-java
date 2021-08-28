@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONObject;
+
 public class OnStatus extends Request{
     public OnStatus() {
         super();
@@ -9,6 +11,9 @@ public class OnStatus extends Request{
         super(payLoad);
     }
 
+    public OnStatus(JSONObject obj){
+        super(obj);
+    }
 
 
 

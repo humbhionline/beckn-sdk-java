@@ -13,13 +13,16 @@ import java.util.Map;
 
 public class BecknObject extends BecknAware<JSONObject> {
     public BecknObject(){
-        super(new JSONObject());
+        this(new JSONObject());
     }
     public BecknObject(String payload){
         super(payload);
         if (!(getInner() instanceof JSONObject)){
             throw new RuntimeException("Payload not correct format");
         }
+    }
+    public BecknObject(JSONObject object){
+        super(object);
     }
 
     private Map<String,ObjectHolder<BecknAware>> attributeMap = new HashMap<>();

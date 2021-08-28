@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -19,10 +20,13 @@ import java.util.regex.Pattern;
 
 public class Request extends BecknObject {
     public Request() {
-        super();
+        this(new JSONObject());
     }
     public Request(String payLoad){
         super(payLoad);
+    }
+    public Request(JSONObject request){
+        super(request);
     }
 
     public Context getContext() {
@@ -58,7 +62,14 @@ public class Request extends BecknObject {
     }
 
     public boolean verifySignature(String header,Map<String,String> httpRequestHeaders){
+        return verifySignature(header,httpRequestHeaders,true);
+    }
+    public boolean verifySignature(String header,Map<String,String> httpRequestHeaders, boolean headerMandatory){
         Map<String,String> params = extractAuthorizationParams(header,httpRequestHeaders);
+        if (params.isEmpty()) {
+            return !headerMandatory;
+        }
+
         String signature = params.get("signature");
         String created = params.get("created");
         String expires = params.get("expires");
@@ -69,8 +80,14 @@ public class Request extends BecknObject {
 
 
         String signingString = getSigningString(Long.valueOf(created),Long.valueOf(expires));
+        return verifySignature(signature,signingString,getPublicKey(subscriberId,uniqueKeyId));
+
+        /*
         String hashedSigningString = generateBlakeHash(signingString);
         return verifySignature(signature,hashedSigningString,getPublicKey(subscriberId,uniqueKeyId));
+
+         */
+
     }
 
     public String getPublicKey(String subscriber_id, String keyId ) {
@@ -124,8 +141,14 @@ public class Request extends BecknObject {
         map.put("created",Long.toString(created_at));
         map.put("expires",Long.toString(expires_at));
         map.put("headers","(created) (expires) digest");
-        map.put("signature",generateSignature(generateBlakeHash(getSigningString(created_at,expires_at)),getPrivateKey(subscriberId,uniqueKeyId)));
+        //map.put("signature",generateSignature(generateBlakeHash(getSigningString(created_at,expires_at)),getPrivateKey(subscriberId,uniqueKeyId)));
+        map.put("signature",generateSignature(getSigningString(created_at,expires_at),getPrivateKey(subscriberId,uniqueKeyId)));
         return map;
+    }
+
+    private BecknObject extendedAttributes = new BecknObject();
+    public BecknObject getExtendedAttributes(){
+        return extendedAttributes;
     }
 
 
@@ -155,18 +178,7 @@ public class Request extends BecknObject {
         }
     }
 
-    String uri ;
-    public String getCallBackUri(){
-        if (ObjectUtil.isVoid(this.uri )){
-            return getContext().getBapUri();
-        }
-        return this.uri;
-    }
-    public void setCallBackUri(String uri){
-        this.uri = uri;
-    }
-
-    public String getSubscriberId(Map<String,String> authParams){
+    public static String getSubscriberId(Map<String,String> authParams){
         if (!authParams.isEmpty()){
             String keyId = authParams.get("keyId");
             StringTokenizer keyTokenizer = new StringTokenizer(keyId,"|");
