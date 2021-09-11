@@ -1,7 +1,6 @@
 package in.succinct.beckn;
 
 import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
@@ -9,15 +8,9 @@ import org.json.simple.JSONValue;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.Security;
 import java.util.Base64;
 
 public abstract class BecknAware<T extends JSONAware> implements Serializable {
-    static {
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-            Security.addProvider(new BouncyCastleProvider());
-        }
-    }
 
     protected BecknAware(T value){
        this.value = value;

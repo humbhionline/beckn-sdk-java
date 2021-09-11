@@ -7,6 +7,7 @@ import com.venky.core.util.ObjectHolder;
 import com.venky.core.util.ObjectUtil;
 import com.venky.extension.Registry;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
+import org.bouncycastle.jcajce.spec.XDHParameterSpec;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -155,27 +156,18 @@ public class Request extends BecknObject {
     public static String SIGNATURE_ALGO = EdDSAParameterSpec.Ed25519;
     public static int SIGNATURE_ALGO_KEY_LENGTH = 256;
 
-    public static String ENCRYPTION_ALGO = Crypt.KEY_ALGO;
-    public static int ENCRYPTION_ALGO_KEY_LENGTH = 2048;
+    public static String ENCRYPTION_ALGO = XDHParameterSpec.X25519;
+    public static int ENCRYPTION_ALGO_KEY_LENGTH = 256;
 
     public static String generateSignature(String req, String privateKey) {
-        try {
-            PrivateKey key = Crypt.getInstance().getPrivateKey(SIGNATURE_ALGO,privateKey);
-            return Crypt.getInstance().generateSignature(req,SIGNATURE_ALGO,key);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        PrivateKey key = Crypt.getInstance().getPrivateKey(SIGNATURE_ALGO,privateKey);
+        return Crypt.getInstance().generateSignature(req,SIGNATURE_ALGO,key);
     }
 
 
     public static boolean verifySignature(String sign, String requestData, String b64PublicKey) {
-        boolean isVerified = false;
-        try {
-            PublicKey key = Crypt.getInstance().getPublicKey(SIGNATURE_ALGO,b64PublicKey);
-            return Crypt.getInstance().verifySignature(requestData,sign,SIGNATURE_ALGO,key);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        PublicKey key = Crypt.getInstance().getPublicKey(SIGNATURE_ALGO,b64PublicKey);
+        return Crypt.getInstance().verifySignature(requestData,sign,SIGNATURE_ALGO,key);
     }
 
     public static String getSubscriberId(Map<String,String> authParams){

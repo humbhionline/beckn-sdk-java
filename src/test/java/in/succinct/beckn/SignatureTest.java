@@ -8,59 +8,34 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.KeyGenerationParameters;
-import org.bouncycastle.crypto.digests.Blake2bDigest;
+import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
-import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
-import org.bouncycastle.crypto.params.Ed448KeyGenerationParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.bouncycastle.crypto.util.OpenSSHPrivateKeyUtil;
-import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
-import org.bouncycastle.crypto.util.PrivateKeyFactory;
-import org.bouncycastle.jcajce.interfaces.EdDSAKey;
-import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
-import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
-import org.bouncycastle.jcajce.provider.digest.Blake2b;
-import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b256;
-import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b384;
-import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
-import org.bouncycastle.jce.ECNamedCurveTable;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
-import org.bouncycastle.jce.spec.ECPrivateKeySpec;
-import org.bouncycastle.jce.spec.ECPublicKeySpec;
-import org.bouncycastle.jce.spec.OpenSSHPrivateKeySpec;
-import org.bouncycastle.jce.spec.OpenSSHPublicKeySpec;
-import org.bouncycastle.math.ec.ECPoint;
-import org.bouncycastle.math.ec.rfc8032.Ed25519;
-import org.bouncycastle.util.encoders.Hex;
-import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.security.AlgorithmParameters;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.Security;
-import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.ECParameterSpec;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
+import java.security.spec.NamedParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.XECPrivateKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,9 +45,6 @@ import java.util.StringTokenizer;
 public class SignatureTest {
     @org.junit.BeforeClass
     public static void setup(){
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
-            Security.addProvider(new BouncyCastleProvider());
-        }
     }
 
     @Test
@@ -196,6 +168,26 @@ public class SignatureTest {
         signer2.verifySignature(Base64.getDecoder().decode(sign2));
 
         Assert.assertEquals(sign1,sign2);
+    }
+    @Test
+    public void retestWithBC()throws  Exception{
+        String public_key = "D6P6S2zx8i/YMSrsi6+3oNTX7cTgbTY1iHX7TqW6moU=";
+        byte[] binSpec =new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                Base64.getDecoder().decode(public_key)).getEncoded();
+
+        String jcePubKey = Base64.getEncoder().encodeToString(new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                Base64.getDecoder().decode(public_key)).getEncoded());
+
+        PublicKey publicKey = Crypt.getInstance().getPublicKey("Ed25519",jcePubKey);
+
+
+        PublicKey key = KeyFactory.getInstance("Ed25519","BC").generatePublic(
+                new X509EncodedKeySpec(new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                        Base64.getDecoder().decode(public_key)).getEncoded()));
+
+
+
+
     }
 
     @Test
