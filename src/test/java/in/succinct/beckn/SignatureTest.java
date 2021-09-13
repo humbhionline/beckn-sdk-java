@@ -14,7 +14,9 @@ import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
+import org.bouncycastle.util.encoders.Hex;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -268,6 +271,20 @@ public class SignatureTest {
 
         Assert.assertTrue(Request.verifySignature(signature,hashedSigningString,publicKey));
 
+
+    }
+    @Test
+    public void testBlakeHash(){
+        MessageDigest digest = new Blake2b512();
+        digest.reset();
+        digest.update("Venky".getBytes(StandardCharsets.UTF_8));
+        byte[] hash = digest.digest();
+        String hex = Hex.toHexString(hash);
+        String bs64Hex = Base64.getEncoder().encodeToString(hex.getBytes()) ;
+        String bs64 = Base64.getEncoder().encodeToString(hash);
+        System.out.println(hex);
+        System.out.println(bs64Hex);
+        System.out.println(bs64);
 
     }
 
