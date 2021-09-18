@@ -218,6 +218,28 @@ public class Request extends BecknObject {
         }
     }
 
+    public static String getRawSigningKey(PublicKey publicKey){
+        try {
+            BCEdDSAPublicKey k = (BCEdDSAPublicKey) publicKey;
+            Field f = k.getClass().getDeclaredField("eddsaPublicKey");
+            f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+            Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters) f.get(k);
+            return Base64.getEncoder().encodeToString(publicKeyParameters.getEncoded());
+        }catch (Exception ex){
+            throw new RuntimeException("Unknown Key format");
+        }
+    }
+    public static String getRawEncryptionKey(PublicKey publicKey){
+        try {
+            BCXDHPublicKey k = (BCXDHPublicKey) publicKey;
+            Field f = k.getClass().getDeclaredField("xdhPublicKey");
+            f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+            X25519PublicKeyParameters publicKeyParameters = (X25519PublicKeyParameters) f.get(k);
+            return Base64.getEncoder().encodeToString(publicKeyParameters.getEncoded());
+        }catch (Exception ex){
+            throw new RuntimeException("Unknown Key format");
+        }
+    }
 
 
     public static String getPemSigningKey(String keyFromRegistry){
@@ -226,45 +248,11 @@ public class Request extends BecknObject {
     public static String getPemEncryptionKey(String keyFromRegistry){
         return Base64.getEncoder().encodeToString(getEncryptionPublicKey(keyFromRegistry).getEncoded());
     }
-
     public static String getRawSigningKey(String keyFromRegistry){
-        try {
-            PublicKey publicKey = Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO, keyFromRegistry);
-            BCEdDSAPublicKey k = (BCEdDSAPublicKey) publicKey;
-            Field f = k.getClass().getDeclaredField("eddsaPublicKey");
-            f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
-            Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters) f.get(k);
-            return Base64.getEncoder().encodeToString(publicKeyParameters.getEncoded());
-        }catch (Exception ex){
-            try {
-                byte[] bcBytes = Base64.getDecoder().decode(keyFromRegistry);
-                byte[] jceBytes = new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519), bcBytes).getEncoded();
-                String pemKey = Base64.getEncoder().encodeToString(jceBytes);
-                PublicKey publicKey = Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO,pemKey);
-                return keyFromRegistry;
-            }catch (Exception jceEx){
-                throw new RuntimeException("Unknown Key format");
-            }
-        }
+        return getRawSigningKey(getSigningPublicKey(keyFromRegistry));
     }
     public static String getRawEncryptionKey(String keyFromRegistry){
-        try {
-            PublicKey publicKey = Crypt.getInstance().getPublicKey(Request.ENCRYPTION_ALGO, keyFromRegistry);
-            BCXDHPublicKey k = (BCXDHPublicKey) publicKey;
-            Field f = k.getClass().getDeclaredField("xdhPublicKey");
-            f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
-            X25519PublicKeyParameters publicKeyParameters = (X25519PublicKeyParameters) f.get(k);
-            return Base64.getEncoder().encodeToString(publicKeyParameters.getEncoded());
-        }catch (Exception ex){
-            try {
-                byte[] bcBytes = Base64.getDecoder().decode(keyFromRegistry);
-                byte[] jceBytes = new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_X25519), bcBytes).getEncoded();
-                String pemKey = Base64.getEncoder().encodeToString(jceBytes);
-                PublicKey publicKey = Crypt.getInstance().getPublicKey(Request.ENCRYPTION_ALGO,pemKey);
-                return keyFromRegistry;
-            }catch (Exception jceEx){
-                throw new RuntimeException("Unknown Key format");
-            }
-        }
+        return getRawEncryptionKey(getEncryptionPublicKey(keyFromRegistry));
     }
+
 }
