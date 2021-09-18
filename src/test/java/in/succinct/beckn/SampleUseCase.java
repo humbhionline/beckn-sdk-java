@@ -1,13 +1,27 @@
 package in.succinct.beckn;
 
+import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
+import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
+import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
+import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -15,8 +29,10 @@ import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.security.Security;
 import java.security.Signature;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -46,6 +62,17 @@ public class SampleUseCase {
             String B64X25519PrivateKey="MFECAQEwBQYDK2VuBCIEIFBYM49aQt9Yb3dFaUlmkHxE5z1ltk63/ueGAInNSvRFgSEAsysTZ8NnOn86Sko0w5h8jexEkzJdbT4e/tjhHxAdIn0=";
          */
     }
+    public PublicKey getPublicKey(String algo,byte[] jceBytes) throws Exception{
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(jceBytes);
+        PublicKey key = KeyFactory.getInstance(algo,BouncyCastleProvider.PROVIDER_NAME).generatePublic(x509EncodedKeySpec);
+        return key;
+    }
+    public PrivateKey getPrivateKey(String algo, byte[] jceBytes) throws Exception{
+        PrivateKey key = KeyFactory.getInstance(algo,BouncyCastleProvider.PROVIDER_NAME).generatePrivate(
+                new PKCS8EncodedKeySpec(jceBytes));
+        return key;
+    }
+
     @Test
     public void readPublicKeyFromB64String() throws Exception{
         String B64Ed25519PublicKey="MCowBQYDK2VwAyEAop6xU+hDn5C3oSKDkYO7uG9KVcdxm2f0mDrT6X/wuz0=";
@@ -53,23 +80,21 @@ public class SampleUseCase {
         String B64X25519PublicKey="MCowBQYDK2VuAyEAsysTZ8NnOn86Sko0w5h8jexEkzJdbT4e/tjhHxAdIn0=";
         String B64X25519PrivateKey="MFECAQEwBQYDK2VuBCIEIFBYM49aQt9Yb3dFaUlmkHxE5z1ltk63/ueGAInNSvRFgSEAsysTZ8NnOn86Sko0w5h8jexEkzJdbT4e/tjhHxAdIn0=";
 
-        byte[] bytes = Base64.getDecoder().decode(B64Ed25519PublicKey);
-        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(bytes);
-        PublicKey key = KeyFactory.getInstance("Ed25519",BouncyCastleProvider.PROVIDER_NAME).generatePublic(x509EncodedKeySpec);
+        byte[] jceBytes = Base64.getDecoder().decode(B64Ed25519PublicKey);
+        PublicKey key = getPublicKey("Ed25519",jceBytes);
         Assert.assertNotNull(key);
 
-        bytes = Base64.getDecoder().decode(B64X25519PublicKey);
-        x509EncodedKeySpec = new X509EncodedKeySpec(bytes);
-        key = KeyFactory.getInstance("X25519",BouncyCastleProvider.PROVIDER_NAME).generatePublic(x509EncodedKeySpec);
+        jceBytes = Base64.getDecoder().decode(B64X25519PublicKey);
+        key = getPublicKey("X25519",jceBytes);
         Assert.assertNotNull(key);
 
-
-        PrivateKey privateKey = KeyFactory.getInstance("Ed25519",BouncyCastleProvider.PROVIDER_NAME).generatePrivate(
-                new PKCS8EncodedKeySpec(Base64.getDecoder().decode(B64Ed25519PrivateKey)));
+        byte[] privateJceBytes = Base64.getDecoder().decode(B64Ed25519PrivateKey);
+        PrivateKey privateKey = getPrivateKey("Ed25519",privateJceBytes);
 
         Assert.assertNotNull(privateKey);
-        privateKey = KeyFactory.getInstance("X25519",BouncyCastleProvider.PROVIDER_NAME).generatePrivate(
-                new PKCS8EncodedKeySpec(Base64.getDecoder().decode(B64X25519PrivateKey)));
+
+        privateJceBytes = Base64.getDecoder().decode(B64X25519PrivateKey);
+        privateKey = getPrivateKey("X25519",privateJceBytes);
 
         Assert.assertNotNull(privateKey);
     }
@@ -168,5 +193,97 @@ public class SampleUseCase {
         }
         return builder.toString();
     }
+    @Test
+    public void testUnderstandingBouncyCastleInternalApis()throws  Exception{
+        Ed25519KeyPairGenerator pairGenerator = new Ed25519KeyPairGenerator();
+        pairGenerator.init(new Ed25519KeyGenerationParameters(new SecureRandom()));
+        AsymmetricCipherKeyPair pair = pairGenerator.generateKeyPair();
+        Ed25519PrivateKeyParameters privateKeyParameters = (Ed25519PrivateKeyParameters) pair.getPrivate();
+        Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters)pair.getPublic();
 
+        byte[] bcBytes = publicKeyParameters.getEncoded();
+        byte[] jceBytes =new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),bcBytes).getEncoded(); //Convert bcbytes to jcebytes.
+        PublicKey key = getPublicKey("Ed25519",jceBytes); //Convert bc to jce bytes and generate PublicKey.
+
+        Assert.assertArrayEquals(key.getEncoded(),jceBytes);
+
+       //Converting java publicKey to BC publicKeyParams
+        BCEdDSAPublicKey k = (BCEdDSAPublicKey) key;
+        Field f = k.getClass().getDeclaredField("eddsaPublicKey");
+        f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+        Ed25519PublicKeyParameters publicKeyParameters1 = (Ed25519PublicKeyParameters) f.get(k);
+
+        byte[] bcBytes2 = publicKeyParameters1.getEncoded();
+        Assert.assertArrayEquals(bcBytes2,bcBytes);
+
+
+
+        //Convert privateKeyParams to java PrivateKey
+        byte[] privateJceBytes = new PrivateKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                new DEROctetString(privateKeyParameters.getEncoded())).getEncoded();
+
+        PrivateKey privateKey = getPrivateKey("Ed25519",privateJceBytes);
+        Assert.assertNotNull(privateKey);
+
+        //Convert java PrivateKey to privateKeyParams
+        BCEdDSAPrivateKey privateKey1 = (BCEdDSAPrivateKey) privateKey;
+        f = privateKey1.getClass().getDeclaredField("eddsaPrivateKey");
+        f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+        Ed25519PrivateKeyParameters privateKeyParameters1 = (Ed25519PrivateKeyParameters) f.get(privateKey1);
+
+        Assert.assertArrayEquals(privateKeyParameters1.getEncoded(),privateKeyParameters.getEncoded());
+
+
+
+
+
+    }
+    @Test
+    public void testWhatIsIt() throws Exception{
+        // When you get some public/private key b64encoded . How to read it
+        // Check if it is bcBytes
+
+        String spublic = "3DQAZxWBPD8g2iTaaqveQyIXNT3h13cwx++b9+6yjN4=";
+        String sprivate = "NaKRo2AEFoVPEEXt6AUX72GG4mq0EmMUmo1SJo38znvcNABnFYE8PyDaJNpqq95DIhc1PeHXdzDH75v37rKM3g==";
+        byte[] bcBytes = Base64.getDecoder().decode(spublic);
+        byte[] jceBytes = new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),bcBytes).getEncoded();
+        PublicKey key = getPublicKey("Ed25519",jceBytes); //Convert bc to jce bytes and generate PublicKey.
+        Assert.assertNotNull(key);
+
+        PrivateKey privateKey = getPrivateKey("Ed25519",new PrivateKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                new DEROctetString(Base64.getDecoder().decode(sprivate))).getEncoded());
+        Assert.assertNotNull(privateKey);
+    }
+    @Test
+    public void testWhatIsIt2() throws Exception{
+        // When you get some public/private key b64encoded . How to read it
+        // Check if it is bcBytes
+        Assert.assertThrows(InvalidKeySpecException.class, new ThrowingRunnable() {
+            @Override
+            public void run() throws Throwable {
+                //http://ed25519.herokuapp.com/ generated from here.
+                String spublic = "3DQAZxWBPD8g2iTaaqveQyIXNT3h13cwx++b9+6yjN4=";
+                String sprivate = "NaKRo2AEFoVPEEXt6AUX72GG4mq0EmMUmo1SJo38znvcNABnFYE8PyDaJNpqq95DIhc1PeHXdzDH75v37rKM3g==";
+                byte[] jceBytes = Base64.getDecoder().decode(spublic);
+                PublicKey key = getPublicKey("Ed25519", jceBytes); //Convert bc to jce bytes and generate PublicKey.
+                //This Fails.
+                Assert.assertNotNull(key);
+
+                PrivateKey privateKey = getPrivateKey("Ed25519", Base64.getDecoder().decode(sprivate));
+                Assert.assertNotNull(privateKey);
+            }
+        });
+    }
+
+    @Test
+    public void testReadPem() throws Exception {
+        //openssl genpkey -outform pem -algorithm Ed25519 -out private.pem
+        //openssl pkey -in private.pem -outform PEM -pubout  -out public.pem
+        String spublic = "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAJLTgKuhfvnq998O53E0MfEFrmwK+X0CfoMzTiPK7c+U=\n-----END PUBLIC KEY-----";
+        byte[] jceBytes = Base64.getDecoder().decode(spublic.
+                replace("-----BEGIN PUBLIC KEY-----\n","").
+                replace("\n-----END PUBLIC KEY-----",""));
+        PublicKey key = getPublicKey("Ed25519", jceBytes);
+        Assert.assertNotNull(key);
+    }
 }
