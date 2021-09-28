@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import com.venky.core.security.Crypt;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
@@ -48,16 +49,7 @@ public abstract class BecknAware<T extends JSONAware> implements Serializable {
     }
 
     public static String generateBlakeHash(String req) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("BLAKE2B-512", BouncyCastleProvider.PROVIDER_NAME);
-            digest.reset();
-            digest.update(req.getBytes(StandardCharsets.UTF_8));
-            byte[] hash = digest.digest();
-            return Base64.getEncoder().encodeToString(hash) ;
-        }catch (Exception ex){
-            throw new RuntimeException(ex);
-        }
-
+        return Crypt.getInstance().toBase64(Crypt.getInstance().digest("BLAKE2B-512",req));
     }
 
 
