@@ -100,12 +100,12 @@ public class Request extends BecknObject {
 
     }
 
-    public String getPublicKey(String subscriber_id, String keyId ) {
+    public static String getPublicKey(String subscriber_id, String keyId ) {
         ObjectHolder<String> publicKeyHolder = new ObjectHolder<>(null);
         Registry.instance().callExtensions("beckn.public.key.get",subscriber_id,keyId,publicKeyHolder);
         return publicKeyHolder.get();
     }
-    public String getPrivateKey(String subscriber_id, String keyId) {
+    public static String getPrivateKey(String subscriber_id, String keyId) {
         ObjectHolder<String> privateKeyHolder = new ObjectHolder<>(null);
         Registry.instance().callExtensions("beckn.private.key.get",subscriber_id,keyId,privateKeyHolder);
         return privateKeyHolder.get();
