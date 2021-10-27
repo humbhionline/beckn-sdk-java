@@ -129,7 +129,7 @@ public class Request extends BecknObject {
         if (authorization.startsWith(signatureToken)){
             authorization = authorization.substring(signatureToken.length());
         }
-        Matcher matcher = Pattern.compile("([A-z]+=\"[^\"]*\"[ ]*)").matcher(authorization);
+        Matcher matcher = Pattern.compile("([A-z]+=\"[^\"]*\"[ ,]*)").matcher(authorization);
         Pattern variableExtractor = Pattern.compile("([A-z]+)(=\")([^\"]*)(\")");
         matcher.results().forEach(mr->{
             variableExtractor.matcher(mr.group()).results().forEach(r->{
