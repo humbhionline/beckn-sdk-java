@@ -71,7 +71,7 @@ public class BecknObject extends BecknAware<JSONObject> {
         getInner().put(key,value);
     }
 
-    public static final DateFormat TIMESTAMP_FORMAT = DateUtils.getFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+    public static final DateFormat TIMESTAMP_FORMAT = DateUtils.getFormat(DateUtils.ISO_8601_24H_FULL_FORMAT);
     public static final DateFormat DATE_FORMAT = DateUtils.getFormat(DateUtils.ISO_DATE_FORMAT_STR);
 
 
