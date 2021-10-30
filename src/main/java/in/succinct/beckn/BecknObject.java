@@ -7,9 +7,11 @@ import org.json.simple.JSONObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class BecknObject extends BecknAware<JSONObject> {
     public BecknObject(){
@@ -71,8 +73,11 @@ public class BecknObject extends BecknAware<JSONObject> {
         getInner().put(key,value);
     }
 
-    public static final DateFormat TIMESTAMP_FORMAT = DateUtils.getFormat(DateUtils.ISO_8601_24H_FULL_FORMAT);
-    public static final DateFormat DATE_FORMAT = DateUtils.getFormat(DateUtils.ISO_DATE_FORMAT_STR);
+    public static final DateFormat TIMESTAMP_FORMAT = new SimpleDateFormat(DateUtils.ISO_8601_24H_FULL_FORMAT);
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat(DateUtils.ISO_DATE_FORMAT_STR);
+    static {
+        TIMESTAMP_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
 
     public void set(String key, Date date, DateFormat format){

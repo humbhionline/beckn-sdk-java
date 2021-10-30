@@ -37,7 +37,12 @@ import java.security.Signature;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class SampleUseCase {
     @BeforeClass
@@ -45,6 +50,15 @@ public class SampleUseCase {
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null){
             Security.addProvider(new BouncyCastleProvider());
         }
+    }
+
+    @Test
+    public void testDateFormat() throws Exception{
+        SimpleDateFormat format = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = format.parse("2021-10-30T18:09:12.506+05:30");
+        System.out.println(format.format(date));
+
     }
 
     @Test
