@@ -129,7 +129,7 @@ public class SignatureTest {
         Ed25519PrivateKeyParameters privateKeyParameters = (Ed25519PrivateKeyParameters) pair.getPrivate();
         Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters)pair.getPublic();
 
-
+        Crypt.getInstance();
         KeyFactory keyFactory = KeyFactory.getInstance("Ed25519");
 
         PublicKey key = keyFactory.generatePublic(
