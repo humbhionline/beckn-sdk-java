@@ -16,6 +16,7 @@ import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,6 +30,7 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
@@ -121,7 +123,7 @@ public class SignatureTest {
         Assert.assertNotEquals(sign1,sign2);
     }
     @Test
-    public void testKeySizeNew2() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException, InvalidKeySpecException {
+    public void testKeySizeNew2() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException, InvalidKeySpecException, NoSuchProviderException {
         String algo = "Ed25519";
         Ed25519KeyPairGenerator pairGenerator = new Ed25519KeyPairGenerator();
         pairGenerator.init(new Ed25519KeyGenerationParameters(new SecureRandom()));
@@ -130,7 +132,8 @@ public class SignatureTest {
         Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters)pair.getPublic();
 
         Crypt.getInstance();
-        KeyFactory keyFactory = KeyFactory.getInstance("Ed25519");
+        KeyFactory keyFactory = KeyFactory.getInstance("Ed25519", BouncyCastleProvider.PROVIDER_NAME);
+
 
         PublicKey key = keyFactory.generatePublic(
                 new X509EncodedKeySpec(new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
