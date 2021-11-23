@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import com.venky.core.security.Crypt;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
@@ -25,6 +26,7 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -43,6 +45,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SampleUseCase {
     @BeforeClass
@@ -77,16 +81,6 @@ public class SampleUseCase {
             String B64X25519PublicKey="MCowBQYDK2VuAyEAsysTZ8NnOn86Sko0w5h8jexEkzJdbT4e/tjhHxAdIn0=";
             String B64X25519PrivateKey="MFECAQEwBQYDK2VuBCIEIFBYM49aQt9Yb3dFaUlmkHxE5z1ltk63/ueGAInNSvRFgSEAsysTZ8NnOn86Sko0w5h8jexEkzJdbT4e/tjhHxAdIn0=";
          */
-    }
-    public PublicKey getPublicKey(String algo,byte[] jceBytes) throws Exception{
-        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(jceBytes);
-        PublicKey key = KeyFactory.getInstance(algo,BouncyCastleProvider.PROVIDER_NAME).generatePublic(x509EncodedKeySpec);
-        return key;
-    }
-    public PrivateKey getPrivateKey(String algo, byte[] jceBytes) throws Exception{
-        PrivateKey key = KeyFactory.getInstance(algo,BouncyCastleProvider.PROVIDER_NAME).generatePrivate(
-                new PKCS8EncodedKeySpec(jceBytes));
-        return key;
     }
 
     @Test
@@ -381,5 +375,160 @@ public class SampleUseCase {
 
 
     }
+
+    @Test
+    public void testEncryptionKeyFromRegistry(){
+        String key = "lCI84I0Q0U0wQ/T+cxP25+a+9sK8sstBpulLa+4iqEY=" ;
+        Assert.assertEquals(key,Request.getRawEncryptionKey(key));
+        Assert.assertNotNull(Request.getEncryptionPublicKey(key));
+
+        key = "5KHS4StYY8CG4H+1reZtiycN0vCkkUumvZW0tvv6OiQ=";
+        Assert.assertEquals(key,Request.getRawEncryptionKey(key));
+        Assert.assertNotNull(Request.getEncryptionPublicKey(key));
+
+        key = "zMnN+2TOdCQWau2ck0hpjmifP9RhAF7EqLzDjO564Ec=";
+        Assert.assertEquals(key,Request.getRawSigningKey(key));
+
+        key = "H1qQWQzOm3grTCN/C3Lv9IRjkbb0Iqk+QT5858PfmIQ=";
+        Assert.assertEquals(key,Request.getRawSigningKey(key));
+
+    }
+
+    @Test
+    public void testDhirajCode() throws Exception{
+        KeyPair keyPair1 = Crypt.getInstance(BouncyCastleProvider.PROVIDER_NAME).generateKeyPair(Request.ENCRYPTION_ALGO,Request.ENCRYPTION_ALGO_KEY_LENGTH);
+        KeyPair keyPair2 = Crypt.getInstance(BouncyCastleProvider.PROVIDER_NAME).generateKeyPair(Request.ENCRYPTION_ALGO,Request.ENCRYPTION_ALGO_KEY_LENGTH);
+
+
+
+        SecretKey k1 = getSecretKey(Crypt.getInstance().getBase64Encoded(keyPair1.getPrivate()),Crypt.getInstance().getBase64Encoded(keyPair2.getPublic()));
+        SecretKey k2 = getSecretKey(Crypt.getInstance().getBase64Encoded(keyPair2.getPrivate()),Crypt.getInstance().getBase64Encoded(keyPair1.getPublic()));
+        Assert.assertArrayEquals(k1.getEncoded(),k2.getEncoded());
+
+        String e = encChallenge("Hello World",nsdlPrivateKey,otherPublicKey);
+        System.out.println(e);
+        String d = decChallenge(e,otherPrivateKey,nsdlPublicKey);
+        Assert.assertEquals(d,"Hello World");
+
+    }
+    @Test
+    public void testDhirajCodeDecrypt() throws Exception{
+        //String publicKey = "5KHS4StYY8CG4H+1reZtiycN0vCkkUumvZW0tvv6OiQ=";
+        //String nsdlPrivateKey = "IcjI/ozl+pbOWDcKlj5uXb10fPl+8oLO8mKeRLt5RZi1VwYQX2DVG9xHJGp/0LgLi979bDjBrnciAlFyr3mhWdoLe5YdOZJj5SOOSEElaHZXPotn3+r+L/4iekZuvTOREI5BXaMlryqx/1M02rEKUp4AkkMTSYNzYJ+kuDLu6P8=";
+        System.out.println(decChallenge("Jw0vQimQ6cP3r3zHAxYi4A==",otherPrivateKey,nsdlPublicKey));
+    }
+    String nsdlPublicKey = "MCowBQYDK2VuAyEAqe/iT3XBu/3VfaH9muoQ7s6644LORdDc5KIcldN86wE=";
+    String nsdlPrivateKey = "MFECAQEwBQYDK2VuBCIEIDi8orAdzNaZNJZ85xmwbSwBF3uN/Mup4R29f38IPOtsgSEAqe/iT3XBu/3VfaH9muoQ7s6644LORdDc5KIcldN86wE=";
+    String otherPublicKey = "5KHS4StYY8CG4H+1reZtiycN0vCkkUumvZW0tvv6OiQ=";
+    String otherPrivateKey = "MFECAQEwBQYDK2VuBCIEICDv0YL8eHXl3EDBsBF3YwEnWnxROe+bbtCzusVjkuZHgSEA5KHS4StYY8CG4H+1reZtiycN0vCkkUumvZW0tvv6OiQ="; //Was wrong! I had given encrypted private key.
+
+    /*String nsdlPrivateKey = "MFECAQEwBQYDK2VuBCIEIKDpLFCYkoezrEjedy+wU9GhqYfPR+z8bs3C+d1NtVFMgSEAh0EblrXEhdqECkVdiTuG3ma+n9UCcfJD0wu9LS3UVhU=";
+    String otherPublicKey = "MCowBQYDK2VuAyEA6l2nS9ILqzqFPc0ocWlTp/1T2LNdUazs1tusG1+9KUo=";
+
+    String  nsdlPublicKey = "MCowBQYDK2VuAyEAh0EblrXEhdqECkVdiTuG3ma+n9UCcfJD0wu9LS3UVhU=";
+    String  otherPrivateKey = "MFECAQEwBQYDK2VuBCIEIPBxDXHvCD1ZiW7X31kre/b0aYfPB+6l/zTTVuFGhLVpgSEA6l2nS9ILqzqFPc0ocWlTp/1T2LNdUazs1tusG1+9KUo=";
+    */
+
+    @Test
+    public void testRegex(){
+        System.out.println(Pattern.compile("\\d{15}").matcher("12345678901235").matches());
+    }
+
+    public SecretKey getSecretKey(String privateKey1, String publicKey2) throws Exception{
+        System.out.println(String.format("Private:%s\n" ,privateKey1));
+        System.out.println(String.format("OtherPublic:%s\n" ,publicKey2));
+
+        KeyAgreement keyAgreement = KeyAgreement.getInstance(ENC_DEC_ALGO_X25519, BouncyCastleProvider.PROVIDER_NAME);
+        keyAgreement.init(getEncryptionPrivateKey(Base64.getDecoder().decode(privateKey1))); // Server1 uses its private key to initialize the aggreement object
+        keyAgreement.doPhase(getEncryptionPublicKey(Base64.getDecoder().decode(publicKey2)), true); // Uses Server2's ppublic Key
+        SecretKey key1 = keyAgreement.generateSecret("TlsPremasterSecret"); // derive secret at server 1. "TlsPremasterSecret" is the algorithm for secret key. It is an aes key actually.
+        return key1;
+    }
+    public static final String ENC_DEC_ALGO_X25519 = Request.ENCRYPTION_ALGO;
+    public static String encChallenge(String cs, String nsdlPrivateKey, String otherPublicKey) throws Exception
+    {
+        KeyAgreement keyAgreement = KeyAgreement.getInstance(ENC_DEC_ALGO_X25519, BouncyCastleProvider.PROVIDER_NAME);
+        // atServer1.init(nsdlKeyPair.getPrivate()); // Server1 uses its private
+        // key to initialize the aggreement object
+        keyAgreement.init(getEncryptionPrivateKey(Base64.getDecoder().decode(nsdlPrivateKey))); // Server1 uses its private key to initialize the aggreement object
+        // atServer1.doPhase(tcsKeyPair.getPublic(),true); //Uses Server2's
+        // ppublic Key
+        keyAgreement.doPhase(getEncryptionPublicKey(Base64.getDecoder().decode(otherPublicKey)), true); // Uses Server2's ppublic Key
+        SecretKey key1 = keyAgreement.generateSecret("TlsPremasterSecret"); // derive secret at server 1. "TlsPremasterSecret" is the algorithm for secret key. It is an aes key actually.
+        // *Server1
+        Cipher cipher1 = Cipher.getInstance("AES", BouncyCastleProvider.PROVIDER_NAME);
+        cipher1.init(Cipher.ENCRYPT_MODE, key1);
+        byte[] encrypted1 = cipher1.doFinal(cs.getBytes(StandardCharsets.UTF_8));
+        String b64Encryped1 = Base64.getEncoder().encodeToString(encrypted1);
+        System.out.println("Encrypted : " + b64Encryped1);
+        return b64Encryped1;
+    }
+
+
+    public static String decChallenge(String cs, String otherPrivateKey, String nsdlPublicKey) throws  Exception
+    {
+        //KeyAgreement ka = KeyAgreement.getInstance(ENC_DEC_ALGO_X25519, BouncyCastleProvider.PROVIDER_NAME);
+        //ka.init(getPrivateKey(ENC_DEC_ALGO_X25519, Base64.getDecoder().decode(otherPrivateKey)));
+        //ka.doPhase(getPublicKey(ENC_DEC_ALGO_X25519, Base64.getDecoder().decode(nsdlPublicKey)), true);
+
+
+        KeyAgreement keyAgreement = KeyAgreement.getInstance(ENC_DEC_ALGO_X25519, BouncyCastleProvider.PROVIDER_NAME);
+        // atServer1.init(nsdlKeyPair.getPrivate()); // Server1 uses its private
+        // key to initialize the aggreement object
+        keyAgreement.init(getEncryptionPrivateKey(Base64.getDecoder().decode(otherPrivateKey))); // Server1 uses its private key to initialize the aggreement object
+        // atServer1.doPhase(tcsKeyPair.getPublic(),true); //Uses Server2's
+        // ppublic Key
+        keyAgreement.doPhase(getEncryptionPublicKey(Base64.getDecoder().decode(nsdlPublicKey)), true);
+
+        SecretKey key2 = keyAgreement.generateSecret("TlsPremasterSecret");
+        Cipher cipher2 = Cipher.getInstance("AES", BouncyCastleProvider.PROVIDER_NAME);
+        cipher2.init(Cipher.DECRYPT_MODE, key2);
+        byte[] decrypted2 = cipher2.doFinal(Base64.getDecoder().decode(cs));
+        //System.out.println("" + new String(decrypted2));
+        return new String(decrypted2);
+    }
+
+    public static PublicKey getEncryptionPublicKey(byte[] bytes){
+        try {
+            return getPublicKey(ENC_DEC_ALGO_X25519,bytes);
+        }catch (Exception ex){
+            try {
+                byte[] jceBytes = new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_X25519), bytes).getEncoded();
+                return getPublicKey(ENC_DEC_ALGO_X25519, jceBytes);
+            }catch (Exception jceEx){
+                return null;
+            }
+        }
+    }
+    public static PrivateKey getEncryptionPrivateKey(byte[] bytes) {
+        try {
+            return getPrivateKey(ENC_DEC_ALGO_X25519,bytes);
+        }catch (Exception ex){
+            try {
+                Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(bytes,0);
+                byte[] jceBytes = new PrivateKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_X25519),
+                        new DEROctetString(privateKeyParameters.getEncoded())).getEncoded();
+                return getPrivateKey(ENC_DEC_ALGO_X25519,jceBytes);
+            }catch (Exception jceEx){
+                return null;
+            }
+        }
+
+
+    }
+
+
+    public static PublicKey getPublicKey(String algo, byte[] jceBytes) throws Exception {
+        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(jceBytes);
+        PublicKey key = KeyFactory.getInstance(algo, BouncyCastleProvider.PROVIDER_NAME)
+                .generatePublic(x509EncodedKeySpec);
+        return key;
+    }
+    public static PrivateKey getPrivateKey(String algo, byte[] jceBytes) throws Exception {
+        PrivateKey key = KeyFactory.getInstance(algo, BouncyCastleProvider.PROVIDER_NAME)
+                .generatePrivate(new PKCS8EncodedKeySpec(jceBytes));
+        return key;
+    }
+
 
 }
