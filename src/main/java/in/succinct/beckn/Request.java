@@ -112,8 +112,15 @@ public class Request extends BecknObject {
 
     public String generateAuthorizationHeader(String  subscriberId, String uniqueKeyId){
         Map<String,String> map = generateAuthorizationParams(subscriberId,uniqueKeyId);
-        StringBuilder auth = new StringBuilder("Signature");
-        map.forEach((k,v)-> auth.append(",").append(k).append("=\"").append(v).append("\""));
+        StringBuilder auth = new StringBuilder();
+        map.forEach((k,v)-> {
+            if (auth.length() == 0){
+                auth.append("Signature ");
+            }else {
+                auth.append(",");
+            }
+            auth.append(k).append("=\"").append(v).append("\"");
+        });
         return auth.toString();
     }
 
