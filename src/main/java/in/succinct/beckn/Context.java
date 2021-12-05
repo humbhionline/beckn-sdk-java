@@ -21,11 +21,11 @@ public class Context extends BecknObject {
         set("domain", domain);
     }
 
-    public Country getCountry(){
-        return get(Country.class,"country");
+    public String getCountry(){
+        return get("country");
     }
-    public City getCity(){
-        return get(City.class,"city");
+    public String getCity(){
+        return get("city");
     }
 
     public String getAction(){
@@ -112,5 +112,12 @@ public class Context extends BecknObject {
     }
     public void setUser(User user){
         set("user",user);
+    }
+
+    public void setCity(String city){
+        set("city",city);
+    }
+    public void setCountry(String country){
+        set("country",country);
     }
 }

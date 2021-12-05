@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<T>{
@@ -73,5 +74,20 @@ public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<
                 return get(i++);
             }
         };
+    }
+
+    public T min(Comparator<T> comparator){
+        int size = size();
+        if (size == 0){
+            return null;
+        }
+        T min = get(0);
+        for (int i = 1 ; i < size ; i ++){
+            T t = get(i);
+            if (comparator.compare(min,t) > 0){
+                min = t;
+            }
+        }
+        return min;
     }
 }

@@ -84,12 +84,11 @@ public class Request extends BecknObject {
         String created = params.get("created");
         String expires = params.get("expires");
         String keyId = params.get("keyId");
-        StringTokenizer keyTokenizer = new StringTokenizer(keyId,"|");
-        String subscriberId = keyTokenizer.nextToken();
-        String uniqueKeyId = keyTokenizer.nextToken();
+        String subscriberId = params.get("subscriber_id");
+        String uniqueKeyId  = params.get("unique_key_id");
 
 
-        String signingString = getSigningString(Long.valueOf(created),Long.valueOf(expires));
+        String signingString = getSigningString(Long.parseLong(created),Long.parseLong(expires));
         return verifySignature(signature,signingString,getPublicKey(subscriberId,uniqueKeyId));
 
         /*
@@ -114,7 +113,7 @@ public class Request extends BecknObject {
     public String generateAuthorizationHeader(String  subscriberId, String uniqueKeyId){
         Map<String,String> map = generateAuthorizationParams(subscriberId,uniqueKeyId);
         StringBuilder auth = new StringBuilder("Signature");
-        map.forEach((k,v)-> auth.append(" ").append(k).append("=\"").append(v).append("\""));
+        map.forEach((k,v)-> auth.append(",").append(k).append("=\"").append(v).append("\""));
         return auth.toString();
     }
 
@@ -136,16 +135,28 @@ public class Request extends BecknObject {
                 params.put(r.group(1),r.group(3));
             });
         });
+
+        if (!params.isEmpty()) {
+            String keyId = params.get("keyId");
+            if (!ObjectUtil.isVoid(keyId)){
+                StringTokenizer keyTokenizer = new StringTokenizer(keyId, "|");
+                String subscriberId = keyTokenizer.nextToken();
+                String uniqueKeyId = keyTokenizer.nextToken();
+                params.put("subscriber_id",subscriberId);
+                params.put("unique_key_id",uniqueKeyId);
+            }
+        }
+
         return params;
     }
     public Map<String,String> generateAuthorizationParams(String subscriberId,String uniqueKeyId){
         Map<String,String> map = new SequenceMap<>();
         StringBuilder keyBuilder = new StringBuilder();
         keyBuilder.append(subscriberId).append('|')
-                .append(uniqueKeyId).append('|').append("xed25519");
+                .append(uniqueKeyId).append('|').append("ed25519");
 
         map.put("keyId",keyBuilder.toString());
-        map.put("algorithm","xed25519");
+        map.put("algorithm","ed25519");
         long created_at = System.currentTimeMillis()/1000L;
         long expires_at = created_at + (getContext() == null ? 10 : getContext().getTtl());
         map.put("created",Long.toString(created_at));

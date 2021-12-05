@@ -415,6 +415,7 @@ public class SampleUseCase {
     public void testDhirajCodeDecrypt() throws Exception{
         //String publicKey = "5KHS4StYY8CG4H+1reZtiycN0vCkkUumvZW0tvv6OiQ=";
         //String nsdlPrivateKey = "IcjI/ozl+pbOWDcKlj5uXb10fPl+8oLO8mKeRLt5RZi1VwYQX2DVG9xHJGp/0LgLi979bDjBrnciAlFyr3mhWdoLe5YdOZJj5SOOSEElaHZXPotn3+r+L/4iekZuvTOREI5BXaMlryqx/1M02rEKUp4AkkMTSYNzYJ+kuDLu6P8=";
+        System.out.println(Request.getRawEncryptionKey(nsdlPublicKey));
         System.out.println(decChallenge("Jw0vQimQ6cP3r3zHAxYi4A==",otherPrivateKey,nsdlPublicKey));
     }
     String nsdlPublicKey = "MCowBQYDK2VuAyEAqe/iT3XBu/3VfaH9muoQ7s6644LORdDc5KIcldN86wE=";
