@@ -85,15 +85,15 @@ public class Request extends BecknObject {
         String expires = params.get("expires");
         String keyId = params.get("keyId");
         String subscriberId = params.get("subscriber_id");
-        String uniqueKeyId  = params.get("unique_key_id");
+        String pub_key_id  = params.get("pub_key_id");
 
 
         String signingString = getSigningString(Long.parseLong(created),Long.parseLong(expires));
-        return verifySignature(signature,signingString,getPublicKey(subscriberId,uniqueKeyId));
+        return verifySignature(signature,signingString,getPublicKey(subscriberId,pub_key_id));
 
         /*
         String hashedSigningString = generateBlakeHash(signingString);
-        return verifySignature(signature,hashedSigningString,getPublicKey(subscriberId,uniqueKeyId));
+        return verifySignature(signature,hashedSigningString,getPublicKey(subscriberId,pub_key_id));
 
          */
 
@@ -110,8 +110,8 @@ public class Request extends BecknObject {
         return privateKeyHolder.get();
     }
 
-    public String generateAuthorizationHeader(String  subscriberId, String uniqueKeyId){
-        Map<String,String> map = generateAuthorizationParams(subscriberId,uniqueKeyId);
+    public String generateAuthorizationHeader(String  subscriberId, String pub_key_id){
+        Map<String,String> map = generateAuthorizationParams(subscriberId,pub_key_id);
         StringBuilder auth = new StringBuilder();
         map.forEach((k,v)-> {
             if (auth.length() == 0){
@@ -148,19 +148,19 @@ public class Request extends BecknObject {
             if (!ObjectUtil.isVoid(keyId)){
                 StringTokenizer keyTokenizer = new StringTokenizer(keyId, "|");
                 String subscriberId = keyTokenizer.nextToken();
-                String uniqueKeyId = keyTokenizer.nextToken();
+                String pub_key_id = keyTokenizer.nextToken();
                 params.put("subscriber_id",subscriberId);
-                params.put("unique_key_id",uniqueKeyId);
+                params.put("pub_key_id",pub_key_id);
             }
         }
 
         return params;
     }
-    public Map<String,String> generateAuthorizationParams(String subscriberId,String uniqueKeyId){
+    public Map<String,String> generateAuthorizationParams(String subscriberId,String pub_key_id){
         Map<String,String> map = new SequenceMap<>();
         StringBuilder keyBuilder = new StringBuilder();
         keyBuilder.append(subscriberId).append('|')
-                .append(uniqueKeyId).append('|').append("ed25519");
+                .append(pub_key_id).append('|').append("ed25519");
 
         map.put("keyId",keyBuilder.toString());
         map.put("algorithm","ed25519");
@@ -169,8 +169,8 @@ public class Request extends BecknObject {
         map.put("created",Long.toString(created_at));
         map.put("expires",Long.toString(expires_at));
         map.put("headers","(created) (expires) digest");
-        //map.put("signature",generateSignature(generateBlakeHash(getSigningString(created_at,expires_at)),getPrivateKey(subscriberId,uniqueKeyId)));
-        map.put("signature",generateSignature(getSigningString(created_at,expires_at),getPrivateKey(subscriberId,uniqueKeyId)));
+        //map.put("signature",generateSignature(generateBlakeHash(getSigningString(created_at,expires_at)),getPrivateKey(subscriberId,pub_key_id)));
+        map.put("signature",generateSignature(getSigningString(created_at,expires_at),getPrivateKey(subscriberId,pub_key_id)));
         return map;
     }
 

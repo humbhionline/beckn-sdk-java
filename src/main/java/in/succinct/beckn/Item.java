@@ -5,6 +5,12 @@ public class Item extends BecknObjectWithId {
         super();
     }
 
+    public String getCriteriaId(){
+        return get("criteria_id");
+    }
+    public void setCriteriaId(String criteriaId){
+        set("criteria_id",criteriaId);
+    }
 
     public Descriptor getDescriptor(){
         return get(Descriptor.class,"descriptor");
