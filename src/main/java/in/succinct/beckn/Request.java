@@ -135,12 +135,11 @@ public class Request extends BecknObject {
         if (authorization.startsWith(signatureToken)){
             authorization = authorization.substring(signatureToken.length());
         }
-        Matcher matcher = Pattern.compile("([A-z]+=\"[^\"]*\"[ ,]*)").matcher(authorization);
-        Pattern variableExtractor = Pattern.compile("([A-z]+)(=\")([^\"]*)(\")");
+
+        Matcher matcher = Pattern.compile("([A-z]+)(=)[\"]*([^\",]*)[\"]*[, ]*").matcher(authorization);
         matcher.results().forEach(mr->{
-            variableExtractor.matcher(mr.group()).results().forEach(r->{
-                params.put(r.group(1),r.group(3));
-            });
+            System.out.println(mr.group());
+            params.put(mr.group(1),mr.group(3));
         });
 
         if (!params.isEmpty()) {

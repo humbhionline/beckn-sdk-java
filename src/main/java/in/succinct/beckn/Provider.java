@@ -24,5 +24,11 @@ public class Provider extends BecknObjectWithId {
         set("items",items.getInner());
     }
 
+    public Categories getCategories(){
+        return get(Categories.class,"categories");
+    }
+    public void setCategories(Categories categories){
+        set("categories",categories.getInner());
+    }
 
 }

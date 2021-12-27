@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import com.venky.core.collections.IgnoreCaseMap;
 import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
 import org.bouncycastle.asn1.DEROctetString;
@@ -291,4 +292,13 @@ public class SignatureTest {
 
     }
 
+
+    @Test
+    public void testSignaturePattern1(){
+        Map<String,String> httpHeaders = new IgnoreCaseMap<>();
+        String signature = "Signature keyId=\"JUSPAY.FMD.UAT.1|juspay-fmd-1-key|ed25519\",algorithm=\"ed25519\",created=1640246819,expires=1640247419,headers=\"(created) (expires) digest\",signature=\"zUwMBABRgJZ57VZY924CMaF/mJRVXvS20/k4JYz8GRJCtGJhQTfz+kMbDcUVrKG86W+tG99m4d7QYY4LzgzEBg==\"";
+        httpHeaders.put("AUTHORIZATION",signature);
+        Map<String,String> map = new Request().extractAuthorizationParams("Authorization",httpHeaders);
+        System.out.println(map.toString());
+    }
 }
