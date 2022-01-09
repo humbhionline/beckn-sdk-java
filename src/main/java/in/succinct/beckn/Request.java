@@ -74,8 +74,7 @@ public class Request extends BecknObject {
     public boolean verifySignature(String header,Map<String,String> httpRequestHeaders){
         return verifySignature(header,httpRequestHeaders,true);
     }
-    public boolean verifySignature(String header,Map<String,String> httpRequestHeaders, boolean headerMandatory){
-        Map<String,String> params = extractAuthorizationParams(header,httpRequestHeaders);
+    public boolean verifySignature(Map<String,String> params, boolean headerMandatory){
         if (params.isEmpty()) {
             return !headerMandatory;
         }
@@ -90,13 +89,10 @@ public class Request extends BecknObject {
 
         String signingString = getSigningString(Long.parseLong(created),Long.parseLong(expires));
         return verifySignature(signature,signingString,getPublicKey(subscriberId,pub_key_id));
-
-        /*
-        String hashedSigningString = generateBlakeHash(signingString);
-        return verifySignature(signature,hashedSigningString,getPublicKey(subscriberId,pub_key_id));
-
-         */
-
+    }
+    public boolean verifySignature(String header,Map<String,String> httpRequestHeaders, boolean headerMandatory){
+        Map<String,String> params = extractAuthorizationParams(header,httpRequestHeaders);
+        return verifySignature(params,headerMandatory);
     }
 
     public static String getPublicKey(String subscriber_id, String keyId ) {

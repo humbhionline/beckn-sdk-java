@@ -35,6 +35,7 @@ public class Price extends BecknObject {
     public void setMaximumValue(double maximum){
         setValue("maximum",maximum);
     }
+    @Deprecated
     public double getEstimatedValue(){
         return getValue("estimated");
     }

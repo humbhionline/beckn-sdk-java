@@ -17,7 +17,8 @@ public class Response extends BecknObject {
     }
 
     public Acknowledgement getAcknowledgement(){
-        return get(Acknowledgement.class,"message");
+        Message message = get(Message.class,"message");
+        return message.getAcknowledgement();
     }
 
     public void setContext(Context context){

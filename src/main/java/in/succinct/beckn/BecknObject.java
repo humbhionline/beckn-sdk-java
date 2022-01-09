@@ -27,11 +27,14 @@ public class BecknObject extends BecknAware<JSONObject> {
         super(object);
     }
 
-    private Map<String,ObjectHolder<BecknAware>> attributeMap = new HashMap<>();
+    private final Map<String,ObjectHolder<BecknAware>> attributeMap = new HashMap<>();
     public <T extends BecknAware> T get(Class<T> clazz,String name){
         return get(clazz,name,false);
     }
     public <T extends BecknAware> T get(Class<T> clazz,String name,boolean createIfAbsent){
+        if (attributeMap.containsKey(name)){
+            return (T)attributeMap.get(name).get();
+        }
         JSONObject inner = getInner();
         JSONAware clazzInner = (JSONAware) inner.get(name);
         try {
@@ -45,6 +48,7 @@ public class BecknObject extends BecknAware<JSONObject> {
                     inner.put(name,clazzInner);
                 }
             }
+            attributeMap.put(name,new ObjectHolder<>(t));
             return t;
         } catch (Exception ex) {
             throw new RuntimeException(ex);

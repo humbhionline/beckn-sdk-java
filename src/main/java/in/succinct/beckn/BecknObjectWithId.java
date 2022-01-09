@@ -10,6 +10,9 @@ public class BecknObjectWithId extends BecknObject {
     public BecknObjectWithId(String payload){
         super(payload);
     }
+    public BecknObjectWithId(JSONObject object){
+        super(object);
+    }
 
     public String getId(){
         return get("id");

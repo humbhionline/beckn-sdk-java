@@ -26,8 +26,8 @@ public class Location extends BecknObjectWithId {
             String gps = get("gps");
             if (!ObjectUtil.isVoid(gps)) {
                 StringTokenizer tokenizer = new StringTokenizer(gps, ",");
-                String lat = tokenizer.nextToken();
-                String lng = tokenizer.nextToken();
+                String lat = tokenizer.nextToken().trim();
+                String lng = tokenizer.nextToken().trim();
                 this.gps.set(new GeoCoordinate(new BigDecimal(lat),new BigDecimal(lng)));
             }
         }

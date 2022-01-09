@@ -53,4 +53,8 @@ public class Message extends BecknObject {
     public void setSelected(Order selected){
         setOrder(selected);
     }
+
+    public Acknowledgement getAcknowledgement(){
+        return get(Acknowledgement.class,"ack");
+    }
 }

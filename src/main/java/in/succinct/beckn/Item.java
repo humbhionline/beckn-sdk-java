@@ -16,13 +16,20 @@ public class Item extends BecknObjectWithId {
         return get(Descriptor.class,"descriptor");
     }
     public void setDescriptor(Descriptor descriptor){
-        set("descriptor",descriptor.getInner());
+        set("descriptor",descriptor);
     }
     public Price getPrice(){
         return get(Price.class,"price");
     }
     public void setPrice(Price price){
-        set("price",price.getInner());
+        set("price",price);
+    }
+
+    public Quantity getQuantity(){
+        return get(Quantity.class,"quantity");
+    }
+    public  void setQuantity(Quantity quantity){
+        set("quantity",quantity);
     }
 
     public String getLocationId(){
