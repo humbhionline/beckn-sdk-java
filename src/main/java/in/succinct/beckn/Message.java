@@ -57,4 +57,11 @@ public class Message extends BecknObject {
     public Acknowledgement getAcknowledgement(){
         return get(Acknowledgement.class,"ack");
     }
+
+    public Rating getRating(){
+        return get(Rating.class, "rating");
+    }
+    public void setRating(Rating rating){
+        set("rating",rating);
+    }
 }
