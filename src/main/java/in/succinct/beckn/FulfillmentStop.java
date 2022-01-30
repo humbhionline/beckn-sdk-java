@@ -30,4 +30,11 @@ public class FulfillmentStop extends BecknObject {
     public void setContact(Contact contact){
         set("contact",contact);
     }
+
+    public Person getPerson(){
+        return get(Person.class, "person");
+    }
+    public void setPerson(Person person){
+        set("person",person);
+    }
 }
