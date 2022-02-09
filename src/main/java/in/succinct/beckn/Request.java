@@ -61,6 +61,34 @@ public class Request extends BecknObject {
         set("error",error.getInner());
     }
 
+    public RatingCategories getRatingCategories(){
+        return get(RatingCategories.class, "rating_categories");
+    }
+    public void setRatingCategories(RatingCategories rating_categories){
+        set("rating_categories",rating_categories);
+    }
+
+    public FeedbackCategories getFeedbackCategories(){
+        return get(FeedbackCategories.class, "feedback_categories");
+    }
+    public void setFeedbackCategories(FeedbackCategories feedback_categories){
+        set("feedback_categories",feedback_categories);
+    }
+
+    public CancellationReasons getCancellationReasons(){
+        return get(CancellationReasons.class, "cancellation_reasons");
+    }
+    public void setCancellationReasons(CancellationReasons cancellation_reasons){
+        set("cancellation_reasons",cancellation_reasons);
+    }
+
+    public ReturnReasons getReturnReasons(){
+        return get(ReturnReasons.class, "return_reasons");
+    }
+    public void setReturnReasons(ReturnReasons return_reasons){
+        set("return_reasons",return_reasons);
+    }
+
 
 
     public String getSigningString(long created_at, long expires_at) {

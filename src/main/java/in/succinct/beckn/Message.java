@@ -64,4 +64,26 @@ public class Message extends BecknObject {
     public void setRating(Rating rating){
         set("rating",rating);
     }
+    
+    
+    public String getPhone(){
+        return get("phone");
+    }
+    public void setPhone(String phone){
+        set("phone",phone);
+    }
+    
+    public String getEmail(){
+        return get("email");
+    }
+    public void setEmail(String email){
+        set("email",email);
+    }
+
+    public String getUrl(){
+        return get("url");
+    }
+    public void setUrl(String url){
+        set("url",url);
+    }
 }

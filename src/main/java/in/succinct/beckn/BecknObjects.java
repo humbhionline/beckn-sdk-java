@@ -10,9 +10,19 @@ import java.util.Iterator;
 public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<T>{
     Class<T> clazz ;
     public BecknObjects(){
-        super(new JSONArray());
+        this(new JSONArray());
+    }
+
+    public BecknObjects(JSONArray value) {
+        super(value);
         ParameterizedType pt = (ParameterizedType)getClass().getGenericSuperclass();
-        this.clazz = (Class<T>) pt.getActualTypeArguments()[0];
+        this.clazz = (Class<T>) pt.getActualTypeArguments()[0];;
+    }
+
+    public BecknObjects(String payload) {
+        super(payload);
+        ParameterizedType pt = (ParameterizedType)getClass().getGenericSuperclass();
+        this.clazz = (Class<T>) pt.getActualTypeArguments()[0];;
     }
 
     public void add(T t){

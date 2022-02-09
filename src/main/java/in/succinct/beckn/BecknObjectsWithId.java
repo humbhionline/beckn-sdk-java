@@ -1,13 +1,21 @@
 package in.succinct.beckn;
 
 import com.venky.core.util.ObjectUtil;
+import org.json.simple.JSONArray;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObjects<T> {
     public BecknObjectsWithId(){
-        super();
+        this(new JSONArray());
+    }
+    public BecknObjectsWithId(JSONArray array){
+        super(array);
+        loadMap();
+    }
+    public BecknObjectsWithId(String payload){
+        super(payload);
         loadMap();
     }
 
