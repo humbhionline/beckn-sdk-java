@@ -116,6 +116,13 @@ public class Request extends BecknObject {
 
 
         String signingString = getSigningString(Long.parseLong(created),Long.parseLong(expires));
+
+        System.out.println( "Signing String:" +signingString );
+        System.out.println( "Signature:"  + signature);
+        System.out.println( "pub_key_id:"  + pub_key_id);
+
+
+
         return verifySignature(signature,signingString,getPublicKey(subscriberId,pub_key_id));
     }
     public boolean verifySignature(String header,Map<String,String> httpRequestHeaders, boolean headerMandatory){
