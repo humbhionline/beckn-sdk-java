@@ -175,6 +175,41 @@ public class SampleUseCase {
         Assert.assertTrue(verified);
 
     }
+    @Test
+    public void testSign1() throws Exception{
+        String signingString = "(created): 1645895834\n" +
+                "(expires): 1645895854\n" +
+                "digest: BLAKE-512=3UY7ZXVmybod2rFlj8/QFnpWoeeSuWnBeEwwOanf6pdu/aYyZAlG+Pq6k8MIdQ471W7/rwXyD7AVzAEjxeUn2g==";
+
+        String passedSignature = "x+xy3NiokZfEIl3kY1PanTuNtGgW8XQC86ILOflR5y3Iad1s5IZ6zNmcoGc1E/CpffHHaG3DmfWyTr7Nq6X/CA==";
+
+        String privateKey = "MFECAQEwBQYDK2VwBCIEIMChGqsZo7FbrwIK7tq6AuKiqtEPCm+rMx7cz+AsqhcFgSEATa9ExVX6Q1c1+4cdmZSFnh1rAR8F0TbIuCCzehTz5U0=";
+        String signature = Request.generateSignature(signingString,privateKey);
+        System.out.println("Computed:" + signature );
+        System.out.println("Passed:" + passedSignature);
+        //Assert.assertEquals(signature,passedSignature);
+
+        //boolean verified = Request.verifySignature(signature, s,"MCowBQYDK2VwAyEATa9ExVX6Q1c1+4cdmZSFnh1rAR8F0TbIuCCzehTz5U0=");
+        boolean verified = Request.verifySignature(signature, signingString,"Ta9ExVX6Q1c1+4cdmZSFnh1rAR8F0TbIuCCzehTz5U0=");
+        Assert.assertTrue(verified);
+    }
+
+    @Test
+    public void testSignRavi() throws Exception{
+        String privateKey = "b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZWQyNTUxOQAAACDC6beMrEFF7VmZK7EY7QW3LYbe8XTik/pEve02ezDa1wAAAIix3rwCsd68AgAAAAtzc2gtZWQyNTUxOQAAACDC6beMrEFF7VmZK7EY7QW3LYbe8XTik/pEve02ezDa1wAAAEBrrQ8SBkbBxNo6Vj9AWQi61Cs+dfycUG7bBXW+g67c+MLpt4ysQUXtWZkrsRjtBbctht7xdOKT+kS97TZ7MNrXAAAAAAECAwQF";
+
+        String publicKey = "X+jgcPXHD4kFzvcbb3eaxWRA5UwB8Mm6IykeTPADofU=" ;
+        String signingString = "(created): 1645897554\n" +
+                "(expires): 1645897574\n" +
+                "digest: BLAKE-512=SzSEdjOtuZVUOBeN6dpCXOZ4DF2kJTFDu9ejBAOneHtyQlAWLa5ravzbGf2wfCyIYAaxBDpaLoHFlCZ8gRh2UA==";
+
+        String passedSignature = "ull+zVvFTdbORi3VCUsA+pL/fiVtf5CJ7nm/kf7Fif4AkZlHE9M9zqA3gwDiMfaTC65HSdgq26grk53bUpEOAQ==";
+
+        String signature = Request.generateSignature(signingString,privateKey);
+        System.out.println("Computed:" + signature );
+        Assert.assertTrue(Request.verifySignature(signature, signingString,publicKey));
+        Assert.assertTrue(Request.verifySignature(passedSignature,signingString,publicKey));
+    }
 
     @Test
     public void generateBlakeHash() throws Exception{
