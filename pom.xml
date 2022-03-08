@@ -9,7 +9,7 @@
 
     <groupId>in.succinct.beckn</groupId>
     <artifactId>sdk</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>beckn-sdk-java</name>
     <description>Commonly used programming tasks for java programmers building on beckn protocol</description>
     <url>http://maven.apache.org</url>
