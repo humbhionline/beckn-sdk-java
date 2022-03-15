@@ -11,6 +11,9 @@ public class Response extends BecknObject {
         setContext(context);
         setAcknowledgement(acknowledgement);
     }
+    public Response(Acknowledgement acknowledgement){
+        this(null,acknowledgement);
+    }
 
     public  Context getContext(){
         return get(Context.class,"context");
@@ -22,7 +25,9 @@ public class Response extends BecknObject {
     }
 
     public void setContext(Context context){
-        set("context",context);
+        if (context != null) {
+            set("context", context);
+        }
     }
 
     public void setAcknowledgement(Acknowledgement acknowledgement){
