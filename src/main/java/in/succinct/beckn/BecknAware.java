@@ -49,7 +49,13 @@ public abstract class BecknAware<T extends JSONAware> implements Serializable {
     }
 
     public static String generateBlakeHash(String req) {
-        return Crypt.getInstance().toBase64(Crypt.getInstance().digest("BLAKE2B-512",req));
+        System.out.println("Blake in :" + req);
+
+        String hash = Crypt.getInstance().toBase64(Crypt.getInstance().digest("BLAKE2B-512",req));
+
+        System.out.println("Blake out :" + hash);
+
+        return hash;
     }
 
 

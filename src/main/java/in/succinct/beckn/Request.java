@@ -96,6 +96,7 @@ public class Request extends BecknObject {
         builder.append("(created): ").append(created_at);
         builder.append("\n(expires): ").append(expires_at);
         builder.append("\n").append("digest: BLAKE-512=").append(hash());
+        System.out.println( "Signing String:" +builder );
         return builder.toString();
     }
 
@@ -116,13 +117,6 @@ public class Request extends BecknObject {
 
 
         String signingString = getSigningString(Long.parseLong(created),Long.parseLong(expires));
-
-        System.out.println( "Signing String:" +signingString );
-        System.out.println( "Signature:"  + signature);
-        System.out.println( "pub_key_id:"  + pub_key_id);
-
-
-
         return verifySignature(signature,signingString,getPublicKey(subscriberId,pub_key_id));
     }
     public boolean verifySignature(String header,Map<String,String> httpRequestHeaders, boolean headerMandatory){
@@ -169,7 +163,6 @@ public class Request extends BecknObject {
 
         Matcher matcher = Pattern.compile("([A-z]+)(=)[\"]*([^\",]*)[\"]*[, ]*").matcher(authorization);
         matcher.results().forEach(mr->{
-            System.out.println(mr.group());
             params.put(mr.group(1),mr.group(3));
         });
 
@@ -223,10 +216,7 @@ public class Request extends BecknObject {
 
 
     public static boolean verifySignature(String sign, String requestData, String b64PublicKey) {
-        System.out.println("Public Key:" + b64PublicKey);
         PublicKey key = getSigningPublicKey(b64PublicKey);
-        System.out.println("Public Key OK:" + (key != null));
-
         return Crypt.getInstance().verifySignature(requestData,sign,SIGNATURE_ALGO,key);
     }
 

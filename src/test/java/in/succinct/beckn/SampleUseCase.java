@@ -343,6 +343,11 @@ public class SampleUseCase {
         Assert.assertNotNull(k2);
 
     }
+    @Test
+    public  void testSandeep() throws  Exception{
+        PublicKey key = Request.getSigningPublicKey("sVgSdujT4S+pZm/DwHC39QE/1zTRBScyuMKsqJzuAKM=");
+        Assert.assertNotNull(key);
+    }
 
     @Test
     public void testRawToPem() throws Exception {
