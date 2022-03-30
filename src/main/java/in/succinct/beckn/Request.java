@@ -216,6 +216,7 @@ public class Request extends BecknObject {
 
 
     public static boolean verifySignature(String sign, String requestData, String b64PublicKey) {
+        System.out.println(String.format("--Sign : %s\nPayload: %s\n Public key: %s\n--",sign,requestData,b64PublicKey));
         PublicKey key = getSigningPublicKey(b64PublicKey);
         return Crypt.getInstance().verifySignature(requestData,sign,SIGNATURE_ALGO,key);
     }

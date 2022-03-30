@@ -347,6 +347,9 @@ public class SampleUseCase {
     public  void testSandeep() throws  Exception{
         PublicKey key = Request.getSigningPublicKey("sVgSdujT4S+pZm/DwHC39QE/1zTRBScyuMKsqJzuAKM=");
         Assert.assertNotNull(key);
+        boolean verified  = Crypt.getInstance().verifySignature("X", "v+k64uPcn8D7BcCgdE0HYh9qtdLgSelfIuBcyo3odc/jV68n0ZHIfi1ZAN/YhwIw65yKvg6fdjZuzlFei8n0Bw==", Request.SIGNATURE_ALGO,key) ;
+        Assert.assertTrue(verified);
+
     }
 
     @Test
