@@ -2,9 +2,15 @@ package in.succinct.beckn;
 
 import org.json.simple.JSONObject;
 
+
+
+
 public class Response extends BecknObject {
     public Response(String payload){
         super(payload);
+    }
+    public Response(JSONObject object){
+        super(object);
     }
     public Response(Context context, Acknowledgement acknowledgement){
         super();

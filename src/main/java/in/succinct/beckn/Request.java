@@ -96,7 +96,7 @@ public class Request extends BecknObject {
         builder.append("(created): ").append(created_at);
         builder.append("\n(expires): ").append(expires_at);
         builder.append("\n").append("digest: BLAKE-512=").append(hash());
-        System.out.println( "Signing String:" +builder );
+        System.out.println( "---------Signing String:\n" +builder + "\n------------------");
         return builder.toString();
     }
 
@@ -210,13 +210,16 @@ public class Request extends BecknObject {
     public static int ENCRYPTION_ALGO_KEY_LENGTH = 256;
 
     public static String generateSignature(String req, String privateKey) {
+
         PrivateKey key = Crypt.getInstance().getPrivateKey(SIGNATURE_ALGO,privateKey);
-        return Crypt.getInstance().generateSignature(req,SIGNATURE_ALGO,key);
+        String signature =  Crypt.getInstance().generateSignature(req,SIGNATURE_ALGO,key);
+        System.out.println(String.format("--\nSignature : %s\nPayload: %s\n",signature,req));
+        return signature;
     }
 
 
     public static boolean verifySignature(String sign, String requestData, String b64PublicKey) {
-        System.out.println(String.format("--Sign : %s\nPayload: %s\n Public key: %s\n--",sign,requestData,b64PublicKey));
+        System.out.println(String.format("--\nSignature : %s\nPayload: %s\n Public key: %s\n--",sign,requestData,b64PublicKey));
         PublicKey key = getSigningPublicKey(b64PublicKey);
         return Crypt.getInstance().verifySignature(requestData,sign,SIGNATURE_ALGO,key);
     }

@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import com.venky.core.io.StringReader;
 import com.venky.core.security.Crypt;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
@@ -11,10 +12,13 @@ import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
 import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.bouncycastle.crypto.params.X25519PrivateKeyParameters;
+import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.OpenSSHPublicKeySpec;
+import org.bouncycastle.util.io.pem.PemReader;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -23,6 +27,9 @@ import org.junit.function.ThrowingRunnable;
 import javax.crypto.Cipher;
 import javax.crypto.KeyAgreement;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.SecretKeySpec;
+import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -455,6 +462,15 @@ public class SampleUseCase {
 
     }
     @Test
+    public void testSandeepX25519() throws Exception{
+         String  regstryKey = "/re98S+QQonKxutHTNsnfX3qbSjZrsiqZ/drbeLbhis=";
+         String privateKEy = "SKROdhs7yeD4gdJi2fOWvHLA9rqYaBzty5v8k6bH/3Q=";
+         //SecretKey key = getSecretKey(privateKEy,regstryKey);
+         String secret = "0Kpkm/vWrCGE4cUBfO0+jiGoNjpAME43/Alg7kC3Su0MxHYqEi18iAMpX8HD3XBM";
+
+         System.out.println(decChallenge(secret,privateKEy,regstryKey));
+    }
+    @Test
     public void testDhirajCodeDecrypt() throws Exception{
         //String publicKey = "5KHS4StYY8CG4H+1reZtiycN0vCkkUumvZW0tvv6OiQ=";
         //String nsdlPrivateKey = "IcjI/ozl+pbOWDcKlj5uXb10fPl+8oLO8mKeRLt5RZi1VwYQX2DVG9xHJGp/0LgLi979bDjBrnciAlFyr3mhWdoLe5YdOZJj5SOOSEElaHZXPotn3+r+L/4iekZuvTOREI5BXaMlryqx/1M02rEKUp4AkkMTSYNzYJ+kuDLu6P8=";
@@ -485,7 +501,7 @@ public class SampleUseCase {
         KeyAgreement keyAgreement = KeyAgreement.getInstance(ENC_DEC_ALGO_X25519, BouncyCastleProvider.PROVIDER_NAME);
         keyAgreement.init(getEncryptionPrivateKey(Base64.getDecoder().decode(privateKey1))); // Server1 uses its private key to initialize the aggreement object
         keyAgreement.doPhase(getEncryptionPublicKey(Base64.getDecoder().decode(publicKey2)), true); // Uses Server2's ppublic Key
-        SecretKey key1 = keyAgreement.generateSecret("TlsPremasterSecret"); // derive secret at server 1. "TlsPremasterSecret" is the algorithm for secret key. It is an aes key actually.
+        SecretKey key1 = keyAgreement.generateSecret("TlsPremasterSecret "); // derive secret at server 1. "TlsPremasterSecret" is the algorithm for secret key. It is an aes key actually.
         return key1;
     }
     public static final String ENC_DEC_ALGO_X25519 = Request.ENCRYPTION_ALGO;
@@ -529,6 +545,7 @@ public class SampleUseCase {
         cipher2.init(Cipher.DECRYPT_MODE, key2);
         byte[] decrypted2 = cipher2.doFinal(Base64.getDecoder().decode(cs));
         //System.out.println("" + new String(decrypted2));
+        //System.out.println(String.valueOf(decrypted2));
         return new String(decrypted2);
     }
 
@@ -549,7 +566,7 @@ public class SampleUseCase {
             return getPrivateKey(ENC_DEC_ALGO_X25519,bytes);
         }catch (Exception ex){
             try {
-                Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(bytes,0);
+                X25519PrivateKeyParameters privateKeyParameters = new X25519PrivateKeyParameters(bytes,0);
                 byte[] jceBytes = new PrivateKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_X25519),
                         new DEROctetString(privateKeyParameters.getEncoded())).getEncoded();
                 return getPrivateKey(ENC_DEC_ALGO_X25519,jceBytes);
