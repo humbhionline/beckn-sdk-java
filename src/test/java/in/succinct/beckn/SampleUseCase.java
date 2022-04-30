@@ -73,6 +73,13 @@ public class SampleUseCase {
     }
 
     @Test
+    public void testIshitaPaytm(){
+        String payload = "{\"context\":{\"domain\":\"nic2004:52110\",\"country\":\"IND\",\"city\":\"std:080\",\"action\":\"search\",\"core_version\":\"0.9.1\",\"bap_id\": \"ondc-staging.paytm.com\",\"bap_uri\": \"https://ondc-staging.paytm.com\",\"transaction_id\":\"txn_test\",\"message_id\":\"a2fe6d52-9fe4-4d1a-9d0b-dccb8b48522d\",\"timestamp\":\"2022-04-19T09:17:55.971Z\",\"ttl\":\"P1M\"},\"message\":{\"intent\":{\"fulfillment\":{\"start\":{\"location\":{\"gps\":\"10.108768, 76.347517\"}},\"end\":{\"location\":{\"gps\":\"10.102997, 76.353480\"}}}}}}";
+        Request request = new Request(payload);
+        System.out.println(request.hash());
+
+    }
+    @Test
     public void generateKeyPair() throws  Exception{
         for (String algo : new String[]{"Ed25519","X25519"}){
             KeyPair agreementKeyPair = KeyPairGenerator.getInstance(algo,BouncyCastleProvider.PROVIDER_NAME).generateKeyPair();
@@ -469,6 +476,28 @@ public class SampleUseCase {
          String secret = "0Kpkm/vWrCGE4cUBfO0+jiGoNjpAME43/Alg7kC3Su0MxHYqEi18iAMpX8HD3XBM";
 
          System.out.println(decChallenge(secret,privateKEy,regstryKey));
+    }
+    @Test
+    public void testSandeepX25519OnRegistrySide() throws Exception{
+        String publicKey = "MCowBQYDK2VuAyEA5ZnLsJiemxA+4xnZg9uA1rW9fxULelTIfUDT5CidMjQ=";
+        String privateKey = "MFECAQEwBQYDK2VuBCIEICBh1xuhLhT1SqfZiLmRusAl2xESPr6/fnzl5Op7hOBsgSEA/re98S+QQonKxutHTNsnfX3qbSjZrsiqZ/drbeLbhis=";
+
+        KeyAgreement keyAgreement = KeyAgreement.getInstance(ENC_DEC_ALGO_X25519, BouncyCastleProvider.PROVIDER_NAME);
+        // atServer1.init(nsdlKeyPair.getPrivate()); // Server1 uses its private
+        // key to initialize the aggreement object
+        keyAgreement.init(getEncryptionPrivateKey(Base64.getDecoder().decode(privateKey))); // Server1 uses its private key to initialize the aggreement object
+        // atServer1.doPhase(tcsKeyPair.getPublic(),true); //Uses Server2's
+        // ppublic Key
+        keyAgreement.doPhase(getEncryptionPublicKey(Base64.getDecoder().decode(publicKey)), true);
+
+        SecretKey key = keyAgreement.generateSecret("TlsPremasterSecret");
+
+
+        String sharedKey = Base64.getEncoder().encodeToString(key.getEncoded());
+        System.out.println(sharedKey);
+        SecretKey k2 = SecretKeyFactory.getInstance("AES").generateSecret(new SecretKeySpec(Base64.getDecoder().decode(sharedKey),"AES"));
+        System.out.println(Base64.getEncoder().encodeToString(key.getEncoded()));
+
     }
     @Test
     public void testDhirajCodeDecrypt() throws Exception{

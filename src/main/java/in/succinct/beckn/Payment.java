@@ -85,8 +85,16 @@ public class Payment extends BecknObject {
             return getDouble("amount");
         }
         public void setAmount(double amount){
-            set("amount",amount);
+            set("amount",String.valueOf(amount));
         }
+
+        public String getCurrency(){
+            return get("currency");
+        }
+        public void setCurrency(String currency){
+            set("currency",currency);
+        }
+
 
     }
 
