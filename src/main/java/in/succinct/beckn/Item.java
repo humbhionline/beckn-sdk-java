@@ -47,6 +47,12 @@ public class Item extends BecknObjectWithId {
         set("recommended",recommended);
     }
 
+    public String getFulfillmentId(){
+        return get("fulfillment_id");
+    }
+    public void setFulfillmentId(String fulfillment_id){
+        set("fulfillment_id",fulfillment_id);
+    }
 
 
 }
