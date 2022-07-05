@@ -12,17 +12,9 @@ public class Response extends BecknObject {
     public Response(JSONObject object){
         super(object);
     }
-    public Response(Context context, Acknowledgement acknowledgement){
-        super();
-        setContext(context);
-        setAcknowledgement(acknowledgement);
-    }
     public Response(Acknowledgement acknowledgement){
-        this(null,acknowledgement);
-    }
-
-    public  Context getContext(){
-        return get(Context.class,"context");
+        super();
+        setAcknowledgement(acknowledgement);
     }
 
     public Acknowledgement getAcknowledgement(){
@@ -30,16 +22,18 @@ public class Response extends BecknObject {
         return message.getAcknowledgement();
     }
 
-    public void setContext(Context context){
-        if (context != null) {
-            set("context", context);
-        }
-    }
 
     public void setAcknowledgement(Acknowledgement acknowledgement){
         JSONObject ack = new JSONObject();
         ack.put("ack",acknowledgement.getInner());
         set("message",ack);
+    }
+
+    public void setError(Error error){
+        set("error",error);
+    }
+    public Error getError(){
+        return get(Error.class,"error");
     }
 
 }

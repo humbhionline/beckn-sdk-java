@@ -71,4 +71,10 @@ public class Fulfillment extends BecknObjectWithId {
         set("customer",customer);
     }
 
+    public Vehicle getVehicle(){
+        return get(Vehicle.class, "vehicle");
+    }
+    public void setVehicle(Vehicle vehicle){
+        set("vehicle",vehicle);
+    }
 }

@@ -29,4 +29,17 @@ public class Intent extends BecknObject {
         set("item",item);
     }
 
+    public Tags getTags(){
+        return get(Tags.class,"tags");
+    }
+    public void setTags(Tags tags){
+        set("tags",tags);
+    }
+
+    public Category getCategory(){
+        return get(Category.class,"category");
+    }
+    public void setCategory(Category category){
+        set("category",category);
+    }
 }
