@@ -8,6 +8,13 @@ public class Intent extends BecknObject {
         super(payload);
     }
 
+    public Descriptor getDescriptor(){
+        return get(Descriptor.class, "descriptor");
+    }
+    public void setDescriptor(Descriptor descriptor){
+        set("descriptor",descriptor);
+    }
+
     public Fulfillment getFulfillment(){
         return get(Fulfillment.class, "fulfillment");
     }

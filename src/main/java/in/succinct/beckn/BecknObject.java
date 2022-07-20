@@ -65,12 +65,18 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
     public <T extends BecknAware> void set(String key, T value){
+        if (value == null) return;
+
         set(key,value.getInner());
     }
     public void set(String key, JSONAware value){
+        if (value == null) return;
+
         getInner().put(key,value);
     }
     public void set(String key, String value){
+        if (value == null) return;
+
         getInner().put(key,value);
     }
     public void set(String key, boolean value){
@@ -89,9 +95,11 @@ public class BecknObject extends BecknAware<JSONObject> {
 
 
     public void set(String key, Date date, DateFormat format){
+        if (date == null) return;
         set(key,format.format(date));
     }
     public void set(String key, Double value){
+        if (value == null) return;
         getInner().put(key,value);
     }
     public void set(String key, int value){

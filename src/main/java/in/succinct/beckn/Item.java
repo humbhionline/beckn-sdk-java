@@ -54,5 +54,11 @@ public class Item extends BecknObjectWithId {
         set("fulfillment_id",fulfillment_id);
     }
 
+    public Tags getTags(){
+        return get(Tags.class, "tags");
+    }
+    public void setTags(Tags tags){
+        set("tags",tags);
+    }
 
 }
