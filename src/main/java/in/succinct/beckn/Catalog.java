@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import java.util.Date;
+
 public class Catalog extends BecknObjectWithId {
     public Catalog(){
         super();
@@ -27,6 +29,27 @@ public class Catalog extends BecknObjectWithId {
     }
     public void setFulfillments(Fulfillments fulfillments){
         set("bpp/fulfillments",fulfillments);
+    }
+
+    public Categories getCategories(){
+        return get(Categories.class, "bpp/categories");
+    }
+    public void setCategories(Categories categories){
+        set("bpp/categories",categories);
+    }
+
+    public Payments getPayments(){
+        return get(Payments.class, "bpp/payments");
+    }
+    public void setPayments(Payments payments){
+        set("bpp/payments",payments);
+    }
+
+    public Date getExp(){
+        return getDate("exp",TIMESTAMP_FORMAT);
+    }
+    public void setExp(Date exp){
+        set("exp",exp,TIMESTAMP_FORMAT);
     }
 
 }
