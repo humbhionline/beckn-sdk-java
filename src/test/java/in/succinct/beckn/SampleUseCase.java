@@ -2,6 +2,7 @@ package in.succinct.beckn;
 
 import com.venky.core.io.StringReader;
 import com.venky.core.security.Crypt;
+import com.venky.core.string.StringUtil;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
@@ -51,6 +52,7 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,6 +63,25 @@ public class SampleUseCase {
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null){
             Security.addProvider(new BouncyCastleProvider());
         }
+    }
+
+    @Test
+    public void testBikry()throws  Exception{
+        String payload = StringUtil.read(getClass().getResourceAsStream("/message.txt"));
+        payload=payload.trim();
+        Request request = new Request(payload);
+        String privateKey = "MFECAQEwBQYDK2VwBCIEIGFb5nbGack1kjlYtbWel9LyxmXti1HGh9Oq6tFoAMZzgSEA1NOJ12n2O9pNTMjxQEOBy/Aqa4z8mfEHMpWQgV15gE4=";
+
+        String signingString = request.getSigningString(1659888942,1659888952);
+        System.out.println(signingString);
+        PrivateKey privateKey1 = Crypt.getInstance().getPrivateKey(Request.SIGNATURE_ALGO,privateKey);
+
+        //PublicKey key = Request.getSigningPublicKey("MCowBQYDK2VwAyEA1NOJ12n2O9pNTMjxQEOBy/Aqa4z8mfEHMpWQgV15gE4=");
+        PublicKey key = Request.getSigningPublicKey("1NOJ12n2O9pNTMjxQEOBy/Aqa4z8mfEHMpWQgV15gE4=");
+
+        String signature = "Nv8WY23Yv8tfSNBIVes3TMQeLW27CLIMvkEQrje9DfbR3P5B7SwTLWjr+LQfsWk0MuCAKF/EaLTp2B6SDW+vBw==";
+
+        Assert.assertTrue(Crypt.getInstance().verifySignature(signingString,signature,Request.SIGNATURE_ALGO,key));
     }
 
     @Test

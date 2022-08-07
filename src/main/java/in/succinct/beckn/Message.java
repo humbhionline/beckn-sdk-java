@@ -86,4 +86,12 @@ public class Message extends BecknObject {
     public void setUrl(String url){
         set("url",url);
     }
+
+    public Tracking getTracking(){
+        return get(Tracking.class, "tracking");
+    }
+    public void setTracking(Tracking tracking){
+        set("tracking",tracking);
+    }
+
 }
