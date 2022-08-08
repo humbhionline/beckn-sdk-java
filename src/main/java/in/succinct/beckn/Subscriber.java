@@ -2,7 +2,11 @@ package in.succinct.beckn;
 
 import org.json.simple.JSONObject;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Subscriber extends BecknObject{
     public static final String SUBSCRIBER_TYPE_BAP = "BAP";
@@ -12,6 +16,24 @@ public class Subscriber extends BecknObject{
     public static final String SUBSCRIBER_TYPE_ROOT_REGISTRY = "RREG";
     public static final String SUBSCRIBER_TYPE_BG = "BG";
     public static final String SUBSCRIBER_STATUS_SUBSCRIBED = "SUBSCRIBED";
+
+    public static final String[] BPP_ACTIONS = new String[]{"search", "select", "init", "confirm", "track",
+            "cancel", "update", "status", "rating", "support","get_cancellation_reasons","get_return_reasons","get_rating_categories","get_feedback_categories"};
+
+    public static final Set<String> BPP_ACTION_SET = Collections.unmodifiableSet(new HashSet<>(){{
+        for (String action: BPP_ACTIONS){
+            add(action);
+        }
+    }});
+
+    public static final String[] BAP_ACTIONS = new String[]{"on_search", "on_select", "on_init", "on_confirm", "on_track",
+            "on_cancel", "on_update", "on_status", "on_rating", "on_support","cancellation_reasons","return_reasons","rating_categories","feedback_categories"};
+
+    public static final Set<String> BAP_ACTION_SET = Collections.unmodifiableSet(new HashSet<>(){{
+        for (String action: BAP_ACTIONS){
+            add(action);
+        }
+    }});
 
     public Subscriber() {
     }
