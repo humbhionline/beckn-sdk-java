@@ -44,10 +44,10 @@ public class Fulfillment extends BecknObjectWithId {
         set("tracking",tracking);
     }
 
-    public String getAgent(){
+    public Agent getAgent(){
         return get("agent");
     }
-    public void setAgent(String agent){
+    public void setAgent(Agent agent){
         set("agent",agent);
     }
 
