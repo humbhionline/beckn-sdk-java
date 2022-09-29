@@ -68,6 +68,7 @@ public class BecknObject extends BecknAware<JSONObject> {
         if (value == null) return;
 
         set(key,value.getInner());
+        attributeMap.put(key,new ObjectHolder<>(value));
     }
     public void set(String key, JSONAware value){
         if (value == null) return;
