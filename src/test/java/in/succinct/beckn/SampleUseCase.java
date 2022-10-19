@@ -19,6 +19,7 @@ import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.jce.spec.OpenSSHPublicKeySpec;
+import org.bouncycastle.math.ec.rfc8032.Ed25519;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -32,6 +33,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.SecretKeySpec;
 import java.awt.*;
 import java.io.IOException;
+import java.lang.ref.ReferenceQueue;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -69,7 +71,7 @@ public class SampleUseCase {
     @Test
     public void timestampFormats(){
         for (DateFormat t : BecknObject.TIMESTAMP_FORMATS){
-            System.out.println(t.getNumberFormat().toString() + "," + t.format(new Date()));
+            System.out.println(((SimpleDateFormat)t).toPattern()+ "," + t.format(new Date()));
         }
     }
 
@@ -649,5 +651,28 @@ public class SampleUseCase {
         return key;
     }
 
+    @Test
+    public void testHashicorpVault(){
+        String sign =  "0U0IVLl6qpy3SW7ginB3o/H1/dS1eg6Dxnu/Rqdyxlrr5+BDQEsmCyJwIXTmeNEumLQvi3Wkg2sXPck0ngGfCg==" ;//"pn5lfZ0qw41hgTayfol5HOiIffJLUdl0zmGUPjyBvZXvbEzyxYnvQxEdu5R3h9c6LEnJ1BGhydeXcaMkAP2lBw==";
+        //String sign = "r3jezKeH2CSnOeS6R45CEiatM63Wd2q2PXukfPEjPHZworPdTV3ItN8iHojP09DoozN8eNC7pjbZHUcRf2hfAQ==";
+        //String sign = "r3jezKeH2CSnOeS6R45CEiatM63Wd2q2PXukfPEjPHZworPdTV3ItN8iHojP09DoozN8eNC7pjbZHUcRf2hfAQ==";
+        String publicKey = "M9t8uPpYwaSPk/nk03t3rJ2pMbUwwRC6+wiF7923MYE=";
+        String signingString = "XX\n";
+        Assert.assertTrue(Crypt.getInstance(BouncyCastleProvider.   PROVIDER_NAME).verifySignature(signingString,sign,Request.SIGNATURE_ALGO, Request.getSigningPublicKey(publicKey)));
 
+
+    }
+
+    @Test
+    public void testTimestamp(){
+        Context context = new Context();
+        context.set("timestamp",new Date(),BecknObject.TIMESTAMP_FORMAT_WITH_MILLS);
+        Request r = new Request();
+        r.setContext(context);
+
+        r = new Request(r.toString());
+        System.out.println(r.getContext().getTimestamp());
+
+
+    }
 }

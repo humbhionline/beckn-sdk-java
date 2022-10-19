@@ -121,8 +121,8 @@ public class BecknObject extends BecknAware<JSONObject> {
         MultiException multiException = new MultiException();
         for (DateFormat f : TIMESTAMP_FORMATS){
             try {
-                return f.parse(key);
-            }catch (ParseException ex){
+                return getDate(key,f);
+            }catch (Exception ex){
                 multiException.add(ex);
             }
         }
