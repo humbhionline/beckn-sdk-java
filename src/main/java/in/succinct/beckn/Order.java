@@ -73,10 +73,10 @@ public class Order extends BecknObjectWithId {
     }
 
     public Date getCreatedAt(){
-        return getDate("created_at",TIMESTAMP_FORMAT);
+        return getTimestamp("created_at");
     }
     public Date getUpdatedAt(){
-        return getDate("updated_at",TIMESTAMP_FORMAT);
+        return getTimestamp("updated_at");
     }
     public void setCreatedAt(Date date){
         set("created_at",date,TIMESTAMP_FORMAT);

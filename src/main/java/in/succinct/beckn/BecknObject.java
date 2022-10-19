@@ -1,10 +1,12 @@
 package in.succinct.beckn;
 
 import com.venky.core.date.DateUtils;
+import com.venky.core.util.MultiException;
 import com.venky.core.util.ObjectHolder;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -89,10 +91,18 @@ public class BecknObject extends BecknAware<JSONObject> {
         getInner().remove(key);
     }
 
-    public static final DateFormat TIMESTAMP_FORMAT = new SimpleDateFormat(DateUtils.ISO_8601_24H_FULL_FORMAT);
+    public static DateFormat TIMESTAMP_FORMAT_WITH_MILLS =  new SimpleDateFormat(DateUtils.ISO_8601_24H_FULL_FORMAT);
+    public static DateFormat TIMESTAMP_FORMAT_WO_MILLIS = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+
+    public static DateFormat TIMESTAMP_FORMAT =  TIMESTAMP_FORMAT_WITH_MILLS;
+
+    public static final DateFormat[] TIMESTAMP_FORMATS = new DateFormat[] {TIMESTAMP_FORMAT_WITH_MILLS, TIMESTAMP_FORMAT_WO_MILLIS};
+
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat(DateUtils.ISO_DATE_FORMAT_STR);
     static {
-        TIMESTAMP_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+        for (DateFormat t : TIMESTAMP_FORMATS ){
+            t.setTimeZone(TimeZone.getTimeZone("UTC"));
+        }
     }
 
 
@@ -107,7 +117,21 @@ public class BecknObject extends BecknAware<JSONObject> {
     public void set(String key, int value){
         getInner().put(key,value);
     }
-    public Date getDate(String key, DateFormat format){
+    public Date getTimestamp(String key){
+        MultiException multiException = new MultiException();
+        for (DateFormat f : TIMESTAMP_FORMATS){
+            try {
+                return f.parse(key);
+            }catch (ParseException ex){
+                multiException.add(ex);
+            }
+        }
+        throw multiException;
+    }
+    public Date getDate(String key){
+        return getDate(key,DATE_FORMAT);
+    }
+    private Date getDate(String key, DateFormat format){
         String value = get(key);
         if (value == null){
             return null;

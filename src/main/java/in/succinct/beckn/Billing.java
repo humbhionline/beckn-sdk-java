@@ -59,14 +59,14 @@ public class Billing extends BecknObject {
     }
     
     public Date getCreatedAt(){
-        return getDate("created_at",TIMESTAMP_FORMAT);
+        return getTimestamp("created_at");
     }
     public void setCreatedAt(Date created_at){
         set("created_at",created_at,TIMESTAMP_FORMAT);
     }
 
     public Date getUpdatedAt(){
-        return getDate("updated_at",TIMESTAMP_FORMAT);
+        return getTimestamp("updated_at");
     }
     public void setUpdatedAt(Date updated_at){
         set("updated_at",updated_at,TIMESTAMP_FORMAT);

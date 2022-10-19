@@ -16,7 +16,7 @@ public class State extends BecknObject{
     }
 
     public Date getUpdatedAt(){
-        return getDate("updated_at",TIMESTAMP_FORMAT);
+        return getTimestamp("updated_at");
     }
     public void setUpdatedAt(Date updated_at){
         set("updated_at",updated_at,TIMESTAMP_FORMAT);

@@ -87,7 +87,7 @@ public class Context extends BecknObject {
     }
 
     public Date getTimestamp(){
-        return getDate("timestamp",TIMESTAMP_FORMAT);
+        return getTimestamp("timestamp");
     }
     public void setTimestamp(Date timestamp){
         set("timestamp",timestamp,TIMESTAMP_FORMAT);

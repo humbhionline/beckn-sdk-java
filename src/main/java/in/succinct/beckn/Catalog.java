@@ -46,7 +46,7 @@ public class Catalog extends BecknObjectWithId {
     }
 
     public Date getExp(){
-        return getDate("exp",TIMESTAMP_FORMAT);
+        return getTimestamp("exp");
     }
     public void setExp(Date exp){
         set("exp",exp,TIMESTAMP_FORMAT);

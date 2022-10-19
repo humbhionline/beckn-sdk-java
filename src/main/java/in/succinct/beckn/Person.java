@@ -14,7 +14,7 @@ public class Person extends BecknObjectWithId {
     }
 
     public Date getDob(){
-        return getDate("dob",DATE_FORMAT);
+        return getDate("dob");
     }
     public void setDob(Date date){
         set("dob",date,DATE_FORMAT);

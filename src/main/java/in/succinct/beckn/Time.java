@@ -14,7 +14,7 @@ public class Time extends BecknObject {
         set("label",label);
     }
     public Date getTimestamp(){
-        return getDate("timestamp", TIMESTAMP_FORMAT);
+        return getTimestamp("timestamp");
     }
     public void setTimestamp(Date timestamp){
         set("timestamp",timestamp,TIMESTAMP_FORMAT);
@@ -43,14 +43,14 @@ public class Time extends BecknObject {
     
     public static class Range extends BecknObject {
         public Date getStart(){
-            return getDate("start",TIMESTAMP_FORMAT);
+            return getTimestamp("start");
         }
         public void setStart(Date start){
             set("start",start,TIMESTAMP_FORMAT);
         }
 
         public Date getEnd(){
-            return getDate("end",TIMESTAMP_FORMAT);
+            return getTimestamp("end");
         }
         public void setEnd(Date end){
             set("end",end,TIMESTAMP_FORMAT);

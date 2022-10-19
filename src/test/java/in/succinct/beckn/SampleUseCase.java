@@ -47,6 +47,7 @@ import java.security.Signature;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Calendar;
@@ -62,6 +63,13 @@ public class SampleUseCase {
     public static void setup(){
         if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null){
             Security.addProvider(new BouncyCastleProvider());
+        }
+    }
+
+    @Test
+    public void timestampFormats(){
+        for (DateFormat t : BecknObject.TIMESTAMP_FORMATS){
+            System.out.println(t.getNumberFormat().toString() + "," + t.format(new Date()));
         }
     }
 

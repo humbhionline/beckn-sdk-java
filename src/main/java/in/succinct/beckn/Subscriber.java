@@ -122,13 +122,13 @@ public class Subscriber extends BecknObject{
     }
 
     public Date getValidFrom(){
-        return getDate("valid_from",TIMESTAMP_FORMAT);
+        return getTimestamp("valid_from");
     }
     public void setValidFrom(Date valid_from){
         set("valid_from",valid_from,TIMESTAMP_FORMAT);
     }
     public Date getValidTo(){
-        return getDate("valid_to",TIMESTAMP_FORMAT);
+        return getTimestamp("valid_to");
     }
     public void setValidTo(Date valid_to){
         set("valid_to",valid_to,TIMESTAMP_FORMAT);
