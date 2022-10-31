@@ -667,11 +667,13 @@ public class SampleUseCase {
     public void testTimestamp(){
         Context context = new Context();
         context.set("timestamp",new Date(),BecknObject.TIMESTAMP_FORMAT_WITH_MILLS);
+        context.setTtl(10L);
         Request r = new Request();
         r.setContext(context);
 
+        System.out.println(r.toString());
         r = new Request(r.toString());
-        System.out.println(r.getContext().getTimestamp());
+        System.out.println(r.getContext().getTtl());
 
 
     }
