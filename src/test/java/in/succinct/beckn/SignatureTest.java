@@ -3,6 +3,9 @@ package in.succinct.beckn;
 import com.venky.core.collections.IgnoreCaseMap;
 import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
+import com.venky.core.util.ObjectHolder;
+import com.venky.extension.Extension;
+import com.venky.extension.Registry;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
@@ -19,6 +22,8 @@ import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -55,6 +60,20 @@ public class SignatureTest {
 
     @Test
     public void genKeys(){
+        Registry.instance().registerExtension("beckn.public.key.get", new Extension() {
+            @Override
+            public void invoke(Object... context) {
+                ObjectHolder<String> publicKeyHolder = (ObjectHolder<String>) context[2];
+                publicKeyHolder.set("bOVx9uLyvk4SfrFmsaTaGXbaubU8jTShsFyK0yr9D+s=");
+            }
+        });
+        Request request = new Request("{\"context\":{\"domain\":\"local-retail\",\"country\":\"IND\",\"city\":\"*\",\"action\":\"search\",\"core_version\":\"0.9.2\",\"bap_id\":\"test.mockserver.in\",\"bap_uri\":\"http://13.233.115.209:9900/protocol\",\"transaction_id\":\"1239890341\",\"message_id\":\"123793824\",\"timestamp\":\"2021-03-23T10:00:40.065Z\"},\"message\":{\"intent\":{\"fulfillment\":{\"type\":\"STORE-PICKUP\",\"end\":{\"location\":{\"gps\":\"12.4535445,77.9283792\"}}}}}}");
+        JSONObject object = new JSONObject();
+        object.put("Authorization","Signature keyId=\"test.mockserver.in|laptop|ed25519\",algorithm=\"ed25519\",created=\"1641287875\",expires=\"1941291475\",headers=\"(created) (expires) digest\",signature=\"BhExg/SaJUNqnKPt0jIg5P1AzeAKU95v1uK8dtRLv+RHeB/TsBIOl5avPHryz1o9eFNAJzxakhujJIN4K4WZAA==\"");
+
+        /* {'Authorization': 'Signature keyId="test.mockserver.in|laptop|ed25519",algorithm="ed25519",created="1641287875",expires="1941291475",headers="(created) (expires) digest",signature="BhExg/SaJUNqnKPt0jIg5P1AzeAKU95v1uK8dtRLv+RHeB/TsBIOl5avPHryz1o9eFNAJzxakhujJIN4K4WZAA=="', 'Content-Type': 'application/json'} */
+        Assert.assertTrue(request.verifySignature("Authorization",object,true));
+
 
     }
 
