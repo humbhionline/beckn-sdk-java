@@ -67,19 +67,28 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
     public <T extends BecknAware> void set(String key, T value){
-        if (value == null) return;
+        if (value == null){
+            rm(key);
+            return;
+        }
 
         set(key,value.getInner());
         attributeMap.put(key,new ObjectHolder<>(value));
     }
     public void set(String key, JSONAware value){
-        if (value == null) return;
+        if (value == null) {
+            rm(key);
+            return;
+        }
 
         getInner().put(key,value);
         attributeMap.remove(key);
     }
     public void set(String key, String value){
-        if (value == null) return;
+        if (value == null) {
+            rm(key);
+            return;
+        }
 
         getInner().put(key,value);
     }
@@ -107,11 +116,17 @@ public class BecknObject extends BecknAware<JSONObject> {
 
 
     public void set(String key, Date date, DateFormat format){
-        if (date == null) return;
+        if (date == null) {
+            rm(key);
+            return;
+        }
         set(key,format.format(date));
     }
     public void set(String key, Double value){
-        if (value == null) return;
+        if (value == null) {
+            rm(key);
+            return;
+        }
         getInner().put(key,value);
     }
     public void set(String key, int value){

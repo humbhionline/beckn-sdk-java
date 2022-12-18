@@ -1,8 +1,16 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONObject;
+
 public class Item extends BecknObjectWithId {
     public Item() {
         super();
+    }
+    public Item(String payload){
+        super(payload);
+    }
+    public Item(JSONObject item){
+        super(item);
     }
 
     public String getCategoryId(){
@@ -10,6 +18,33 @@ public class Item extends BecknObjectWithId {
     }
     public void setCategoryId(String criteriaId){
         set("category_id",criteriaId);
+    }
+
+    public BecknStrings getCategoryIds(){
+        return get(BecknStrings.class, "category_ids");
+    }
+    public void setCategoryIds(BecknStrings category_ids){
+        set("category_ids",category_ids);
+    }
+
+    public BecknStrings getLocationIds(){
+        return get(BecknStrings.class, "location_ids");
+    }
+    public void setLocationIds(BecknStrings location_ids){
+        set("location_ids",location_ids);
+    }
+
+    public BecknStrings getPaymentIds(){
+        return get(BecknStrings.class, "payment_ids");
+    }
+    public void setPaymentIds(BecknStrings payment_ids){
+        set("payment_ids",payment_ids);
+    }
+    public BecknStrings getFulfillmentIds(){
+        return get(BecknStrings.class, "fulfillment_ids");
+    }
+    public void setFulfillmentIds(BecknStrings fulfillment_ids){
+        set("fulfillment_ids",fulfillment_ids);
     }
 
     public Descriptor getDescriptor(){

@@ -8,41 +8,39 @@ public class Catalog extends BecknObjectWithId {
     }
 
     public Descriptor getDescriptor(){
-        return get(Descriptor.class,"bpp/descriptor");
+        return get(Descriptor.class,"descriptor");
     }
     public void setDescriptor(Descriptor descriptor){
-        set("bpp/descriptor", descriptor);
+        set("descriptor", descriptor);
     }
 
     public Providers getProviders(){
-        return get(Providers.class,"bpp/providers");
+        return get(Providers.class,"providers");
     }
 
     public void setProviders(Providers providers){
-        set("bpp/providers",providers);
+        set("providers",providers);
     }
-
-
 
     public Fulfillments getFulfillments(){
-        return get(Fulfillments.class, "bpp/fulfillments");
+        return get(Fulfillments.class, "fulfillments");
     }
     public void setFulfillments(Fulfillments fulfillments){
-        set("bpp/fulfillments",fulfillments);
+        set("fulfillments",fulfillments);
     }
 
     public Categories getCategories(){
-        return get(Categories.class, "bpp/categories");
+        return get(Categories.class, "categories");
     }
     public void setCategories(Categories categories){
-        set("bpp/categories",categories);
+        set("categories",categories);
     }
 
     public Payments getPayments(){
-        return get(Payments.class, "bpp/payments");
+        return get(Payments.class, "payments");
     }
     public void setPayments(Payments payments){
-        set("bpp/payments",payments);
+        set("payments",payments);
     }
 
     public Date getExp(){

@@ -5,6 +5,9 @@ public class Fulfillment extends BecknObjectWithId {
     public Fulfillment(){
         super();
     }
+    public Fulfillment(String payload){
+        super(payload);
+    }
 
 
     public FulfillmentType getType(){

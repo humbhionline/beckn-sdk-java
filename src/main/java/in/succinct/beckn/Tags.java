@@ -1,4 +1,4 @@
 package in.succinct.beckn;
 
-public class Tags extends BecknObject{
+public class Tags extends BecknObjects<Tag>{
 }

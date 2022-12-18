@@ -3,9 +3,12 @@ package in.succinct.beckn;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Payment extends BecknObject {
+public class Payment extends BecknObjectWithId {
     public Payment(){
         super();
+    }
+    public Payment(String payload){
+        super(payload);
     }
     public String getUri(){
         return get("uri");

@@ -1,6 +1,6 @@
 package in.succinct.beckn;
 
-public class Payments extends BecknObjects<Payment> {
+public class Payments extends BecknObjectsWithId<Payment> {
     public Payments() {
         super();
     }

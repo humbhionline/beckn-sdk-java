@@ -1,4 +1,4 @@
 package in.succinct.beckn;
 
-public class Fulfillments extends BecknObjects<Fulfillment>{
+public class Fulfillments extends BecknObjectsWithId<Fulfillment>{
 }
