@@ -48,7 +48,7 @@ public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<
                 t = clazz.getConstructor().newInstance();
                 ((BecknObject)t).setInner((JSONObject) element);
             }else {
-                t = clazz.getConstructor().newInstance(String.valueOf(element));
+                t = clazz.getConstructor(String.class).newInstance(String.valueOf(element));
             }
             return t;
         }catch (Exception ex){
