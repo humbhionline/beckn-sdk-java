@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONObject;
 
 import java.util.Arrays;
@@ -99,6 +100,14 @@ public class Subscriber extends BecknObject{
     }
     public void setUniqueKeyId(String unique_key_id){
         set("unique_key_id",unique_key_id);
+        set("pub_key_id",unique_key_id);
+    }
+
+    public String getPubKeyId(){
+        return get("pub_key_id");
+    }
+    public void setPubKeyId(String pub_key_id){
+        setUniqueKeyId(pub_key_id);
     }
 
     public String getSigningPublicKey(){
@@ -132,6 +141,14 @@ public class Subscriber extends BecknObject{
     }
     public void setValidTo(Date valid_to){
         set("valid_to",valid_to,TIMESTAMP_FORMAT);
+    }
+
+    public Set<String> getSupportedActions(){
+        if (ObjectUtil.equals(getType(),Subscriber.SUBSCRIBER_TYPE_BAP)){
+            return BAP_ACTION_SET;
+        }else {
+            return BPP_ACTION_SET;
+        }
     }
 
 }
