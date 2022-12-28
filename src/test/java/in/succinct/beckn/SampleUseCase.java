@@ -153,6 +153,12 @@ public class SampleUseCase {
 
         Assert.assertNotNull(privateKey);
     }
+    @Test
+    public void testJuspayPublicKey() {
+        String key = "kCa4OlmRVfCPcvzjPPGik0Ljei5dRYuuj/2K6upaf1E=";
+        System.out.println(Request.getPemSigningKey(key));
+
+    }
 
     @Test
     public void testEncryption() throws Exception{

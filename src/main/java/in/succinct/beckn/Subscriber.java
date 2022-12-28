@@ -137,10 +137,10 @@ public class Subscriber extends BecknObject{
         set("valid_from",valid_from,TIMESTAMP_FORMAT);
     }
     public Date getValidTo(){
-        return getTimestamp("valid_to");
+        return getTimestamp("valid_until");
     }
     public void setValidTo(Date valid_to){
-        set("valid_to",valid_to,TIMESTAMP_FORMAT);
+        set("valid_until",valid_to,TIMESTAMP_FORMAT);
     }
 
     public Set<String> getSupportedActions(){
