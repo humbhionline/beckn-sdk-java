@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import java.time.Duration;
+
 public class Provider extends BecknObjectWithId {
     public Provider(){
         super();
@@ -62,4 +64,13 @@ public class Provider extends BecknObjectWithId {
     public void setTags(TagGroup tags){
         set("tags",tags);
     }
+
+    public long getTtl(){
+        String ttl = get("ttl");
+        return ttl == null ? 10 : Duration.parse(ttl).getSeconds();
+    }
+    public void setTtl(long seconds){
+        set("ttl",Duration.ofSeconds(seconds).toString());
+    }
+
 }
