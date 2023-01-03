@@ -100,11 +100,10 @@ public class Subscriber extends BecknObject{
     }
     public void setUniqueKeyId(String unique_key_id){
         set("unique_key_id",unique_key_id);
-        set("pub_key_id",unique_key_id);
     }
 
     public String getPubKeyId(){
-        return get("pub_key_id");
+        return getUniqueKeyId();
     }
     public void setPubKeyId(String pub_key_id){
         setUniqueKeyId(pub_key_id);
