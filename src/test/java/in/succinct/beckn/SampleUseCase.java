@@ -9,11 +9,13 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
 import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.params.X25519PrivateKeyParameters;
+import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.bouncycastle.crypto.util.OpenSSHPublicKeyUtil;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
@@ -32,6 +34,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.SecretKeySpec;
 import java.awt.*;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.ref.ReferenceQueue;
 import java.lang.reflect.Field;
@@ -683,4 +686,23 @@ public class SampleUseCase {
 
 
     }
+
+    @Test
+    public void testnsdl()throws Exception{
+        String key     = "ONtluFKk9FfVIePk0FJjCZE1XlTdcXtcWWRjqzllVSw=";
+        String jsonText = "{\"context\":{\"transaction_id\":\"9f010135-ace0-4c20-b749-3181d6fa7826\",\"country\":\"IND\",\"bpp_id\":\"becknify.humbhionline.in.local_retail.BPP\\/ondc\\/app1-magnolabs-in\",\"city\":\"std:022\",\"message_id\":\"e154537f-4bf6-4f84-a48d-715d4656a931\",\"ttl\":\"PT30S\",\"core_version\":\"1.0.0\",\"bap_id\":\"buyer-app.ondc.org\",\"domain\":\"nic2004:52110\",\"bpp_uri\":\"https:\\/\\/becknify.humbhionline.in\\/local_retail\\/ondc\\/app1-magnolabs-in\\/bpp\",\"action\":\"on_search\",\"bap_uri\":\"https:\\/\\/buyer-app.ondc.org\\/protocol\\/v1\",\"timestamp\":\"2023-01-03T06:52:21.026Z\"},\"message\":{\"catalog\":{\"bpp\\/providers\":[{\"@ondc\\/org\\/fssai_license_no\":\"12345678901234\",\"id\":\"ondcconnect.myshopify.com\",\"descriptor\":{\"name\":\"ONDC Connect Test Store\",\"short_desc\":\"ONDC Connect Test Store\"},\"rateable\":false,\"items\":[]}],\"bpp\\/descriptor\":{\"short_desc\":\"ONDC Connect Test Store\",\"long_desc\":\"ONDC Connect Test Store\"}}}}";
+        String sign = "Az+DYUOHcQcsg2MupkTiJWO97VhyhUr2ZxF+TBlAlVU3BhcRGM+rJFMJHTV3g60F8cnqLdeVK8Tqpt2KL0fKAg==";
+
+        String signingString = "(created): 1672728743\n" +
+                "(expires): 1672728773\n" +
+                "digest: BLAKE-512=kHBAd/BM+Cqxhn71oKtuTE7tpqMyaibskU6P5CqHO+KzPzlIgyL5YU/Ps6/maa6KOCf5G/4nX0nx8vRELZxZCQ==";
+
+        Ed25519PublicKeyParameters pubKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(key),0);
+        Ed25519Signer signer = new Ed25519Signer();
+        signer.init(false,pubKey);
+        byte[] signingBytes =  signingString.getBytes(StandardCharsets.UTF_8);
+        signer.update(signingBytes,0,signingBytes.length);
+        Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode(sign)));
+    }
+
 }
