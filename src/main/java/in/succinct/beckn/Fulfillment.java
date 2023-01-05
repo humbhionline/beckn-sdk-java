@@ -80,4 +80,19 @@ public class Fulfillment extends BecknObjectWithId {
     public void setVehicle(Vehicle vehicle){
         set("vehicle",vehicle);
     }
+
+    public Tags getTags(){
+        return get(Tags.class, "tags");
+    }
+    public void setTags(Tags tags){
+        set("tags",tags);
+    }
+    
+    public boolean getRateable(){
+        return getBoolean("rateable");
+    }
+    public void setRateable(boolean rateable){
+        set("rateable",rateable);
+    }
+
 }

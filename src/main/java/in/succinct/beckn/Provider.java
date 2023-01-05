@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import java.time.Duration;
+import java.util.Date;
 
 public class Provider extends BecknObjectWithId {
     public Provider(){
@@ -58,10 +59,10 @@ public class Provider extends BecknObjectWithId {
         set("bpp_id",bpp_id);
     }
 
-    public TagGroup getTags(){
-        return get(TagGroup.class, "tags");
+    public Tags getTags(){
+        return get(Tags.class, "tags");
     }
-    public void setTags(TagGroup tags){
+    public void setTags(Tags tags){
         set("tags",tags);
     }
 
@@ -73,4 +74,17 @@ public class Provider extends BecknObjectWithId {
         set("ttl",Duration.ofSeconds(seconds).toString());
     }
 
+    public Offers getOffers(){
+        return get(Offers.class, "offers");
+    }
+    public void setOffers(Offers offers){
+        set("offers",offers);
+    }
+
+    public Date getExp(){
+        return getTimestamp("exp");
+    }
+    public void setExp(Date exp){
+        set("exp",exp,TIMESTAMP_FORMAT);
+    }
 }

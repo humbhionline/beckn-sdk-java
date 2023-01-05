@@ -37,4 +37,13 @@ public class FulfillmentStop extends BecknObject {
     public void setPerson(Person person){
         set("person",person);
     }
+
+    public String getAuthorization(){
+        return get("authorization");
+    }
+    public void setAuthorization(String authorization){
+        set("authorization",authorization);
+    }
+
+
 }

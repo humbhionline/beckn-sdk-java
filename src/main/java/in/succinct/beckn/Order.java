@@ -58,6 +58,13 @@ public class Order extends BecknObjectWithId {
         set("fulfillment",fulfillment.getInner());
     }
 
+    public Fulfillments getFulfillments(){
+        return get(Fulfillments.class, "fulfillments");
+    }
+    public void setFulfillments(Fulfillments fulfillments){
+        set("fulfillments",fulfillments);
+    }
+
     public Quote getQuote(){
         return get(Quote.class,"quote");
     }
