@@ -6,6 +6,7 @@ import com.venky.core.util.ObjectHolder;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -98,6 +99,7 @@ public class BecknObject extends BecknAware<JSONObject> {
 
     public void rm(String  key){
         getInner().remove(key);
+        attributeMap.remove(key);
     }
 
     public static DateFormat TIMESTAMP_FORMAT_WITH_MILLS =  new SimpleDateFormat(DateUtils.ISO_8601_24H_FULL_FORMAT);
@@ -173,4 +175,13 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
 
+    public <T extends BecknObject> T cast(Class<T> clazz){
+        try {
+            T t = clazz.getConstructor().newInstance();
+            t.setInner(this.getInner());
+            return t;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
