@@ -58,6 +58,7 @@ import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -321,8 +322,12 @@ public class SampleUseCase {
         byte[] privateJceBytes = new PrivateKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
                 new DEROctetString(privateKeyParameters.getEncoded())).getEncoded();
 
+        System.out.println(Base64.getEncoder().encodeToString(privateJceBytes));
         PrivateKey privateKey = getPrivateKey("Ed25519",privateJceBytes);
         Assert.assertNotNull(privateKey);
+        System.out.println(Crypt.getInstance().toBase64(privateKey.getEncoded()));
+        PrivateKey pk = Crypt.getInstance().getPrivateKey(Request.SIGNATURE_ALGO,Crypt.getInstance().toBase64(privateKey.getEncoded()));
+        Assert.assertNotNull(pk);
 
         //Convert java PrivateKey to privateKeyParams
         BCEdDSAPrivateKey privateKey1 = (BCEdDSAPrivateKey) privateKey;
@@ -705,4 +710,75 @@ public class SampleUseCase {
         Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode(sign)));
     }
 
+    @Test
+    public void testnsdlJan82023()throws Exception{
+        String key     = "ONtluFKk9FfVIePk0FJjCZE1XlTdcXtcWWRjqzllVSw=";
+        String jsonText = "{\"context\":{\"transaction_id\":\"cf40d775-397a-401a-a0db-028cb7a0dd09\",\"country\":\"IND\",\"bpp_id\":\"becknify.humbhionline.in.local_retail.BPP/ondc/app1-magnolabs-in\",\"city\":\"std:080\",\"message_id\":\"f88f3744-3316-45de-a9f8-b8e18d45efd5\",\"core_version\":\"1.0.0\",\"ttl\":\"PT30S\",\"bap_id\":\"buyer-app.ondc.org\",\"domain\":\"nic2004:52110\",\"bpp_uri\":\"https://becknify.humbhionline.in/local_retail/ondc/app1-magnolabs-in/bpp\",\"action\":\"on_search\",\"bap_uri\":\"https://buyer-app.ondc.org/protocol/v1\",\"timestamp\":\"2023-01-08T06:43:43.439Z\"},\"message\":{\"catalog\":{\"bpp/providers\":[{\"fssai_license_no\":\"12345678901234\",\"id\":\"ondcconnect.myshopify.com\",\"descriptor\":{\"name\":\"ONDC Connect Test Store\",\"short_desc\":\"ONDC Connect Test Store\"},\"items\":[{\"@ondc/org/cancellable\":true,\"@ondc/org/returnable\":true,\"@ondc/org/seller_pickup_return\":true,\"@ondc/org/contact_details_consumer_care\":\"1212121212\",\"@ondc/org/time_to_ship\":\"12PTH\",\"descriptor\":{\"images\":[\"https://cdn.shopify.com/s/files/1/0664/8034/1217/products/Double-Chocolate-Walnut-Cake-Mix-Cookies-4.jpg?v=1663683413\"],\"name\":\"Chocolate biscuit\",\"short_desc\":\"Double Chocolate Walnut Cookies\",\"long_desc\":\"Double Chocolate Walnut Cookies\"},\"rateable\":true,\"location_id\":\"-1\",\"fulfillment_id\":\"-1\",\"recommended\":true,\"@ondc/org/return_window\":\"TBD\",\"@ondc/org/available_on_cod\":true,\"category_id\":\"-1\",\"related\":true,\"price\":{\"currency\":\"INR\",\"value\":\"340.00\"},\"matched\":true,\"id\":\"43320248860897\"}]}],\"bpp/descriptor\":{\"short_desc\":\"ONDC Connect Test Store\",\"long_desc\":\"ONDC Connect Test Store\"}}}}";
+        String sign = "Vl6OIxw1TmR5SEreUFSkT9ESoGP8M5YX5zQXyR5XOlwmYNv6JGo2KIwHxWkHfmBncoP+aRcKibI8E3uljPpgAQ==";
+
+        String signingString = "(created): 1673160228\n" +
+                "(expires): 1673160258\n" +
+                "digest: BLAKE-512=SpFz7itdhVJIdo+eIVQ0IJRQ5q+5NE5Np+6UhniKxSGKuOU2FbPQV5hU3JFmvWPjj3J6Prh24jKLzUjnG8l7Cw==";
+        //signingString = new Request(jsonText).getSigningString(1673160228L,1673160258L);
+
+        Ed25519PublicKeyParameters pubKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(key),0);
+        Ed25519PrivateKeyParameters privateKeyParameters = new Ed25519PrivateKeyParameters(Base64.getDecoder().decode("jW0MxDzdqbJTJAsskUl8Gx1JZLCPVgu1Ij7McmvBLrw="),0);
+
+        Ed25519Signer signer = new Ed25519Signer();
+        signer.init(true,privateKeyParameters);
+
+        byte[] signingBytes =  signingString.getBytes(StandardCharsets.UTF_8);
+
+        signer.update(signingBytes,0,signingBytes.length);
+        Assert.assertEquals(Base64.getEncoder().encodeToString(signer.generateSignature()),sign);
+
+        signer.init(false,pubKey);
+
+
+
+        signer.update(signingBytes,0,signingBytes.length);
+        Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode(sign)));
+    }
+    @Test
+    public void testPrivatekey() throws Exception{
+        String pv = "MFECAQEwBQYDK2VwBCIEII1tDMQ83amyUyQLLJFJfBsdSWSwj1YLtSI+zHJrwS68gSEAONtluFKk9FfVIePk0FJjCZE1XlTdcXtcWWRjqzllVSw=";
+        PrivateKey privateKey = Crypt.getInstance().getPrivateKey(Request.SIGNATURE_ALGO,pv);
+        Assert.assertNotNull(privateKey);
+
+        //Convert java PrivateKey to privateKeyParams
+        BCEdDSAPrivateKey privateKey1 = (BCEdDSAPrivateKey) privateKey;
+        Field f = privateKey1.getClass().getDeclaredField("eddsaPrivateKey");
+        f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+        Ed25519PrivateKeyParameters privateKeyParameters1 = (Ed25519PrivateKeyParameters) f.get(privateKey1);
+
+
+        byte[] privateJceBytes = new PrivateKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519),
+                new DEROctetString(privateKeyParameters1.getEncoded())).getEncoded();
+
+        Assert.assertNotNull(Crypt.getInstance().getPrivateKey(Request.SIGNATURE_ALGO,pv));
+        System.out.println(Base64.getEncoder().encodeToString(privateJceBytes));
+
+        System.out.println(Base64.getEncoder().encodeToString(privateKeyParameters1.getEncoded()));
+
+    }
+
+    @Test
+    public void testSignBA(){
+        String key     = "lqegf0O1Ok+FPEWqaAH9OswRldrH6ClQ2b895TwHucc=";
+
+        Ed25519PublicKeyParameters pubKey = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(key),0);
+
+        Ed25519Signer signer = new Ed25519Signer();
+
+        String payload = "{\"context\": {\"domain\": \"nic2004:52110\", \"country\": \"IND\", \"city\": \"std:080\", \"action\": \"select\", \"core_version\": \"1.0.0\", \"bap_id\": \"buyer-app.ondc.org\", \"bap_uri\": \"https://buyer-app.ondc.org/protocol/v1\", \"bpp_uri\": \"https://z1o2ovg69j.execute-api.ap-south-1.amazonaws.com/QA6/\", \"transaction_id\": \"1aed2dad-3eb0-48da-b905-18777c6c29dd\", \"message_id\": \"7721241e-b821-4e67-9856-a5286e68dbc6\", \"timestamp\": \"2023-01-11T18:56:24.867Z\", \"bpp_id\": \"testing.chaipoint.com\", \"ttl\": \"PT30S\"}, \"message\": {\"order\": {\"items\": [{\"id\": \"169\", \"quantity\": {\"count\": 1}}], \"provider\": {\"id\": \"108\", \"locations\": [{\"id\": \"1063\"}]}, \"fulfillments\": [{\"end\": {\"location\": {\"gps\": \"12.935532, 77.6244960000001\", \"address\": {\"area_code\": \"560095\"}}}}]}}}";
+
+        String signingString = new Request(payload).getSigningString(1673463384L,1673466984L);
+        byte[] signingBytes =  signingString.getBytes(StandardCharsets.UTF_8);
+
+        String sign = "5X09CW8MecsKbtUqlNKraei2mz2iDAcyC3sdUF8iWsUfZBKSwenscF5oieeEtVOSx8aT4sIM06VdpGCWmTbVAA==";
+
+        signer.init(false,pubKey);
+        signer.update(signingBytes,0,signingBytes.length);
+        Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode(sign)));
+    }
 }

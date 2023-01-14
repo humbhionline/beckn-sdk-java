@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import com.venky.core.date.DateUtils;
+import com.venky.core.date.Time;
 import com.venky.core.util.MultiException;
 import com.venky.core.util.ObjectHolder;
 import org.json.simple.JSONAware;
@@ -110,10 +111,13 @@ public class BecknObject extends BecknAware<JSONObject> {
     public static final DateFormat[] TIMESTAMP_FORMATS = new DateFormat[] {TIMESTAMP_FORMAT_WITH_MILLS, TIMESTAMP_FORMAT_WO_MILLIS};
 
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat(DateUtils.ISO_DATE_FORMAT_STR);
+    public static final DateFormat TIME_FORMAT = new SimpleDateFormat(DateUtils.APP_TIME_FORMAT_STR);
+
     static {
         for (DateFormat t : TIMESTAMP_FORMATS ){
             t.setTimeZone(TimeZone.getTimeZone("UTC"));
         }
+        TIME_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
 
@@ -134,6 +138,9 @@ public class BecknObject extends BecknAware<JSONObject> {
     public void set(String key, int value){
         getInner().put(key,value);
     }
+    public void set(String key, long value){
+        getInner().put(key,value);
+    }
     public Date getTimestamp(String key){
         MultiException multiException = new MultiException();
         for (DateFormat f : TIMESTAMP_FORMATS){
@@ -147,6 +154,9 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
     public Date getDate(String key){
         return getDate(key,DATE_FORMAT);
+    }
+    public Date getTime(String key){
+        return getDate(key,TIME_FORMAT);
     }
     private Date getDate(String key, DateFormat format){
         String value = get(key);
