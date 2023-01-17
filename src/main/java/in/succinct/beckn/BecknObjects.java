@@ -42,6 +42,9 @@ public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<
 
     public T get(int index){
         Object element = getInner().get(index);
+        if (element == null){
+            return null;
+        }
         try {
             T t ;
             if (BecknObject.class.isAssignableFrom(clazz)){

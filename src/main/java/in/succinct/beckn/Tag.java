@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+
 public class Tag extends BecknObject{
     public boolean getDisplay(){
         return getBoolean("display");
