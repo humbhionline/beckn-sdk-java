@@ -43,6 +43,17 @@ public class Descriptor extends BecknObject {
     public void setImages(Images images){
         set("images",images);
     }
+    public String getAudio(){
+        return get("audio");
+    }
+    public void setAudio(String audio){
+        set("audio",audio);
+    }
 
-
+    public String get3dRender(){
+        return get("3d_render");
+    }
+    public void set3dRender(String render3d){
+        set("3d_render",render3d);
+    }
 }

@@ -98,5 +98,10 @@ public class Order extends BecknObjectWithId {
         return get("state");
     }
 
-
+    public Documents getDocuments(){
+        return get(Documents.class,"documents");
+    }
+    public void setDocuments(Documents documents){
+        set("documents",documents.getInner());
+    }
 }

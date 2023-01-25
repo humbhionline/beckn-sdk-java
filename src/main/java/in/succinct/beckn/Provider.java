@@ -87,4 +87,33 @@ public class Provider extends BecknObjectWithId {
     public void setExp(Date exp){
         set("exp",exp,TIMESTAMP_FORMAT);
     }
+
+
+    public String getCategoryId(){
+        return get("category_id");
+    }
+    public void setCategoryId(String category_id){
+        set("category_id",category_id);
+    }
+
+    public Rating getRating(){
+        return get(Rating.class,"rating");
+    }
+    public void setRating(Rating rating){
+        set("rating",rating.getInner());
+    }
+
+    public Time getTime(){
+        return get(Time.class,"time");
+    }
+    public void setTime(Time time){
+        set("time",time.getInner());
+    }
+
+    public boolean getRateable(){
+        return get("rateable");
+    }
+    public void setRateable(boolean rateable){
+        set("rateable",rateable);
+    }
 }

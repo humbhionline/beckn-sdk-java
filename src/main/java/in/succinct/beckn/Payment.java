@@ -101,4 +101,20 @@ public class Payment extends BecknObjectWithId {
 
     }
 
+    public String getCollectedBy(){
+        return get("collected_by");
+    }
+    static final Set<String> COLLECTED_BY = new HashSet<String>(){{
+        add("BAP");
+        add("BPP");
+    }};
+    public void setCollectedBy(String collected_by){
+        if (!COLLECTED_BY.contains(collected_by)){
+            throw new IllegalArgumentException();
+        }
+        set("collected_by",collected_by);
+    }
+
+
+
 }

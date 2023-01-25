@@ -12,12 +12,13 @@ public class Circle extends BecknObject {
         super();
     }
 
-    public double getRadius(){
-        return getDouble("radius");
+    public Scalar getRadius(){
+        return get(Scalar.class, "radius");
     }
-    public void setRadius(double radius){
+    public void setRadius(Scalar radius){
         set("radius",radius);
     }
+
 
     ObjectHolder<GeoCoordinate> gps = null ;
     public GeoCoordinate getGps(){

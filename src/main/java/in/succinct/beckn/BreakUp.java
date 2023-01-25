@@ -12,34 +12,35 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         super();
     }
     public BreakUpElement createElement(String type,String title, Price price){
-        validate(type);
-        BreakUpElement element =new BreakUpElement(type);
-        element.set("title",title);
-        element.set("price",price.getInner());
+        BreakUpElement element =new BreakUpElement();
+        element.setTitle(title);
+        element.setPrice(price);
         return element;
     }
 
 
-    private static Set<String> types = new HashSet<>(){{
-        add("item");
-        add("offer");
-        add("add-on");
-        add("fulfillment");
-    }};
-
-    private void validate(String type){
-        if (!types.contains(type)){
-            throw new RuntimeException("Invalid type:" +  type);
-        }
-    }
 
     public static class BreakUpElement extends BecknObject {
         public BreakUpElement(){
             super();
         }
-        public BreakUpElement(String type) {
-            this();
-            set("type",type);
+        public String getTitle(){
+            return get("title");
+        }
+        public void setTitle(String title){
+            set("title",title);
+        }
+        public Item getItem(){
+            return get(Item.class, "item");
+        }
+        public void setItem(Item item){
+            set("item",item);
+        }
+        public Price getPrice(){
+            return get(Price.class, "price");
+        }
+        public void setPrice(Price price){
+            set("price",price);
         }
     }
 }

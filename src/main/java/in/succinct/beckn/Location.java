@@ -78,5 +78,10 @@ public class Location extends BecknObjectWithId {
         set("descriptor",descriptor);
     }
 
-
+    public Time getTime(){
+        return get(Time.class,"time");
+    }
+    public void setTime(Time time){
+        set("time",time.getInner());
+    }
 }

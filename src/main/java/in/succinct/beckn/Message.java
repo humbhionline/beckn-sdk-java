@@ -94,4 +94,10 @@ public class Message extends BecknObject {
         set("tracking",tracking);
     }
 
+    public String getOrderId(){
+        return get("order_id");
+    }
+    public void setOrderId(String order_id){
+        set("order_id",order_id);
+    }
 }

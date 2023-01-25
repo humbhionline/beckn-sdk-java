@@ -96,4 +96,57 @@ public class Item extends BecknObjectWithId {
         set("tags",tags);
     }
 
+
+    //
+
+    public String getParentItemId(){
+        return get("parent_item_id");
+    }
+    public void setParentItemId(String parent_item_id){
+        set("parent_item_id",parent_item_id);
+    }
+
+    public ItemQuantity getItemQuantity(){
+        return get(ItemQuantity.class,"quantity");
+    }
+    public void setItemQuantity(ItemQuantity quantity){
+        set("quantity",quantity.getInner());
+    }
+
+    public Integer getRating(){
+        return get("rating");
+    }
+    public void setRating(Integer rating){
+        set("rating",rating);
+    }
+
+    public Time getTime(){
+        return get(Time.class,"time");
+    }
+    public void setTime(Time time){
+        set("time",time.getInner());
+    }
+
+    public boolean getRateable(){
+        return getBoolean("rateable");
+    }
+    public void setRateable(boolean rateable){
+        set("rateable",rateable);
+    }
+
+    public boolean getMatched(){
+        return getBoolean("matched");
+    }
+    public void setMatched(boolean matched){
+        set("matched",matched);
+    }
+
+    public boolean getRelated(){
+        return getBoolean("related");
+    }
+    public void setRelated(boolean related){
+        set("related",related);
+    }
+
+
 }

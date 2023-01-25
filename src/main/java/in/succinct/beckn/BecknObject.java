@@ -8,6 +8,7 @@ import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 public class BecknObject extends BecknAware<JSONObject> {
@@ -172,20 +174,20 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
     public double getDouble(String key){
-        return Double.valueOf(String.valueOf(get(key,0.0D)));
+        return Double.parseDouble(String.valueOf(get(key,0.0D)));
     }
     public int getInteger(String key){
-        return Integer.valueOf(String.valueOf(get(key,0)));
+        return Integer.parseInt(String.valueOf(get(key,0)));
     }
     public long getLong(String key){
-        return Long.valueOf(String.valueOf(get(key,0L)));
+        return Long.parseLong(String.valueOf(get(key,0L)));
     }
     public boolean getBoolean(String key){
-        return Boolean.valueOf(String.valueOf(get(key,false)));
+        return Boolean.parseBoolean(String.valueOf(get(key,false)));
     }
 
 
-    public <T extends BecknObject> T cast(Class<T> clazz){
+    private <T extends BecknObject> T cast(Class<T> clazz){
         try {
             T t = clazz.getConstructor().newInstance();
             t.setInner(this.getInner());
@@ -194,4 +196,91 @@ public class BecknObject extends BecknAware<JSONObject> {
             throw new RuntimeException(e);
         }
     }
+
+    public <T extends  BecknObject> void load(T other){
+        if (!hasCommonAncestor(this,other)){
+            throw new IllegalArgumentException("Incompatible type of the parameter");
+        }
+
+        Class<? extends BecknObject> otherClass = other.getClass();
+
+        Map<String,Method> selfSetters = new HashMap<>();
+        Map<String,Method> selfGetters = new HashMap<>();
+        Map<String,Method> otherGetters = new HashMap<>();
+        for (Method m : otherClass.getMethods()) {
+            if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterCount() == 0){
+                otherGetters.put(m.getName(),m);
+            }
+        }
+
+        for (Method m : getClass().getMethods()) {
+            if ((m.getName().startsWith("set") && m.getParameterCount() == 1 )) {
+                String setterName = m.getName();
+                String getterName = String.format("g%s",setterName.substring(1));
+
+                Method otherGetter = otherGetters.get(getterName);
+                if (otherGetter !=  null && hasCommonAncestor(m.getParameterTypes()[0],otherGetter.getReturnType())){
+                    selfSetters.put(m.getName(), m);
+                }
+            }else if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterCount() == 0){
+                selfGetters.put(m.getName(),m);
+            }
+        }
+
+        for (Map.Entry<String,Method> entry : otherGetters.entrySet()) {
+
+            String getterName = entry.getKey();
+            String setterName = String.format("s%s",getterName.substring(1));
+
+            Method otherGetter = entry.getValue();
+            Method selfSetter = selfSetters.get(setterName);
+            Method selfGetter = selfGetters.get(getterName);
+
+            if (selfSetter == null || selfGetter == null) {
+                continue;
+            }
+
+            Class<?> otherFieldType = otherGetter.getReturnType();
+            Class<?> selfFieldType = selfSetter.getParameterTypes()[0];
+            try {
+                if (BecknObject.class.isAssignableFrom(otherFieldType) && BecknObject.class.isAssignableFrom(selfFieldType)) {
+                    selfSetter.invoke(this, selfFieldType.getConstructor().newInstance());
+                    BecknObject selfField = (BecknObject) selfGetter.invoke(this);
+                    BecknObject otherField = (BecknObject) otherGetter.invoke(other);
+                    selfField.load(otherField);
+                } else {
+                    selfSetter.invoke(this, otherGetter.invoke(other));
+                }
+            }catch (Exception ex){
+                throw new RuntimeException(ex);
+            }
+        }
+
+
+    }
+
+    private boolean hasCommonAncestor(Class<?> targetType, Class<?> sourceType) {
+        Class<?> commonAncestor = targetType;
+        while (!commonAncestor.isAssignableFrom(sourceType)){
+            commonAncestor = commonAncestor.getSuperclass();
+        }
+        if (commonAncestor == BecknObject.class || commonAncestor == Object.class){
+            return false;
+        }
+        return true;
+    }
+
+
+    private  <T extends BecknObject, S extends BecknObject> boolean hasCommonAncestor(T target, S source){
+        Class<?> commonAncestor = target.getClass();
+        Class<?> sourceType = source.getClass();
+        while (!commonAncestor.isAssignableFrom(sourceType)){
+            commonAncestor = commonAncestor.getSuperclass();
+        }
+        if (commonAncestor == BecknObject.class){
+            return false;
+        }
+        return true;
+    }
+
 }

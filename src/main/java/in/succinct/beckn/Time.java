@@ -57,4 +57,10 @@ public class Time extends BecknObject {
         }
 
     }
+    public Schedule getSchedule(){
+        return get(Schedule.class,"schedule");
+    }
+    public void setSchedule(Schedule schedule){
+        set("schedule",schedule.getInner());
+    }
 }
