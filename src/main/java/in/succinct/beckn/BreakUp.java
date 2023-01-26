@@ -15,6 +15,7 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         BreakUpElement element =new BreakUpElement();
         element.setTitle(title);
         element.setPrice(price);
+        element.setType(type);
         return element;
     }
 
@@ -41,6 +42,13 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         }
         public void setPrice(Price price){
             set("price",price);
+        }
+
+        public String getType(){
+            return get("type");
+        }
+        public void setType(String type){
+            set("type",type);
         }
     }
 }

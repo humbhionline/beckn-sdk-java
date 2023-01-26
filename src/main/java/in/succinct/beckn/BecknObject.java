@@ -187,7 +187,7 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
 
-    private <T extends BecknObject> T cast(Class<T> clazz){
+    public <T extends BecknObject> T cast(Class<T> clazz){
         try {
             T t = clazz.getConstructor().newInstance();
             t.setInner(this.getInner());
