@@ -116,4 +116,12 @@ public class Provider extends BecknObjectWithId {
     public void setRateable(boolean rateable){
         set("rateable",rateable);
     }
+
+    protected final BecknObject extendedAttributes = new BecknObject();
+    public String getFssaiLicenceNo(){
+        return extendedAttributes.get("fssai_licence_no");
+    }
+    public void setFssaiLicenceNo(String fssai_licence_no){
+        extendedAttributes.set("fssai_licence_no",fssai_licence_no);
+    }
 }

@@ -104,4 +104,12 @@ public class Order extends BecknObjectWithId {
     public void setDocuments(Documents documents){
         set("documents",documents.getInner());
     }
+
+    protected final BecknObject extendedAttributes = new BecknObject();
+    public Cancellation getCancellation(){
+        return extendedAttributes.get(Cancellation.class, "cancellation");
+    }
+    public void setCancellation(Cancellation cancellation){
+        extendedAttributes.set("cancellation",cancellation);
+    }
 }

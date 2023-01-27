@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -134,6 +135,31 @@ public class Fulfillment extends BecknObjectWithId {
 
     public void setContact(Contact contact) {
         set("contact", contact.getInner());
+    }
+
+    //Extended attributes rationalized from networks
+
+    protected final BecknObject extendedAttributes = new BecknObject();
+    public String getCategory(){
+        return extendedAttributes.get("category");
+    }
+    public void setCategory(String category){
+        extendedAttributes.set("category",category);
+    }
+
+    public Duration getTAT(){
+        String tat =  extendedAttributes.get("tat");
+        return tat == null ? null : Duration.parse(tat);
+    }
+    public void setTAT(Duration tat){
+        extendedAttributes.set("tat",tat == null ? null : tat.toString());
+    }
+
+    public String getProviderName(){
+        return extendedAttributes.get("provider_name");
+    }
+    public void setProviderName(String provider_name){
+        extendedAttributes.set("provider_name",provider_name);
     }
 }
 

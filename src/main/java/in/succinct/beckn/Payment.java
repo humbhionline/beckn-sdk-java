@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -115,6 +116,89 @@ public class Payment extends BecknObjectWithId {
         set("collected_by",collected_by);
     }
 
+    protected final BecknObject extendedAttributes = new BecknObject();
+    public String getCollectedByStatus(){
+        return extendedAttributes.get("collected_by_status");
+    }
+    public void setCollectedByStatus(String collected_by_status){
+        extendedAttributes.set("collected_by_status",collected_by_status);
+    }
 
+
+    public String getBuyerAppFinderFeeType(){
+        return extendedAttributes.get("buyer_app_finder_fee_type");
+    }
+    public void setBuyerAppFinderFeeType(String buyer_app_finder_fee_type){
+        extendedAttributes.set("buyer_app_finder_fee_type",buyer_app_finder_fee_type);
+    }
+
+    public double getBuyerAppFinderFeeAmount(){
+        return extendedAttributes.getDouble("buyer_app_finder_fee_amount");
+    }
+    public void setBuyerAppFinderFeeAmount(double buyer_app_finder_fee_amount){
+        extendedAttributes.set("buyer_app_finder_fee_amount",buyer_app_finder_fee_amount);
+    }
+
+    public String getWithholdingAmountStatus(){
+        return extendedAttributes.get("withholding_amount_status");
+    }
+    public void setWithholdingAmountStatus(String withholding_amount_status){
+        extendedAttributes.set("withholding_amount_status",withholding_amount_status);
+    }
+
+    public double getWithholdingAmount(){
+        return extendedAttributes.getDouble("withholding_amount");
+    }
+    public void setWithholdingAmount(double withholding_amount){
+        extendedAttributes.set("withholding_amount",withholding_amount);
+    }
+    public Duration getReturnWindow(){
+        return Duration.parse(extendedAttributes.get("return_window"));
+    }
+    public void setReturnWindow(Duration return_window){
+        extendedAttributes.set("return_window",return_window.toString());
+    }
+
+    public String getReturnWindowStatus(){
+        return extendedAttributes.get("return_window_status");
+    }
+    public void setReturnWindowStatus(String return_window_status){
+        extendedAttributes.set("return_window_status",return_window_status);
+    }
+
+    public String getSettlementBasisStatus(){
+        return extendedAttributes.get("settlement_basis_status");
+    }
+    public void setSettlementBasisStatus(String settlement_basis_status){
+        extendedAttributes.set("settlement_basis_status",settlement_basis_status);
+    }
+
+    public String getSettlementBasis(){
+        return extendedAttributes.get("settlement_basis");
+    }
+    public void setSettlementBasis(String settlement_basis){
+        extendedAttributes.set("settlement_basis",settlement_basis);
+    }
+
+    public Duration getSettlementWindow(){
+        String sw = extendedAttributes.get("settlement_window");
+        return sw == null ? null : Duration.parse(sw);
+    }
+    public void setSettlementWindow(Duration settlement_window){
+        extendedAttributes.set("settlement_window",settlement_window == null ? null : settlement_window.toString());
+    }
+
+    public String getSettlementWindowStatus(){
+        return extendedAttributes.get("settlement_window_status");
+    }
+    public void setSettlementWindowStatus(String settlement_window_status){
+        extendedAttributes.set("settlement_window_status",settlement_window_status);
+    }
+    public SettlementDetails getSettlementDetails(){
+        return extendedAttributes.get(SettlementDetails.class, "settlement_details");
+    }
+    public void setSettlementDetails(SettlementDetails settlement_details){
+        extendedAttributes.set("settlement_details",settlement_details);
+    }
 
 }

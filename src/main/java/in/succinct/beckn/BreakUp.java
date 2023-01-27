@@ -50,5 +50,19 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         public void setType(String type){
             set("type",type);
         }
+
+        protected final BecknObject extendedAttributes = new BecknObject();
+        public String getItemId(){
+            return extendedAttributes.get("item_id");
+        }
+        public void setItemId(String item_id){
+            extendedAttributes.set("item_id",item_id);
+        }
+        public Quantity getItemQuantity(){
+            return extendedAttributes.get(Quantity.class, "item_quantity");
+        }
+        public void setItemQuantity(Quantity item_quantity){
+            extendedAttributes.set("item_quantity",item_quantity);
+        }
     }
 }
