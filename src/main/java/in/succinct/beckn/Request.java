@@ -75,6 +75,13 @@ public class Request extends BecknObject {
         set("feedback_categories",feedback_categories);
     }
 
+    public Feedback getFeedback(){
+        return get(Feedback.class, "message");
+    }
+    public void setFeedback(Feedback feedback){
+        set("message",feedback);
+    }
+
     public CancellationReasons getCancellationReasons(){
         return get(CancellationReasons.class, "cancellation_reasons");
     }

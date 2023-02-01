@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import in.succinct.beckn.BreakUp.BreakUpElement;
+import in.succinct.beckn.BreakUp.BreakUpElement.BreakUpCategory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -11,7 +12,7 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
     public BreakUp(){
         super();
     }
-    public BreakUpElement createElement(String type,String title, Price price){
+    public BreakUpElement createElement(BreakUpCategory type, String title, Price price){
         BreakUpElement element =new BreakUpElement();
         element.setTitle(title);
         element.setPrice(price);
@@ -44,11 +45,12 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
             set("price",price);
         }
 
-        public String getType(){
-            return get("type");
+        public BreakUpCategory getType(){
+            String s = get("type");
+            return s == null ? null : BreakUpCategory.valueOf(s);
         }
-        public void setType(String type){
-            set("type",type);
+        public void setType(BreakUpCategory type){
+            set("type",type == null ? null : type.toString());
         }
 
         protected final BecknObject extendedAttributes = new BecknObject();
@@ -63,6 +65,16 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         }
         public void setItemQuantity(Quantity item_quantity){
             extendedAttributes.set("item_quantity",item_quantity);
+        }
+        
+        
+        public enum BreakUpCategory {
+            item,
+            delivery,
+            packing,
+            tax,
+            misc,
+            discount,
         }
     }
 }

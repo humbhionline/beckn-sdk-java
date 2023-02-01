@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,35 +40,49 @@ public class Payment extends BecknObjectWithId {
     }
 
 
-    public String getType(){
-        return get("type");
+    public PaymentType getType(){
+        String s = get("type");
+        return s == null ? null : PaymentType.valueOf(s);
     }
-    static final Set<String> TYPES = new HashSet<>(){{
-        add("ON-ORDER");
-        add("PRE-FULFILLMENT");
-        add("ON-FULFILLMENT");
-        add("POST-FULFILLMENT");
-    }};
-    public void setType(String type){
-        if (!TYPES.contains(type)){
-            throw new IllegalArgumentException();
+    public enum PaymentType {
+        ON_ORDER ("ON-ORDER"),
+        ON_FULFILLMENT("ON-FULFILLMENT"),
+        PRE_FULFILLMENT ("PRE-FULFILLMENT"),
+        POST_FULFILLMENT("POST-FULFILLMENT");
+
+        PaymentType(String tos){
+            this.tos = tos;
         }
-        set("type",type);
+        final String tos;
+        public String toString(){
+            return tos;
+        }
+    }
+    ;
+    public void setType(PaymentType type){
+        set("type",type == null ? null : type.toString());
     }
 
-    public String getStatus(){
-        return get("status");
+    public enum PaymentStatus {
+        PAID("PAID"),
+        NOT_PAID("NOT-PAID"),
+        PENDING("PENDING");
+
+        PaymentStatus(String tos){
+            this.tos = tos;
+        }
+        final String tos;
+        public String toString(){
+            return tos;
+        }
+    }
+    public PaymentStatus getStatus(){
+        String s =  get("status");
+        return s == null ? null : PaymentStatus.valueOf(s);
     }
 
-    static final Set<String> STATUSES = new HashSet<>(){{
-       add("PAID");
-       add("NOT-PAID");
-    }};
-    public void setStatus(String status){
-        if (!STATUSES.contains(status)){
-            throw new IllegalArgumentException();
-        }
-        set("status",status);
+    public void setStatus(PaymentStatus status){
+        set("status",status == null ? null : status.toString());
     }
 
     public Time getTime(){
@@ -102,34 +117,35 @@ public class Payment extends BecknObjectWithId {
 
     }
 
-    public String getCollectedBy(){
-        return get("collected_by");
+    public CollectedBy getCollectedBy(){
+        String s = get("collected_by");
+        return s == null ? null : CollectedBy.valueOf(s);
     }
-    static final Set<String> COLLECTED_BY = new HashSet<String>(){{
-        add("BAP");
-        add("BPP");
-    }};
-    public void setCollectedBy(String collected_by){
-        if (!COLLECTED_BY.contains(collected_by)){
-            throw new IllegalArgumentException();
-        }
-        set("collected_by",collected_by);
+
+    public enum CollectedBy {
+        BAP,
+        BPP
+    }
+    public void setCollectedBy(CollectedBy collected_by){
+        set("collected_by",collected_by == null ? null : collected_by.toString());
     }
 
     protected final BecknObject extendedAttributes = new BecknObject();
-    public String getCollectedByStatus(){
-        return extendedAttributes.get("collected_by_status");
+    public NegotiationStatus getCollectedByStatus(){
+        String status =  extendedAttributes.get("collected_by_status");
+        return status == null ? null : NegotiationStatus.valueOf(status);
     }
-    public void setCollectedByStatus(String collected_by_status){
-        extendedAttributes.set("collected_by_status",collected_by_status);
+    public void setCollectedByStatus(NegotiationStatus collected_by_status){
+        extendedAttributes.set("collected_by_status",collected_by_status == null ? null : collected_by_status.toString());
     }
 
 
-    public String getBuyerAppFinderFeeType(){
-        return extendedAttributes.get("buyer_app_finder_fee_type");
+    public CommissionType getBuyerAppFinderFeeType(){
+        String s = extendedAttributes.get("buyer_app_finder_fee_type");
+        return s == null ? null : CommissionType.valueOf(s);
     }
-    public void setBuyerAppFinderFeeType(String buyer_app_finder_fee_type){
-        extendedAttributes.set("buyer_app_finder_fee_type",buyer_app_finder_fee_type);
+    public void setBuyerAppFinderFeeType(CommissionType buyer_app_finder_fee_type){
+        extendedAttributes.set("buyer_app_finder_fee_type",buyer_app_finder_fee_type == null ? null :buyer_app_finder_fee_type.toString());
     }
 
     public double getBuyerAppFinderFeeAmount(){
@@ -139,11 +155,12 @@ public class Payment extends BecknObjectWithId {
         extendedAttributes.set("buyer_app_finder_fee_amount",buyer_app_finder_fee_amount);
     }
 
-    public String getWithholdingAmountStatus(){
-        return extendedAttributes.get("withholding_amount_status");
+    public NegotiationStatus getWithholdingAmountStatus(){
+        String s = extendedAttributes.get("withholding_amount_status");
+        return s == null ? null : NegotiationStatus.valueOf(s);
     }
-    public void setWithholdingAmountStatus(String withholding_amount_status){
-        extendedAttributes.set("withholding_amount_status",withholding_amount_status);
+    public void setWithholdingAmountStatus(NegotiationStatus withholding_amount_status){
+        extendedAttributes.set("withholding_amount_status",withholding_amount_status == null ? null  : withholding_amount_status.toString());
     }
 
     public double getWithholdingAmount(){
@@ -159,25 +176,28 @@ public class Payment extends BecknObjectWithId {
         extendedAttributes.set("return_window",return_window.toString());
     }
 
-    public String getReturnWindowStatus(){
-        return extendedAttributes.get("return_window_status");
+    public NegotiationStatus getReturnWindowStatus(){
+        String s = extendedAttributes.get("return_window_status");
+        return s == null ? null : NegotiationStatus.valueOf(s);
     }
-    public void setReturnWindowStatus(String return_window_status){
-        extendedAttributes.set("return_window_status",return_window_status);
-    }
-
-    public String getSettlementBasisStatus(){
-        return extendedAttributes.get("settlement_basis_status");
-    }
-    public void setSettlementBasisStatus(String settlement_basis_status){
-        extendedAttributes.set("settlement_basis_status",settlement_basis_status);
+    public void setReturnWindowStatus(NegotiationStatus return_window_status){
+        extendedAttributes.set("return_window_status",return_window_status == null ? null : return_window_status.toString());
     }
 
-    public String getSettlementBasis(){
-        return extendedAttributes.get("settlement_basis");
+    public NegotiationStatus getSettlementBasisStatus(){
+        String s = extendedAttributes.get("settlement_basis_status");
+        return s == null ? null : NegotiationStatus.valueOf(s);
     }
-    public void setSettlementBasis(String settlement_basis){
-        extendedAttributes.set("settlement_basis",settlement_basis);
+    public void setSettlementBasisStatus(NegotiationStatus settlement_basis_status){
+        extendedAttributes.set("settlement_basis_status",settlement_basis_status == null ? null : settlement_basis_status.toString());
+    }
+
+    public SettlementBasis getSettlementBasis(){
+        String s = extendedAttributes.get("settlement_basis");
+        return s == null ? null : SettlementBasis.valueOf(s);
+    }
+    public void setSettlementBasis(SettlementBasis settlement_basis){
+        extendedAttributes.set("settlement_basis",settlement_basis == null ? null : settlement_basis.toString());
     }
 
     public Duration getSettlementWindow(){
@@ -188,17 +208,38 @@ public class Payment extends BecknObjectWithId {
         extendedAttributes.set("settlement_window",settlement_window == null ? null : settlement_window.toString());
     }
 
-    public String getSettlementWindowStatus(){
-        return extendedAttributes.get("settlement_window_status");
+    public NegotiationStatus getSettlementWindowStatus(){
+        String ws = extendedAttributes.get("settlement_window_status");
+        return null == ws ? null : NegotiationStatus.valueOf(ws);
     }
-    public void setSettlementWindowStatus(String settlement_window_status){
-        extendedAttributes.set("settlement_window_status",settlement_window_status);
+    public void setSettlementWindowStatus(NegotiationStatus settlement_window_status){
+        extendedAttributes.set("settlement_window_status",settlement_window_status == null ? null :settlement_window_status.toString());
     }
     public SettlementDetails getSettlementDetails(){
         return extendedAttributes.get(SettlementDetails.class, "settlement_details");
     }
     public void setSettlementDetails(SettlementDetails settlement_details){
         extendedAttributes.set("settlement_details",settlement_details);
+    }
+
+
+
+    public enum NegotiationStatus {
+        Assert,
+        Agree,
+        DisAgree,
+        Terminate,
+    }
+
+    public enum CommissionType{
+        Percent,
+        Amount
+    }
+
+    public enum SettlementBasis {
+        Collection,
+        Shipment,
+        Delivery
     }
 
 }

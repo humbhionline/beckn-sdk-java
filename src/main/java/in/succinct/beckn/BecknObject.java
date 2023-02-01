@@ -259,7 +259,7 @@ public class BecknObject extends BecknAware<JSONObject> {
 
     }
 
-    private boolean hasCommonAncestor(Class<?> targetType, Class<?> sourceType) {
+    public static boolean hasCommonAncestor(Class<?> targetType, Class<?> sourceType) {
         Class<?> commonAncestor = targetType;
         while (!commonAncestor.isAssignableFrom(sourceType)){
             commonAncestor = commonAncestor.getSuperclass();
@@ -271,7 +271,7 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
 
-    private  <T extends BecknObject, S extends BecknObject> boolean hasCommonAncestor(T target, S source){
+    public static  <T extends BecknObject, S extends BecknObject> boolean hasCommonAncestor(T target, S source){
         Class<?> commonAncestor = target.getClass();
         Class<?> sourceType = source.getClass();
         while (!commonAncestor.isAssignableFrom(sourceType)){

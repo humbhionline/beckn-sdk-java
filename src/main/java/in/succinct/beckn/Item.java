@@ -108,6 +108,13 @@ public class Item extends BecknObjectWithId {
         set("quantity",quantity.getInner());
     }
 
+    public Quantity getQuantity(){
+        return get(Quantity.class, "quantity");
+    }
+    public void setQuantity(Quantity quantity){
+        set("quantity",quantity);
+    }
+
     public Integer getRating(){
         return get("rating");
     }

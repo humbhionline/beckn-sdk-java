@@ -14,23 +14,20 @@ public class Fulfillment extends BecknObjectWithId {
         super(payload);
     }
 
-    public String getType() {
-        return get("type");
+    public FulfillmentType getType() {
+        String s = get("type");
+        return s == null ? null : FulfillmentType.valueOf(s);
     }
 
-    public void setType(String type) {
-        if (!getFulfillmentTypes().contains(type)) {
-            throw new IllegalArgumentException();
-        }
-        set("type", type);
+    public void setType(FulfillmentType type) {
+        set("type", type == null ? null : type.toString());
     }
 
-    public Set<String> getFulfillmentTypes() {
-        return new HashSet<>() {{
-            add("home_delivery");
-            add("store_pickup");
-            add("return_to_origin");
-        }};
+    public enum FulfillmentType {
+        home_delivery,
+        store_pickup,
+        store_pickup_and_home_delivery,
+        return_to_origin,
     }
 
     public FulfillmentStop getStart() {
