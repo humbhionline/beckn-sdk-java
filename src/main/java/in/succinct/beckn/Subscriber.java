@@ -150,4 +150,12 @@ public class Subscriber extends BecknObject{
         }
     }
 
+    public Location getLocation(){
+        return get(Location.class, "location");
+    }
+    public void setLocation(Location location){
+        set("location",location);
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import com.venky.core.date.DateUtils;
+import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONObject;
 
 import java.text.DateFormat;
@@ -24,8 +25,23 @@ public class Context extends BecknObject {
     public String getCountry(){
         return get("country");
     }
+
+    public String getVersion(){
+        return get("version");
+    }
+    public void setVersion(String version){
+        set("version",version);
+    }
     public String getCity(){
-        return get("city");
+        if (!ObjectUtil.isVoid(getVersion()) ){
+            if(getLocation() != null && getLocation().getCity() != null ){
+                return getLocation().getCity().getCode();
+            }else {
+                return null;
+            }
+        }else {
+            return get("city");
+        }
     }
 
     public String getAction(){
@@ -115,9 +131,22 @@ public class Context extends BecknObject {
     }
 
     public void setCity(String city){
-        set("city",city);
+        if (ObjectUtil.isVoid(getVersion())){
+            set("city",city);
+        }else {
+            setLocation(new Location());
+            getLocation().setCity(new City());
+            getLocation().getCity().setCode(city);
+        }
     }
     public void setCountry(String country){
         set("country",country);
+    }
+
+    public Location getLocation(){
+        return get(Location.class, "location");
+    }
+    public void setLocation(Location location){
+        set("location",location);
     }
 }
