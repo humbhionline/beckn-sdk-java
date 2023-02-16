@@ -23,4 +23,11 @@ public class Contact extends BecknObject {
     public void setTags(Tags tags){
         set("tags",tags);
     }
+
+    public String flatten() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(_flat(getEmail()));
+        builder.append(_flat(getPhone()));
+        return builder.toString();
+    }
 }

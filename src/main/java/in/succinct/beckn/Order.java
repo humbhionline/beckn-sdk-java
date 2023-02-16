@@ -6,6 +6,9 @@ public class Order extends BecknObjectWithId {
     public Order() {
         super();
     }
+    public Order(String payload){
+        super(payload);
+    }
 
     public Provider getProvider(){
         return get(Provider.class,"provider");

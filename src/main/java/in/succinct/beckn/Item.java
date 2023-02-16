@@ -154,6 +154,14 @@ public class Item extends BecknObjectWithId {
 
     //Attributes added by all networks. Rationalized.
     protected final BecknObject extendedAttributes = new BecknObject();
+
+    public Price getTax(){
+        return extendedAttributes.get(Price.class, "tax");
+    }
+    public void setTax(Price tax){
+        extendedAttributes.set("tax",tax);
+    }
+
     public boolean isReturnable(){
         return extendedAttributes.getBoolean("returnable");
     }
@@ -209,7 +217,12 @@ public class Item extends BecknObjectWithId {
         extendedAttributes.set("packaged_commodity",packaged_commodity);
     }
 
-
+    public PrepackagedFood getPrepackagedFood(){
+        return extendedAttributes.get(PrepackagedFood.class, "prepackaged_food");
+    }
+    public void setPrepackagedFood(PrepackagedFood prepackaged_food){
+        extendedAttributes.set("prepackaged_food",prepackaged_food);
+    }
 
 
 

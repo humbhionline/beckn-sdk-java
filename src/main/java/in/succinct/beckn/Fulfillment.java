@@ -24,10 +24,19 @@ public class Fulfillment extends BecknObjectWithId {
     }
 
     public enum FulfillmentType {
-        home_delivery,
-        store_pickup,
-        store_pickup_and_home_delivery,
-        return_to_origin,
+        home_delivery(1),
+        store_pickup(2),
+        store_pickup_and_home_delivery(1|2),
+        return_to_origin(4);
+
+        int bits;
+        FulfillmentType(int bits){
+            this.bits = bits;
+        }
+        public boolean matches(FulfillmentType other){
+            return (other == null || (other.bits & bits) > 0);
+        }
+
     }
 
     public FulfillmentStop getStart() {

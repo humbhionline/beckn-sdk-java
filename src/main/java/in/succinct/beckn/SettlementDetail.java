@@ -1,37 +1,42 @@
 package in.succinct.beckn;
 
-import java.util.HashSet;
-import java.util.Set;
+import in.succinct.beckn.Payment.PaymentStatus;
 
 public class SettlementDetail extends BecknObjectWithId {
-    public String getSettlementCounterparty(){
-        return get("settlement_counterparty");
-    }
-    static final Set<String> SETTLEMENT_COUNTERPARTY = new HashSet<String>(){{
-        add("buyer");
-        add("buyer-app");
-        add("seller-app");
-        add("logistics-provider");
-    }};
-    public void setSettlementCounterparty(String settlement_counterparty){
-        if (!SETTLEMENT_COUNTERPARTY.contains(settlement_counterparty)){
-            throw new IllegalArgumentException();
+
+    public enum SettlementCounterparty {
+        BUYER,
+        BUYER_APP,
+        SELLER_APP,
+        LOGISTICS_PROVIDER;
+        public String toString(){
+            return super.toString().toLowerCase().replace('_','-');
         }
-        set("settlement_counterparty",settlement_counterparty);
+
     }
-    public String getSettlementPhase(){
-        return get("settlement_phase");
-    }
-    static final Set<String> SETTLEMENT_PHASE = new HashSet<String>(){{
-        add("sale-amount");
-        add("withholding-amount");
-        add("refund");
-    }};
-    public void setSettlementPhase(String settlement_phase){
-        if (!SETTLEMENT_PHASE.contains(settlement_phase)){
-            throw new IllegalArgumentException();
+    public enum SettlementPhase {
+        SALE_AMOUNT,
+        WITHHOLDING_AMOUNT,
+        REFUND;
+        public String toString(){
+            return super.toString().toLowerCase().replace('_','-');
         }
-        set("settlement_phase",settlement_phase);
+    }
+
+    public SettlementCounterparty getSettlementCounterparty(){
+        String s= get("settlement_counterparty");
+        return s == null ? null : SettlementCounterparty.valueOf(s.toUpperCase().replace('-','_'));
+    }
+
+    public void setSettlementCounterparty(SettlementCounterparty settlement_counterparty){
+        set("settlement_counterparty",settlement_counterparty == null ? null : settlement_counterparty.toString());
+    }
+    public SettlementPhase getSettlementPhase(){
+        String s =  get("settlement_phase");
+        return s == null ? null : SettlementPhase.valueOf(s.toUpperCase().replace('-','_'));
+    }
+    public void setSettlementPhase(SettlementPhase settlement_phase){
+        set("settlement_phase",settlement_phase == null ? null : settlement_phase.toString());
     }
     public double getSettlementAmount(){
         return getDouble("settlement_amount");
@@ -39,19 +44,22 @@ public class SettlementDetail extends BecknObjectWithId {
     public void setSettlementAmount(double settlement_amount){
         set("settlement_amount",settlement_amount);
     }
-    public String getSettlementType(){
-        return get("settlement_type");
-    }
-    static final Set<String> SETTLEMENT_TYPE = new HashSet<String>(){{
-        add("neft");
-        add("rtgs");
-        add("upi");
-    }};
-    public void setSettlementType(String settlement_type){
-        if (!SETTLEMENT_TYPE.contains(settlement_type)){
-            throw new IllegalArgumentException();
+
+    public enum SettlementType {
+        NEFT,
+        RTGS,
+        UPI;
+        public String toString(){
+            return super.toString().toLowerCase();
         }
-        set("settlement_type",settlement_type);
+    }
+    public SettlementType getSettlementType(){
+        String s = get("settlement_type");
+        return s == null ? null : SettlementType.valueOf(s.toUpperCase());
+    }
+
+    public void setSettlementType(SettlementType settlement_type){
+        set("settlement_type",settlement_type == null ? null : settlement_type.toString());
     }
     public String getSettlementBankAccountNo(){
         return get("settlement_bank_account_no");
@@ -102,18 +110,12 @@ public class SettlementDetail extends BecknObjectWithId {
         set("beneficiary_address",beneficiary_address);
     }
 
-    public String getSettlementStatus(){
-        return get("settlement_status");
+    public PaymentStatus getSettlementStatus(){
+        String s = get("settlement_status");
+        return s== null ? null : PaymentStatus.valueOf(s.replace('-','_'));
     }
-    static final Set<String> SETTLEMENT_STATUS = new HashSet<String>(){{
-        add("PAID");
-        add("NOT-PAID");
-    }};
-    public void setSettlementStatus(String settlement_status){
-        if (!SETTLEMENT_STATUS.contains(settlement_status)){
-            throw new IllegalArgumentException();
-        }
-        set("settlement_status",settlement_status);
+    public void setSettlementStatus(PaymentStatus settlement_status){
+        set("settlement_status",settlement_status == null ? null : settlement_status.toString());
     }
 
     public String getSettlementReference(){

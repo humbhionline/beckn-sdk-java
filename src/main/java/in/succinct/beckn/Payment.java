@@ -64,16 +64,12 @@ public class Payment extends BecknObjectWithId {
     }
 
     public enum PaymentStatus {
-        PAID("PAID"),
-        NOT_PAID("NOT-PAID"),
-        PENDING("PENDING");
+        PAID,
+        NOT_PAID,
+        PENDING;
 
-        PaymentStatus(String tos){
-            this.tos = tos;
-        }
-        final String tos;
         public String toString(){
-            return tos;
+            return super.toString().replace('_','-');
         }
     }
     public PaymentStatus getStatus(){

@@ -83,4 +83,14 @@ public class Address extends BecknObject {
         setPinCode(areaCode);
     }
 
+    public String flatten() {
+        StringBuilder s = new StringBuilder();
+        s.append(_flat(getName()));
+        s.append(_flat(getDoor()));
+        s.append(_flat(getBuilding()));
+        s.append(_flat(getStreet()));
+        s.append(_flat(getLocality())).append(_flat(getWard())).append(_flat(getCity())).append(_flat(getState())).append(_flat(getCountry())).append(_flat(getPinCode()));
+        return s.toString();
+    }
+
 }

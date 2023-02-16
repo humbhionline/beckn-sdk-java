@@ -283,6 +283,8 @@ public class BecknObject extends BecknAware<JSONObject> {
         return true;
     }
 
-
+    protected String _flat(String s){
+        return s == null ? "" : " " + s;
+    }
 
 }
