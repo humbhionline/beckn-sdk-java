@@ -7,13 +7,13 @@ public class Feedback extends BecknObjectWithId {
         return get(FeedbackForm.class,"feedback_form");
     }
     public void setFeedbackForm(FeedbackForm feedback_form){
-        set("feedback_form",feedback_form.getInner());
+        set("feedback_form",feedback_form);
     }
 
     public FeedbackUrl getFeedbackUrl(){
         return get(FeedbackUrl.class,"feedback_url");
     }
     public void setFeedbackUrl(FeedbackUrl feedback_url){
-        set("feedback_url",feedback_url.getInner());
+        set("feedback_url",feedback_url);
     }
 }

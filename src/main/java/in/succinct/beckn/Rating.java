@@ -30,7 +30,7 @@ public class Rating extends BecknObjectWithId{
         return get(FeedbackForm.class,"feedback_form");
     }
     public void setFeedbackForm(FeedbackForm feedback_form){
-        set("feedback_form",feedback_form.getInner());
+        set("feedback_form",feedback_form);
     }
 
     public String getFeedbackId(){

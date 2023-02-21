@@ -4,11 +4,13 @@ import com.venky.core.date.DateUtils;
 import com.venky.core.date.Time;
 import com.venky.core.util.MultiException;
 import com.venky.core.util.ObjectHolder;
+import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -79,6 +81,36 @@ public class BecknObject extends BecknAware<JSONObject> {
         set(key,value.getInner());
         attributeMap.put(key,new ObjectHolder<>(value));
     }
+
+    public <T extends Enum<T>> void setEnum(String key, T value) {
+        setEnum(key,value,null);
+    }
+    public <T extends Enum<T>> void setEnum(String key, T value , EnumConvertor<T> convertor){
+        set(key,convertor == null ? ( value == null ? null : value.name() ) : convertor.toString(value));
+    }
+
+    public <T extends Enum<T>> T getEnum(Class<T> enumClass, String key){
+        return getEnum(enumClass, key, null);
+    }
+    public <T extends Enum<T>> T getEnum(Class<T> enumClass, String key, EnumConvertor<T> convertor){
+        String value = get(key);
+        return convertor == null ? (value == null ? null :  Enum.valueOf(enumClass,value)) : convertor.valueOf(value);
+    }
+    public static abstract class EnumConvertor<T extends Enum<T>> {
+        @SuppressWarnings("unchecked")
+        public Class<T> getEnumClass(){
+            ParameterizedType pt = (ParameterizedType)this.getClass().getGenericSuperclass();
+            return (Class<T>) pt.getActualTypeArguments()[0];
+        }
+
+        public T valueOf(String enumRepresentation) {
+            return enumRepresentation == null ? null : Enum.valueOf(getEnumClass(),enumRepresentation.replace('-','_'));
+        }
+        public String toString(T value){
+            return value == null ? null : value.toString().replace('_','-');
+        }
+    }
+
     public void set(String key, JSONAware value){
         if (value == null) {
             rm(key);
@@ -197,12 +229,12 @@ public class BecknObject extends BecknAware<JSONObject> {
         }
     }
 
-    public <T extends  BecknObject> void load(T other){
-        if (!hasCommonAncestor(this,other)){
+    public <T extends  BecknObject> void load(T from){
+        if (!hasCommonAncestor(this,from)){
             throw new IllegalArgumentException("Incompatible type of the parameter");
         }
 
-        Class<? extends BecknObject> otherClass = other.getClass();
+        Class<? extends BecknObject> otherClass = from.getClass();
 
         Map<String,Method> selfSetters = new HashMap<>();
         Map<String,Method> selfGetters = new HashMap<>();
@@ -244,12 +276,15 @@ public class BecknObject extends BecknAware<JSONObject> {
             Class<?> selfFieldType = selfSetter.getParameterTypes()[0];
             try {
                 if (BecknObject.class.isAssignableFrom(otherFieldType) && BecknObject.class.isAssignableFrom(selfFieldType)) {
+                    BecknObject otherField = (BecknObject) otherGetter.invoke(from);
+                    if (otherField == null){
+                        continue;
+                    }
                     selfSetter.invoke(this, selfFieldType.getConstructor().newInstance());
                     BecknObject selfField = (BecknObject) selfGetter.invoke(this);
-                    BecknObject otherField = (BecknObject) otherGetter.invoke(other);
                     selfField.load(otherField);
                 } else {
-                    selfSetter.invoke(this, otherGetter.invoke(other));
+                    selfSetter.invoke(this, otherGetter.invoke(from));
                 }
             }catch (Exception ex){
                 throw new RuntimeException(ex);

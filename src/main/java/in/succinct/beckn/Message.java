@@ -11,14 +11,14 @@ public class Message extends BecknObject {
         return get(Intent.class,"intent");
     }
     public void setIntent(Intent intent){
-        set("intent",intent.getInner());
+        set("intent",intent);
     }
     public Catalog getCatalog(){
         return get(Catalog.class,"catalog");
     }
 
     public void setCatalog(Catalog catalog){
-        set("catalog",catalog.getInner());
+        set("catalog",catalog);
     }
 
     public Order getOrder(){
@@ -26,7 +26,7 @@ public class Message extends BecknObject {
     }
 
     public void setOrder(Order order){
-        set("order",order.getInner());
+        set("order",order);
     }
 
     public Order getInitialized(){
@@ -41,7 +41,7 @@ public class Message extends BecknObject {
     }
 
     public void setQuote(Quote quote) {
-        set("quote",quote.getInner());
+        set("quote",quote);
     }
     public Quote getQuote(){
         return get(Quote.class,"quote");

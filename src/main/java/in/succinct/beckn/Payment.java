@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Payment.PaymentType.PaymentTypeConverter;
+
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,26 +43,21 @@ public class Payment extends BecknObjectWithId {
 
 
     public PaymentType getType(){
-        String s = get("type");
-        return s == null ? null : PaymentType.valueOf(s);
+       return getEnum(PaymentType.class,"type", new PaymentTypeConverter());
     }
     public enum PaymentType {
-        ON_ORDER ("ON-ORDER"),
-        ON_FULFILLMENT("ON-FULFILLMENT"),
-        PRE_FULFILLMENT ("PRE-FULFILLMENT"),
-        POST_FULFILLMENT("POST-FULFILLMENT");
+        ON_ORDER ,
+        ON_FULFILLMENT,
+        PRE_FULFILLMENT,
+        POST_FULFILLMENT;
 
-        PaymentType(String tos){
-            this.tos = tos;
-        }
-        final String tos;
-        public String toString(){
-            return tos;
-        }
+        public static class PaymentTypeConverter extends EnumConvertor<PaymentType>{}
     }
-    ;
+
+
+
     public void setType(PaymentType type){
-        set("type",type == null ? null : type.toString());
+        setEnum("type", type, new PaymentTypeConverter());
     }
 
     public enum PaymentStatus {

@@ -14,27 +14,27 @@ public class Provider extends BecknObjectWithId {
         return get(Descriptor.class,"descriptor");
     }
     public void setDescriptor(Descriptor descriptor){
-        set("descriptor",descriptor.getInner());
+        set("descriptor",descriptor);
     }
 
     public Locations getLocations(){
         return get(Locations.class,"locations");
     }
     public void setLocations(Locations locations){
-        set("locations",locations.getInner());
+        set("locations",locations);
     }
     public  Items getItems(){
         return get(Items.class,"items");
     }
     public void setItems(Items items){
-        set("items",items.getInner());
+        set("items",items);
     }
 
     public Categories getCategories(){
         return get(Categories.class,"categories");
     }
     public void setCategories(Categories categories){
-        set("categories",categories.getInner());
+        set("categories",categories);
     }
 
     public Fulfillments getFulfillments(){
@@ -100,18 +100,18 @@ public class Provider extends BecknObjectWithId {
         return get(Rating.class,"rating");
     }
     public void setRating(Rating rating){
-        set("rating",rating.getInner());
+        set("rating",rating);
     }
 
     public Time getTime(){
         return get(Time.class,"time");
     }
     public void setTime(Time time){
-        set("time",time.getInner());
+        set("time",time);
     }
 
     public boolean getRateable(){
-        return get("rateable");
+        return getBoolean("rateable");
     }
     public void setRateable(boolean rateable){
         set("rateable",rateable);

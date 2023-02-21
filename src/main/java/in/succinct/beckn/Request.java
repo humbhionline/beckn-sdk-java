@@ -43,7 +43,7 @@ public class Request extends BecknObject {
         return get(Context.class, "context");
     }
     public void setContext(Context context) {
-        set("context",context.getInner());
+        set("context",context);
     }
 
 
@@ -51,14 +51,14 @@ public class Request extends BecknObject {
         return get(Message.class, "message");
     }
     public void setMessage(Message message) {
-        set("message",message.getInner());
+        set("message",message);
     }
 
     public Error getError(){
         return get(Error.class,"error");
     }
     public void setError(Error error){
-        set("error",error.getInner());
+        set("error",error);
     }
 
     public RatingCategories getRatingCategories(){
@@ -273,8 +273,7 @@ public class Request extends BecknObject {
     public static String getRawSigningKey(PublicKey publicKey){
         try {
             BCEdDSAPublicKey k = (BCEdDSAPublicKey) publicKey;
-            Field f = k.getClass().getDeclaredField("eddsaPublicKey");
-            f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+            Field f = getField( k.getClass(),"eddsaPublicKey");
             Ed25519PublicKeyParameters publicKeyParameters = (Ed25519PublicKeyParameters) f.get(k);
             return Base64.getEncoder().encodeToString(publicKeyParameters.getEncoded());
         }catch (Exception ex){
@@ -284,13 +283,28 @@ public class Request extends BecknObject {
     public static String getRawEncryptionKey(PublicKey publicKey){
         try {
             BCXDHPublicKey k = (BCXDHPublicKey) publicKey;
-            Field f = k.getClass().getDeclaredField("xdhPublicKey");
-            f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+            Field f = getField(k.getClass(),"xdhPublicKey");
             X25519PublicKeyParameters publicKeyParameters = (X25519PublicKeyParameters) f.get(k);
             return Base64.getEncoder().encodeToString(publicKeyParameters.getEncoded());
         }catch (Exception ex){
             throw new RuntimeException("Unknown Key format");
         }
+    }
+
+    static Field getField(Class clazz, String fieldName){
+        Field field = null ;
+        while (field == null && clazz != Object.class){
+            try {
+                field = clazz.getDeclaredField(fieldName);
+            }catch (Exception ex){
+                clazz = clazz.getSuperclass();
+            }
+        }
+        if (field != null) {
+            field.setAccessible(true);
+        }
+        return field;
+
     }
 
 

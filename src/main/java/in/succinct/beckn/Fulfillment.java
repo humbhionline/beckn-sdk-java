@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONArray;
+
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
@@ -140,7 +142,7 @@ public class Fulfillment extends BecknObjectWithId {
     }
 
     public void setContact(Contact contact) {
-        set("contact", contact.getInner());
+        set("contact", contact);
     }
 
     //Extended attributes rationalized from networks
@@ -167,6 +169,35 @@ public class Fulfillment extends BecknObjectWithId {
     public void setProviderName(String provider_name){
         extendedAttributes.set("provider_name",provider_name);
     }
+
+    public ServiceablityTags getServiceablityTags(){
+        return extendedAttributes.get(ServiceablityTags.class, "tags");
+    }
+    public void setServiceablityTags(ServiceablityTags tags){
+        extendedAttributes.set("tags",tags);
+    }
+
+    public static class ServiceablityTags extends BecknObjects<Tag> {
+
+        public ServiceablityTags() {
+        }
+
+        public ServiceablityTags(JSONArray value) {
+            super(value);
+        }
+
+    }
+
+    public static class List extends BecknObjects<Tag>{
+
+        public List() {
+        }
+
+        public List(JSONArray value) {
+            super(value);
+        }
+    }
+
 }
 
 

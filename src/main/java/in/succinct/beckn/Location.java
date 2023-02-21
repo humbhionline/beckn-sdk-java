@@ -82,6 +82,6 @@ public class Location extends BecknObjectWithId {
         return get(Time.class,"time");
     }
     public void setTime(Time time){
-        set("time",time.getInner());
+        set("time",time);
     }
 }

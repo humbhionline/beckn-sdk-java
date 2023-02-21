@@ -14,7 +14,7 @@ public class Order extends BecknObjectWithId {
         return get(Provider.class,"provider");
     }
     public void setProvider(Provider provider){
-        set("provider",provider.getInner());
+        set("provider",provider);
     }
 
     public Location getProviderLocation(){
@@ -22,14 +22,14 @@ public class Order extends BecknObjectWithId {
     }
 
     public void setProviderLocation(Location location){
-        set("provider_location",location.getInner());
+        set("provider_location",location);
     }
 
     public Items getItems(){
         return get(Items.class,"items");
     }
     public void setItems(Items  items){
-        set("items",items.getInner());
+        set("items",items);
     }
 
     public AddOns getAddOns(){
@@ -105,7 +105,7 @@ public class Order extends BecknObjectWithId {
         return get(Documents.class,"documents");
     }
     public void setDocuments(Documents documents){
-        set("documents",documents.getInner());
+        set("documents",documents);
     }
 
     protected final BecknObject extendedAttributes = new BecknObject();

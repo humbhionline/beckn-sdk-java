@@ -11,7 +11,7 @@ public class Category extends BecknObjectWithId{
         return get(Descriptor.class,"descriptor");
     }
     public void setDescriptor(Descriptor descriptor){
-        set("descriptor",descriptor.getInner());
+        set("descriptor",descriptor);
     }
 
     public enum CategoryCode {

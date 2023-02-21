@@ -21,10 +21,11 @@ public class Time extends BecknObject {
     }
 
     public Duration getDuration(){
-        return Duration.parse(get("duration"));
+        String d = get("duration");
+        return d == null ? null : Duration.parse(d);
     }
     public void setDuration(Duration duration){
-        set("duration",duration.toString());
+        set("duration", duration == null ? null  :duration.toString());
     }
 
     public Range getRange(){
@@ -61,6 +62,6 @@ public class Time extends BecknObject {
         return get(Schedule.class,"schedule");
     }
     public void setSchedule(Schedule schedule){
-        set("schedule",schedule.getInner());
+        set("schedule",schedule);
     }
 }

@@ -10,7 +10,7 @@ public class Quote extends BecknObject {
     }
 
     public void setPrice(Price price) {
-        set("price",price.getInner());
+        set("price",price);
     }
     public  Price getPrice(){
         return get(Price.class,"price");
@@ -25,7 +25,7 @@ public class Quote extends BecknObject {
     }
 
     public void setBreakUp(BreakUp breakUp) {
-        set("breakup",breakUp.getInner());
+        set("breakup",breakUp);
     }
     public BreakUp getBreakUp(){
         return get(BreakUp.class,"breakup");

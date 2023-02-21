@@ -105,7 +105,7 @@ public class Item extends BecknObjectWithId {
         return get(ItemQuantity.class,"quantity");
     }
     public void setItemQuantity(ItemQuantity quantity){
-        set("quantity",quantity.getInner());
+        set("quantity",quantity);
     }
 
     public Quantity getQuantity(){
@@ -126,7 +126,7 @@ public class Item extends BecknObjectWithId {
         return get(Time.class,"time");
     }
     public void setTime(Time time){
-        set("time",time.getInner());
+        set("time",time);
     }
 
     public boolean getRateable(){

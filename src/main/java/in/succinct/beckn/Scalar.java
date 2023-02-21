@@ -53,6 +53,6 @@ public class Scalar extends BecknObject {
         return get(Range.class,"range");
     }
     public void setRange(Range range){
-        set("range",range.getInner());
+        set("range",range);
     }
 }
