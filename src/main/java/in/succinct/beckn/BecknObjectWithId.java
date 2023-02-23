@@ -18,7 +18,7 @@ public class BecknObjectWithId extends BecknObject {
         return get("id");
     }
     public void setId(String id){
-        if (!ObjectUtil.isVoid(getId())){
+        if (!ObjectUtil.isVoid(id) && !ObjectUtil.isVoid(getId()) && !ObjectUtil.equals(getId(),id)){
             throw new RuntimeException("Id cannot be changed!");
         }
         set("id",id);

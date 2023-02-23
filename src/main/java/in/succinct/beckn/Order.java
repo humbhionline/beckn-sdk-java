@@ -51,14 +51,14 @@ public class Order extends BecknObjectWithId {
         return get(Billing.class,"billing");
     }
     public void setBilling( Billing billing){
-        set("billing",billing.getInner());
+        set("billing",billing);
     }
 
     public Fulfillment getFulfillment(){
         return get(Fulfillment.class,"fulfillment");
     }
     public void setFulfillment(Fulfillment fulfillment){
-        set("fulfillment",fulfillment.getInner());
+        set("fulfillment",fulfillment);
     }
 
     public Fulfillments getFulfillments(){
@@ -72,14 +72,14 @@ public class Order extends BecknObjectWithId {
         return get(Quote.class,"quote");
     }
     public void setQuote(Quote quote){
-        set("quote",quote.getInner());
+        set("quote",quote);
     }
 
     public Payment getPayment(){
         return get(Payment.class,"payment");
     }
     public void setPayment(Payment payment){
-        set("payment",payment.getInner());
+        set("payment",payment);
     }
 
     public Date getCreatedAt(){

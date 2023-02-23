@@ -1,24 +1,19 @@
 package in.succinct.beckn;
 
 import com.venky.core.date.DateUtils;
-import com.venky.core.date.Time;
 import com.venky.core.util.MultiException;
 import com.venky.core.util.ObjectHolder;
-import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 
 public class BecknObject extends BecknAware<JSONObject> {
@@ -229,7 +224,7 @@ public class BecknObject extends BecknAware<JSONObject> {
         }
     }
 
-    public <T extends  BecknObject> void load(T from){
+    public <T extends  BecknObject> void update(T from){
         if (!hasCommonAncestor(this,from)){
             throw new IllegalArgumentException("Incompatible type of the parameter");
         }
@@ -240,7 +235,7 @@ public class BecknObject extends BecknAware<JSONObject> {
         Map<String,Method> selfGetters = new HashMap<>();
         Map<String,Method> otherGetters = new HashMap<>();
         for (Method m : otherClass.getMethods()) {
-            if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterCount() == 0){
+            if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterCount() == 0 && !m.getName().equals("getInner")){
                 otherGetters.put(m.getName(),m);
             }
         }
@@ -282,7 +277,7 @@ public class BecknObject extends BecknAware<JSONObject> {
                     }
                     selfSetter.invoke(this, selfFieldType.getConstructor().newInstance());
                     BecknObject selfField = (BecknObject) selfGetter.invoke(this);
-                    selfField.load(otherField);
+                    selfField.update(otherField);
                 } else {
                     selfSetter.invoke(this, otherGetter.invoke(from));
                 }

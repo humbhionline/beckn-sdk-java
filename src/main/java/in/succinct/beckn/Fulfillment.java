@@ -4,6 +4,7 @@ import org.json.simple.JSONArray;
 
 import java.time.Duration;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 public class Fulfillment extends BecknObjectWithId {
@@ -18,11 +19,11 @@ public class Fulfillment extends BecknObjectWithId {
 
     public FulfillmentType getType() {
         String s = get("type");
-        return s == null ? null : FulfillmentType.valueOf(s);
+        return s == null ? null : FulfillmentType.valueOf(s.replace('-','_').toLowerCase());
     }
 
     public void setType(FulfillmentType type) {
-        set("type", type == null ? null : type.toString());
+        set("type", type == null ? null : type.toString().replace('_','-').toUpperCase());
     }
 
     public enum FulfillmentType {
@@ -130,7 +131,7 @@ public class Fulfillment extends BecknObjectWithId {
     }
 
     public int getRating() {
-        return get("rating");
+        return getInteger("rating");
     }
 
     public void setRating(int rating) {

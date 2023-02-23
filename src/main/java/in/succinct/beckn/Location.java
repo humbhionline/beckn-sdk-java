@@ -34,7 +34,11 @@ public class Location extends BecknObjectWithId {
         return this.gps.get();
     }
     public void setGps(GeoCoordinate coordinate){
-        set("gps",String.format("%f,%f",coordinate.getLat(),coordinate.getLng()));
+        if (coordinate == null){
+            rm("gps");
+        }else {
+            set("gps", String.format("%f,%f", coordinate.getLat(), coordinate.getLng()));
+        }
         if (this.gps == null){
             this.gps = new ObjectHolder<>(coordinate);
         }else {

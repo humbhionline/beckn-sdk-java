@@ -28,7 +28,7 @@ public class Payment extends BecknObjectWithId {
        add("http/post");
     }};
     public void setTlMethod(String tl_method){
-        if  (TL_METHODS.contains(tl_method)) {
+        if  (tl_method == null || TL_METHODS.contains(tl_method)) {
             set("tl_method", tl_method);
         }else {
             throw new IllegalArgumentException();
@@ -71,11 +71,11 @@ public class Payment extends BecknObjectWithId {
     }
     public PaymentStatus getStatus(){
         String s =  get("status");
-        return s == null ? null : PaymentStatus.valueOf(s);
+        return s == null ? null : PaymentStatus.valueOf(s.replace('-','_'));
     }
 
     public void setStatus(PaymentStatus status){
-        set("status",status == null ? null : status.toString());
+        set("status",status == null ? null : status.toString().replace('_','-'));
     }
 
     public Time getTime(){
@@ -163,10 +163,11 @@ public class Payment extends BecknObjectWithId {
         extendedAttributes.set("withholding_amount",withholding_amount);
     }
     public Duration getReturnWindow(){
-        return Duration.parse(extendedAttributes.get("return_window"));
+        String s = extendedAttributes.get("return_window");
+        return s == null ? null: Duration.parse(s);
     }
     public void setReturnWindow(Duration return_window){
-        extendedAttributes.set("return_window",return_window.toString());
+        extendedAttributes.set("return_window",return_window == null ? null : return_window.toString());
     }
 
     public NegotiationStatus getReturnWindowStatus(){
