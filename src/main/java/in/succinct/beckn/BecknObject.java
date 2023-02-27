@@ -3,9 +3,11 @@ package in.succinct.beckn;
 import com.venky.core.date.DateUtils;
 import com.venky.core.util.MultiException;
 import com.venky.core.util.ObjectHolder;
+import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONObject;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.text.DateFormat;
@@ -30,20 +32,26 @@ public class BecknObject extends BecknAware<JSONObject> {
         super(object);
     }
 
-    private final Map<String,ObjectHolder<BecknAware>> attributeMap = new HashMap<>();
+
+    private transient Map<String,ObjectHolder<BecknAware>> attributeMap = new HashMap<>();
+
     public <T extends BecknAware> T get(Class<T> clazz,String name){
         return get(clazz,name,false);
     }
     public <T extends BecknAware> T get(Class<T> clazz,String name,boolean createIfAbsent){
-        if (attributeMap.containsKey(name)){
-            return (T)attributeMap.get(name).get();
+        if (attributeMap().containsKey(name)){
+            Object value = attributeMap().get(name).get();
+            if (value != null && clazz.isAssignableFrom(value.getClass())){
+                return (T)value;
+            }
+            return null;
         }
         JSONObject inner = getInner();
         JSONAware clazzInner = (JSONAware) inner.get(name);
         try {
             T t = null ;
             if (clazzInner != null || createIfAbsent){
-                t = clazz.getConstructor().newInstance();
+                t = getObjectCreator().create(clazz);
                 if (clazzInner != null) {
                     t.setInner(clazzInner);
                 }else {
@@ -51,7 +59,7 @@ public class BecknObject extends BecknAware<JSONObject> {
                     inner.put(name,clazzInner);
                 }
             }
-            attributeMap.put(name,new ObjectHolder<>(t));
+            attributeMap().put(name,new ObjectHolder<>(t));
             return t;
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -74,7 +82,7 @@ public class BecknObject extends BecknAware<JSONObject> {
         }
 
         set(key,value.getInner());
-        attributeMap.put(key,new ObjectHolder<>(value));
+        attributeMap().put(key,new ObjectHolder<>(value));
     }
 
     public <T extends Enum<T>> void setEnum(String key, T value) {
@@ -113,7 +121,7 @@ public class BecknObject extends BecknAware<JSONObject> {
         }
 
         getInner().put(key,value);
-        attributeMap.remove(key);
+        attributeMap().remove(key);
     }
     public void set(String key, String value){
         if (value == null) {
@@ -123,13 +131,17 @@ public class BecknObject extends BecknAware<JSONObject> {
 
         getInner().put(key,value);
     }
-    public void set(String key, boolean value){
+    public void set(String key, Boolean value){
+        if (value == null ){
+            rm(key);
+            return;
+        }
         getInner().put(key,value);
     }
 
     public void rm(String  key){
         getInner().remove(key);
-        attributeMap.remove(key);
+        attributeMap().remove(key);
     }
 
     public static DateFormat TIMESTAMP_FORMAT_WITH_MILLS =  new SimpleDateFormat(DateUtils.ISO_8601_24H_FULL_FORMAT);
@@ -157,17 +169,12 @@ public class BecknObject extends BecknAware<JSONObject> {
         }
         set(key,format.format(date));
     }
-    public void set(String key, Double value){
-        if (value == null) {
+
+    public void set(String key, Number value){
+        if (value == null){
             rm(key);
             return;
         }
-        getInner().put(key,value);
-    }
-    public void set(String key, int value){
-        getInner().put(key,value);
-    }
-    public void set(String key, long value){
         getInner().put(key,value);
     }
     public Date getTimestamp(String key){
@@ -199,88 +206,157 @@ public class BecknObject extends BecknAware<JSONObject> {
             throw new RuntimeException(e);
         }
     }
-
-    public double getDouble(String key){
-        return Double.parseDouble(String.valueOf(get(key,0.0D)));
+    public Double getDouble(String key){
+        return getDouble(key,0.0D);
     }
-    public int getInteger(String key){
-        return Integer.parseInt(String.valueOf(get(key,0)));
+    public Double getDouble(String key,Double ifNull){
+        Object o = get(key);
+        return o == null ? ifNull : Double.valueOf(String.valueOf(o));
     }
-    public long getLong(String key){
-        return Long.parseLong(String.valueOf(get(key,0L)));
-    }
-    public boolean getBoolean(String key){
-        return Boolean.parseBoolean(String.valueOf(get(key,false)));
+    public Integer getInteger(String key) {
+        return getInteger(key,0);
     }
 
+    public Integer getInteger(String key,Integer ifNull){
+        Object o = get(key);
+        return o == null ? ifNull : Integer.valueOf(String.valueOf(o));
+    }
+    public Long getLong(String key) {
+        return getLong(key,0L);
+    }
+    public Long getLong(String key, Long ifNull){
+        Object o = get(key);
+        return o == null ? ifNull : Long.valueOf(String.valueOf(o));
+    }
+    public Boolean getBoolean(String key){
+        return getBoolean(key,false);
+    }
+    public Boolean getBoolean(String key,Boolean ifNull){
+        Object o = get(key);
+        return o == null ? ifNull : Boolean.valueOf(String.valueOf(o));
+    }
 
-    public <T extends BecknObject> T cast(Class<T> clazz){
-        try {
-            T t = clazz.getConstructor().newInstance();
-            t.setInner(this.getInner());
-            return t;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+
+    public static class BecknObjectCreator implements Serializable {
+        public <B> B create(Class<B> clazz){
+            try {
+                B b = clazz.getConstructor().newInstance();
+                if (b instanceof BecknObject){
+                    ((BecknObject)b).setObjectCreator(BecknObjectCreator.this);
+                }
+                return b;
+            }catch (Exception ex){
+                throw new RuntimeException(ex);
+            }
         }
+    }
+
+    @Override
+    public void setObjectCreator(BecknObjectCreator objectCreator) {
+        super.setObjectCreator(objectCreator);
+        attributeMap().clear();
+    }
+
+    private Map<String,ObjectHolder<BecknAware>> attributeMap(){
+        if (attributeMap == null){
+            synchronized (this) {
+                if (attributeMap == null) {
+                    attributeMap = new HashMap<>();
+                }
+            }
+        }
+        return attributeMap;
+    }
+    public boolean hasAdditionalProperties(){
+        return false;
     }
 
     public <T extends  BecknObject> void update(T from){
-        if (!hasCommonAncestor(this,from)){
+        update(from, getObjectCreator());
+    }
+    private <T extends  BecknObject> void update(T fromSource , BecknObjectCreator boCreator){
+        if (!hasCommonAncestor(this,fromSource)){
             throw new IllegalArgumentException("Incompatible type of the parameter");
         }
 
-        Class<? extends BecknObject> otherClass = from.getClass();
+        Class<? extends BecknObject> sourceClass = fromSource.getClass();
 
-        Map<String,Method> selfSetters = new HashMap<>();
-        Map<String,Method> selfGetters = new HashMap<>();
-        Map<String,Method> otherGetters = new HashMap<>();
-        for (Method m : otherClass.getMethods()) {
-            if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterCount() == 0 && !m.getName().equals("getInner")){
-                otherGetters.put(m.getName(),m);
+        Map<String,Method> targetSetters = new HashMap<>();
+        Map<String,Method> targetGetters = new HashMap<>();
+        Map<String,Method> sourceGetters = new HashMap<>();
+        for (Method m : sourceClass.getMethods()) {
+            if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterCount() == 0 && !m.getName().equals("getInner") && BecknObject.class.isAssignableFrom(m.getDeclaringClass())){
+                sourceGetters.put(m.getName(),m);
             }
         }
 
         for (Method m : getClass().getMethods()) {
+            if (!BecknObject.class.isAssignableFrom(m.getDeclaringClass())){
+                continue;
+            }
             if ((m.getName().startsWith("set") && m.getParameterCount() == 1 )) {
                 String setterName = m.getName();
-                String getterName = String.format("g%s",setterName.substring(1));
 
-                Method otherGetter = otherGetters.get(getterName);
-                if (otherGetter !=  null && hasCommonAncestor(m.getParameterTypes()[0],otherGetter.getReturnType())){
-                    selfSetters.put(m.getName(), m);
+                String getterName = String.format("g%s",setterName.substring(1));
+                Method sourceGetter = sourceGetters.get(getterName);
+
+                if (sourceGetter == null){
+                    getterName = String.format("is%s",setterName.substring(3));
+                    sourceGetter = sourceGetters.get(getterName);
+
+                }
+                if (sourceGetter !=  null && hasCommonAncestor(m.getParameterTypes()[0],sourceGetter.getReturnType())){
+                    targetSetters.put(m.getName(), m);
                 }
             }else if ((m.getName().startsWith("get") || m.getName().startsWith("is")) && m.getParameterCount() == 0){
-                selfGetters.put(m.getName(),m);
+                targetGetters.put(m.getName(),m);
             }
         }
 
-        for (Map.Entry<String,Method> entry : otherGetters.entrySet()) {
+        for (Map.Entry<String,Method> entry : sourceGetters.entrySet()) {
 
             String getterName = entry.getKey();
-            String setterName = String.format("s%s",getterName.substring(1));
+            String setterName = getterName.startsWith("get") ? String.format("s%s",getterName.substring(1)) : String.format("set%s",getterName.substring(2));
 
-            Method otherGetter = entry.getValue();
-            Method selfSetter = selfSetters.get(setterName);
-            Method selfGetter = selfGetters.get(getterName);
+            Method sourceGetter = entry.getValue();
+            Method targetSetter = targetSetters.get(setterName);
+            Method targetGetter = targetGetters.get(getterName);
 
-            if (selfSetter == null || selfGetter == null) {
+            if (targetSetter == null || targetGetter == null) {
                 continue;
             }
 
-            Class<?> otherFieldType = otherGetter.getReturnType();
-            Class<?> selfFieldType = selfSetter.getParameterTypes()[0];
+            Class<?> sourceFieldType = sourceGetter.getReturnType();
+            Class<?> targetFieldType = targetSetter.getParameterTypes()[0];
             try {
-                if (BecknObject.class.isAssignableFrom(otherFieldType) && BecknObject.class.isAssignableFrom(selfFieldType)) {
-                    BecknObject otherField = (BecknObject) otherGetter.invoke(from);
-                    if (otherField == null){
-                        continue;
-                    }
-                    selfSetter.invoke(this, selfFieldType.getConstructor().newInstance());
-                    BecknObject selfField = (BecknObject) selfGetter.invoke(this);
-                    selfField.update(otherField);
-                } else {
-                    selfSetter.invoke(this, otherGetter.invoke(from));
+                Object sourceField = sourceGetter.invoke(fromSource);
+                Object targetField = sourceField;
+                if (sourceField == null){
+                    continue;
                 }
+
+                if (BecknObject.class.isAssignableFrom(sourceFieldType) && BecknObject.class.isAssignableFrom(targetFieldType)) {
+                    targetField = boCreator.create(targetFieldType);
+                    if (((BecknObject)sourceField).hasAdditionalProperties()){
+                        ((BecknObject)targetField).setInner(((BecknObject)sourceField).getInner());
+                    }else {
+                        ((BecknObject) targetField).update((BecknObject) sourceField);
+                    }
+                } else if (BecknObjects.class.isAssignableFrom(sourceFieldType) && BecknObjects.class.isAssignableFrom(targetFieldType)){
+                    targetField = boCreator.create(targetFieldType);
+                    BecknObjects sourceFields = (BecknObjects) sourceField;
+                    BecknObjects targetFields = (BecknObjects) targetField;
+                    for (Object o : sourceFields){
+                        if (o instanceof BecknObject){
+                            BecknObject listElement = (BecknObject) boCreator.create(o.getClass());
+                            listElement.update((BecknObject) o);
+                            targetFields.add(listElement);
+                        }else {
+                            targetFields.add(o);
+                        }
+                    }
+                }
+                targetSetter.invoke(this, targetField);
             }catch (Exception ex){
                 throw new RuntimeException(ex);
             }

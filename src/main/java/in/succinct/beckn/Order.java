@@ -2,7 +2,7 @@ package in.succinct.beckn;
 
 import java.util.Date;
 
-public class Order extends BecknObjectWithId {
+public class Order extends ExtendedBecknObjectWithId {
     public Order() {
         super();
     }
@@ -108,7 +108,6 @@ public class Order extends BecknObjectWithId {
         set("documents",documents);
     }
 
-    protected final BecknObject extendedAttributes = new BecknObject();
     public Cancellation getCancellation(){
         return extendedAttributes.get(Cancellation.class, "cancellation");
     }

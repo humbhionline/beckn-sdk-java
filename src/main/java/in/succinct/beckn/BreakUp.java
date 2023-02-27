@@ -53,7 +53,14 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
             set("type",type == null ? null : type.toString());
         }
 
-        protected final BecknObject extendedAttributes = new BecknObject();
+        private BecknObject extendedAttributes = new BecknObject();
+
+        @Override
+        public void setObjectCreator(BecknObjectCreator objectCreator) {
+            super.setObjectCreator(objectCreator);
+            extendedAttributes.setObjectCreator(objectCreator);
+        }
+
         public String getItemId(){
             return extendedAttributes.get("item_id");
         }

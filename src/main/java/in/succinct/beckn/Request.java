@@ -76,10 +76,10 @@ public class Request extends BecknObject {
     }
 
     public Feedback getFeedback(){
-        return get(Feedback.class, "message");
+        return get(Feedback.class, "feedback");
     }
     public void setFeedback(Feedback feedback){
-        set("message",feedback);
+        set("feedback",feedback);
     }
 
     public CancellationReasons getCancellationReasons(){
@@ -209,6 +209,11 @@ public class Request extends BecknObject {
         return extendedAttributes;
     }
 
+    @Override
+    public void setObjectCreator(BecknObjectCreator objectCreator) {
+        super.setObjectCreator(objectCreator);
+        extendedAttributes.setObjectCreator(objectCreator);
+    }
 
     public static String SIGNATURE_ALGO = EdDSAParameterSpec.Ed25519;
     public static int SIGNATURE_ALGO_KEY_LENGTH = 256;
@@ -321,4 +326,5 @@ public class Request extends BecknObject {
         return getRawEncryptionKey(getEncryptionPublicKey(keyFromRegistry));
     }
 
+    public static final String CALLBACK_URL = "callback_url";
 }

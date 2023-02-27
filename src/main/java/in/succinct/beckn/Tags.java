@@ -18,4 +18,8 @@ public class Tags extends BecknObject{
             }
         }
     }
+    @Override
+    public boolean hasAdditionalProperties() {
+        return true;
+    }
 }

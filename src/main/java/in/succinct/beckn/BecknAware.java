@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import com.venky.core.security.Crypt;
+import in.succinct.beckn.BecknObject.BecknObjectCreator;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
 
@@ -39,6 +40,14 @@ public abstract class BecknAware<T extends JSONAware> implements Serializable {
 
     public T getInner(){
         return this.value;
+    }
+
+    private BecknObjectCreator objectCreator = new BecknObjectCreator();
+    public BecknObjectCreator getObjectCreator(){
+        return objectCreator;
+    }
+    public void setObjectCreator(BecknObjectCreator objectCreator){
+        this.objectCreator = objectCreator;
     }
 
     @Override

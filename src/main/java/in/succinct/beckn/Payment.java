@@ -3,11 +3,10 @@ package in.succinct.beckn;
 import in.succinct.beckn.Payment.PaymentType.PaymentTypeConverter;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Payment extends BecknObjectWithId {
+public class Payment extends ExtendedBecknObjectWithId {
     public Payment(){
         super();
     }
@@ -107,7 +106,10 @@ public class Payment extends BecknObjectWithId {
             set("currency",currency);
         }
 
-
+        @Override
+        public boolean hasAdditionalProperties() {
+            return true;
+        }
     }
 
     public CollectedBy getCollectedBy(){
@@ -123,7 +125,6 @@ public class Payment extends BecknObjectWithId {
         set("collected_by",collected_by == null ? null : collected_by.toString());
     }
 
-    protected final BecknObject extendedAttributes = new BecknObject();
     public NegotiationStatus getCollectedByStatus(){
         String status =  extendedAttributes.get("collected_by_status");
         return status == null ? null : NegotiationStatus.valueOf(status);
@@ -141,10 +142,10 @@ public class Payment extends BecknObjectWithId {
         extendedAttributes.set("buyer_app_finder_fee_type",buyer_app_finder_fee_type == null ? null :buyer_app_finder_fee_type.toString());
     }
 
-    public double getBuyerAppFinderFeeAmount(){
-        return extendedAttributes.getDouble("buyer_app_finder_fee_amount");
+    public Double getBuyerAppFinderFeeAmount(){
+        return extendedAttributes.getDouble("buyer_app_finder_fee_amount", null);
     }
-    public void setBuyerAppFinderFeeAmount(double buyer_app_finder_fee_amount){
+    public void setBuyerAppFinderFeeAmount(Double buyer_app_finder_fee_amount){
         extendedAttributes.set("buyer_app_finder_fee_amount",buyer_app_finder_fee_amount);
     }
 

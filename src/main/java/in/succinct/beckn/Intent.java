@@ -49,4 +49,11 @@ public class Intent extends BecknObject {
     public void setCategory(Category category){
         set("category",category);
     }
+
+    public Payment getPayment(){
+        return get(Payment.class, "payment");
+    }
+    public void setPayment(Payment payment){
+        set("payment",payment);
+    }
 }

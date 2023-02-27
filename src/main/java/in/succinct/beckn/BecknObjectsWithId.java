@@ -19,6 +19,15 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
         loadMap();
     }
 
+    @Override
+    public T get(int index) {
+        T t = super.get(index);
+        if (map != null ) {
+            return map.get(t.getId()); // Be careful changing this. possibility of recursion with loadMap()
+        }
+        return t;
+    }
+
     public void add(T t){
         if (ObjectUtil.isVoid(t.getId())){
             throw new RuntimeException("ID missing");
@@ -38,6 +47,11 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
         }
     }
 
+    @Override
+    public void setInner(JSONArray value) {
+        super.setInner(value);
+        map = null;
+    }
 
     Map<String,T> map = null;
     public T get(String id){
@@ -46,11 +60,12 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
     }
     private void loadMap(){
         if (map == null){
-            map =  new HashMap<>();
+            Map tmpMap =  new HashMap<>();
             for (int i = 0 ; i < size() ; i ++){
                 T t = get(i);
-                map.put(t.getId(),t);
+                tmpMap.put(t.getId(),t);
             }
+            map = tmpMap;
         }
     }
     public void put(String id, T t){

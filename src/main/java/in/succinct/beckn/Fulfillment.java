@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-public class Fulfillment extends BecknObjectWithId {
+public class Fulfillment extends ExtendedBecknObjectWithId {
 
     public Fulfillment() {
         super();
@@ -130,11 +130,11 @@ public class Fulfillment extends BecknObjectWithId {
         set("provider_id", provider_id);
     }
 
-    public int getRating() {
-        return getInteger("rating");
+    public Integer getRating() {
+        return getInteger("rating",null);
     }
 
-    public void setRating(int rating) {
+    public void setRating(Integer rating) {
         set("rating", rating);
     }
 
@@ -148,7 +148,6 @@ public class Fulfillment extends BecknObjectWithId {
 
     //Extended attributes rationalized from networks
 
-    protected final BecknObject extendedAttributes = new BecknObject();
     public String getCategory(){
         return extendedAttributes.get("category");
     }

@@ -43,5 +43,9 @@ public class FeedbackUrl extends BecknObject {
         public void setAdditionalProperties(String additionalProperties){
             set("additionalProperties",additionalProperties);
         }
+        @Override
+        public boolean hasAdditionalProperties() {
+            return true;
+        }
     }
 }

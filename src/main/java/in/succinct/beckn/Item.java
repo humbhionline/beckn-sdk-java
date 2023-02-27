@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 import java.time.Duration;
 
-public class Item extends BecknObjectWithId {
+public class Item extends ExtendedBecknObjectWithId {
     public Item() {
         super();
     }
@@ -116,7 +116,7 @@ public class Item extends BecknObjectWithId {
     }
 
     public Integer getRating(){
-        return get("rating");
+        return getInteger("rating", null);
     }
     public void setRating(Integer rating){
         set("rating",rating);
@@ -153,7 +153,7 @@ public class Item extends BecknObjectWithId {
 
 
     //Attributes added by all networks. Rationalized.
-    protected final BecknObject extendedAttributes = new BecknObject();
+
 
     public Price getTax(){
         return extendedAttributes.get(Price.class, "tax");
@@ -184,17 +184,19 @@ public class Item extends BecknObjectWithId {
     }
 
     public Duration getTimeToShip(){
-        return Duration.parse(extendedAttributes.get("time_to_ship"));
+        String s =  extendedAttributes.get("time_to_ship");
+        return s == null ? null : Duration.parse(s);
     }
     public void setTimeToShip(Duration duration){
-        extendedAttributes.set("time_to_ship",duration.toString());
+        extendedAttributes.set("time_to_ship",duration == null ? null : duration.toString());
     }
 
     public Duration getReturnWindow(){
-        return Duration.parse(extendedAttributes.get("return_window"));
+        String s = extendedAttributes.get("return_window");
+        return s == null ? null :Duration.parse(s);
     }
     public void setReturnWindow(Duration return_window){
-        extendedAttributes.set("return_window",return_window.toString());
+        extendedAttributes.set("return_window",return_window == null ? null : return_window.toString());
     }
 
     public boolean isAvailableOnCod(){
@@ -222,6 +224,13 @@ public class Item extends BecknObjectWithId {
     }
     public void setPrepackagedFood(PrepackagedFood prepackaged_food){
         extendedAttributes.set("prepackaged_food",prepackaged_food);
+    }
+
+    public VeggiesFruits getVeggiesFruits(){
+        return extendedAttributes.get(VeggiesFruits.class, "veggies_fruits");
+    }
+    public void setVeggiesFruits(VeggiesFruits veggies_fruits){
+        extendedAttributes.set("veggies_fruits",veggies_fruits);
     }
 
 
@@ -447,7 +456,12 @@ public class Item extends BecknObjectWithId {
     }
 
     public static class VeggiesFruits extends BecknObject {
-
+        public String getNetQuantity(){
+            return get("net_quantity");
+        }
+        public void setNetQuantity(String net_quantity){
+            set("net_quantity",net_quantity);
+        }
     }
 
 

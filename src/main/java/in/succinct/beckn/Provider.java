@@ -3,7 +3,7 @@ package in.succinct.beckn;
 import java.time.Duration;
 import java.util.Date;
 
-public class Provider extends BecknObjectWithId {
+public class Provider extends ExtendedBecknObjectWithId {
     public Provider(){
         super();
     }
@@ -96,10 +96,10 @@ public class Provider extends BecknObjectWithId {
         set("category_id",category_id);
     }
 
-    public Rating getRating(){
-        return get(Rating.class,"rating");
+    public Integer getRating(){
+        return getInteger("rating", null);
     }
-    public void setRating(Rating rating){
+    public void setRating(Integer rating){
         set("rating",rating);
     }
 
@@ -117,7 +117,6 @@ public class Provider extends BecknObjectWithId {
         set("rateable",rateable);
     }
 
-    protected final BecknObject extendedAttributes = new BecknObject();
     public String getFssaiLicenceNo(){
         return extendedAttributes.get("fssai_licence_no");
     }

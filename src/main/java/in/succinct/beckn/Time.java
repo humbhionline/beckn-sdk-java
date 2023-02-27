@@ -44,17 +44,17 @@ public class Time extends BecknObject {
     
     public static class Range extends BecknObject {
         public Date getStart(){
-            return getTime("start");
+            return getTimestamp("start");
         }
         public void setStart(Date start){
-            set("start",start,TIME_FORMAT);
+            set("start",start,TIMESTAMP_FORMAT);
         }
 
         public Date getEnd(){
-            return getTime("end");
+            return getTimestamp("end");
         }
         public void setEnd(Date end){
-            set("end",end,TIME_FORMAT);
+            set("end",end,TIMESTAMP_FORMAT);
         }
 
     }
