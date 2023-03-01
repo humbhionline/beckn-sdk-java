@@ -102,6 +102,10 @@ public class Item extends ExtendedBecknObjectWithId {
     }
 
     public ItemQuantity getItemQuantity(){
+        JSONObject q = get("quantity");
+        if (q == null || q.containsKey("count") || q.keySet().isEmpty()){
+            return null;
+        }
         return get(ItemQuantity.class,"quantity");
     }
     public void setItemQuantity(ItemQuantity quantity){
@@ -109,6 +113,10 @@ public class Item extends ExtendedBecknObjectWithId {
     }
 
     public Quantity getQuantity(){
+        JSONObject q = get("quantity");
+        if (q == null ||  !q.containsKey("count") ){
+            return null;
+        }
         return get(Quantity.class, "quantity");
     }
     public void setQuantity(Quantity quantity){

@@ -241,8 +241,8 @@ public class BecknObject extends BecknAware<JSONObject> {
         public <B> B create(Class<B> clazz){
             try {
                 B b = clazz.getConstructor().newInstance();
-                if (b instanceof BecknObject){
-                    ((BecknObject)b).setObjectCreator(BecknObjectCreator.this);
+                if (b instanceof BecknAware){
+                    ((BecknAware)b).setObjectCreator(BecknObjectCreator.this);
                 }
                 return b;
             }catch (Exception ex){
@@ -257,7 +257,13 @@ public class BecknObject extends BecknAware<JSONObject> {
         attributeMap().clear();
     }
 
-    private Map<String,ObjectHolder<BecknAware>> attributeMap(){
+    @Override
+    public void setInner(JSONObject value) {
+        super.setInner(value);
+        attributeMap().clear();
+    }
+
+    protected Map<String,ObjectHolder<BecknAware>> attributeMap(){
         if (attributeMap == null){
             synchronized (this) {
                 if (attributeMap == null) {

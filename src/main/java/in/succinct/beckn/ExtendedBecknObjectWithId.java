@@ -20,14 +20,20 @@ public class ExtendedBecknObjectWithId extends BecknObjectWithId{
     @Override
     public void setObjectCreator(BecknObjectCreator objectCreator) {
         super.setObjectCreator(objectCreator);
-        extendedAttributes.setObjectCreator(objectCreator);
+        extendedAttributes = getExtendedAttributes();
+    }
+
+    @Override
+    public void setInner(JSONObject value) {
+        super.setInner(value);
+        extendedAttributes = getExtendedAttributes();
     }
 
     protected final BecknObject getExtendedAttributes(){
         if (isExtendedAttributesDisplayed()) {
             return get(BecknObject.class, "extended_attributes", true);
         }else {
-            return new BecknObject();
+            return getObjectCreator().create(BecknObject.class);
         }
     }
 

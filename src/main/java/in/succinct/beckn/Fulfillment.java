@@ -3,9 +3,6 @@ package in.succinct.beckn;
 import org.json.simple.JSONArray;
 
 import java.time.Duration;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
 
 public class Fulfillment extends ExtendedBecknObjectWithId {
 
