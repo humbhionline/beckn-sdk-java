@@ -79,7 +79,7 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
         return getState(false);
     }
 
-    private State getState(boolean create) {
+    public State getState(boolean create) {
         return get(State.class, "state", create);
     }
 
