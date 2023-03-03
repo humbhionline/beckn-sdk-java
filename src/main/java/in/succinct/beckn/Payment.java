@@ -157,10 +157,10 @@ public class Payment extends ExtendedBecknObjectWithId {
         extendedAttributes.set("withholding_amount_status",withholding_amount_status == null ? null  : withholding_amount_status.toString());
     }
 
-    public double getWithholdingAmount(){
-        return extendedAttributes.getDouble("withholding_amount");
+    public Double getWithholdingAmount(){
+        return extendedAttributes.getDouble("withholding_amount", null);
     }
-    public void setWithholdingAmount(double withholding_amount){
+    public void setWithholdingAmount(Double withholding_amount){
         extendedAttributes.set("withholding_amount",withholding_amount);
     }
     public Duration getReturnWindow(){

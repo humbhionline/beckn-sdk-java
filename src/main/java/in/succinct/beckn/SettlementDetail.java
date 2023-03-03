@@ -38,10 +38,10 @@ public class SettlementDetail extends BecknObjectWithId {
     public void setSettlementPhase(SettlementPhase settlement_phase){
         set("settlement_phase",settlement_phase == null ? null : settlement_phase.toString());
     }
-    public double getSettlementAmount(){
-        return getDouble("settlement_amount");
+    public Double getSettlementAmount(){
+        return getDouble("settlement_amount",null);
     }
-    public void setSettlementAmount(double settlement_amount){
+    public void setSettlementAmount(Double settlement_amount){
         set("settlement_amount",settlement_amount);
     }
 

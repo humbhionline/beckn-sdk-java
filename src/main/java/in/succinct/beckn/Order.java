@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Order.Status.StatusConverter;
+
 import java.util.Date;
 
 public class Order extends ExtendedBecknObjectWithId {
@@ -94,12 +96,14 @@ public class Order extends ExtendedBecknObjectWithId {
     public void setUpdatedAt(Date date){
         set("updated_at",date,TIMESTAMP_FORMAT);
     }
-    public void setState(String state){
-        set("state",state);
+    public void setState(Status state){
+        setEnum("state", state, new StatusConverter());
     }
-    public String getState(){
-        return get("state");
+    public Status getState(){
+        return getEnum(Status.class, "state", new StatusConverter());
     }
+
+
 
     public Documents getDocuments(){
         return get(Documents.class,"documents");
@@ -113,5 +117,23 @@ public class Order extends ExtendedBecknObjectWithId {
     }
     public void setCancellation(Cancellation cancellation){
         extendedAttributes.set("cancellation",cancellation);
+    }
+
+
+    public enum Status {
+        /*
+        In_progress,
+        Packed,
+        Out_for_delivery,
+        */
+
+        Created,
+        Accepted,
+        Completed,
+        Cancelled;
+
+        public static class StatusConverter extends EnumConvertor<Status> {
+
+        }
     }
 }

@@ -396,7 +396,10 @@ public class BecknObject extends BecknAware<JSONObject> {
     }
 
     protected String _flat(String s){
-        return s == null ? "" : " " + s;
+        return _flat(s," ");
+    }
+    protected String _flat(String s,String prefix){
+        return s == null ? "" : prefix + s ;
     }
 
 }

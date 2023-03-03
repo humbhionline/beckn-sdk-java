@@ -1,8 +1,12 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Fulfillment.FulfillmentStatus.FulfillmentStatusConvertor;
+import in.succinct.beckn.Order.Status;
 import org.json.simple.JSONArray;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Fulfillment extends ExtendedBecknObjectWithId {
 
@@ -75,7 +79,7 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
         return getState(false);
     }
 
-    public State getState(boolean create) {
+    private State getState(boolean create) {
         return get(State.class, "state", create);
     }
 
@@ -83,8 +87,21 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
         set("state", state);
     }
 
-    public void setState(String state) {
-        getState(true).getDescriptor(true).setCode(state);
+
+    public void setFulfillmentStatus(Status orderStatus) {
+        FulfillmentStatus fulfillmentStatus = FulfillmentStatus.Pending;
+        if (orderStatus == Status.Completed){
+            fulfillmentStatus = FulfillmentStatus.Order_delivered;
+        }else if (orderStatus == Status.Cancelled){
+            fulfillmentStatus = null;
+        }
+        setFulfillmentStatus(fulfillmentStatus);
+    }
+    public void setFulfillmentStatus(FulfillmentStatus state) {
+        getState(true).getDescriptor(true).setEnum("code",state,new FulfillmentStatusConvertor());
+    }
+    public FulfillmentStatus getFulfillmentStatus(){
+        return getState(true).getDescriptor(true).getEnum(FulfillmentStatus.class,"code", new FulfillmentStatusConvertor());
     }
 
     public User getCustomer() {
@@ -195,6 +212,14 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
         }
     }
 
+    public enum FulfillmentStatus {
+        Pending,
+        /* Packed,
+        Order_picked_up,
+        Out_for_delivery,*/
+        Order_delivered ;
+        public static class FulfillmentStatusConvertor extends EnumConvertor<FulfillmentStatus>{}
+    }
 }
 
 
