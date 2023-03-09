@@ -5,8 +5,6 @@ import in.succinct.beckn.Order.Status;
 import org.json.simple.JSONArray;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Fulfillment extends ExtendedBecknObjectWithId {
 
@@ -87,15 +85,17 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
         set("state", state);
     }
 
-
-    public void setFulfillmentStatus(Status orderStatus) {
+    public static FulfillmentStatus getFulfillmentStatus(Status orderStatus){
         FulfillmentStatus fulfillmentStatus = FulfillmentStatus.Pending;
-        if (orderStatus == Status.Completed){
+        if (orderStatus == Status.Out_for_delivery) {
+            fulfillmentStatus =FulfillmentStatus.Out_for_delivery;
+        }else if (orderStatus == Status.Completed){
             fulfillmentStatus = FulfillmentStatus.Order_delivered;
         }else if (orderStatus == Status.Cancelled){
             fulfillmentStatus = null;
         }
-        setFulfillmentStatus(fulfillmentStatus);
+
+        return fulfillmentStatus;
     }
     public void setFulfillmentStatus(FulfillmentStatus state) {
         getState(true).getDescriptor(true).setEnum("code",state,new FulfillmentStatusConvertor());
@@ -213,10 +213,11 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
     }
 
     public enum FulfillmentStatus {
+        serviceable,
         Pending,
-        /* Packed,
+        /* Packed,*/
+        Out_for_delivery,
         Order_picked_up,
-        Out_for_delivery,*/
         Order_delivered ;
         public static class FulfillmentStatusConvertor extends EnumConvertor<FulfillmentStatus>{}
     }

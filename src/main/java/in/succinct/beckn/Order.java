@@ -123,12 +123,12 @@ public class Order extends ExtendedBecknObjectWithId {
     public enum Status {
         /*
         In_progress,
-        Packed,
-        Out_for_delivery,
         */
 
         Created,
         Accepted,
+        Packed,
+        Out_for_delivery,
         Completed,
         Cancelled;
 

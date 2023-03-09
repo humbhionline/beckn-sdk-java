@@ -1,15 +1,17 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Error.Type.TypeConverter;
+
 public class Error extends BecknObject {
     public Error() {
         super();
     }
 
     public Type getType(){
-        return Type.valueOf(get("type",Type.DOMAIN_ERROR.toString()));
+        return getEnum(Type.class,"type",new TypeConverter());
     }
     public void setType(Type type){
-        set("type",type.toString());
+        setEnum("type",type,new TypeConverter());
     }
 
     public String getCode(){
@@ -27,39 +29,11 @@ public class Error extends BecknObject {
 
 
     public enum Type {
-        CONTEXT_ERROR(){
-            @Override
-            public String toString() {
-                return "CONTEXT-ERROR";
-            }
-
-        },
-        CORE_ERROR(){
-            @Override
-            public String toString() {
-                return "CORE-ERROR";
-            }
-
-        },
-        DOMAIN_ERROR(){
-            @Override
-            public String toString() {
-                return "DOMAIN-ERROR";
-            }
-        },
-        POLICY_ERROR(){
-            @Override
-            public String toString() {
-                return "POLICY-ERROR";
-            }
-
-        },
-        JSON_SCHEMA_ERROR(){
-            @Override
-            public String toString() {
-                return "JSON-SCHEMA-ERROR";
-            }
-
-        },
+        CONTEXT_ERROR,
+        CORE_ERROR,
+        DOMAIN_ERROR,
+        POLICY_ERROR,
+        JSON_SCHEMA_ERROR;
+        public static class TypeConverter extends EnumConvertor<Type>{}
     }
 }

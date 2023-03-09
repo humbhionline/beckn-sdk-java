@@ -376,9 +376,11 @@ public class BecknObject extends BecknAware<JSONObject> {
         while (!commonAncestor.isAssignableFrom(sourceType)){
             commonAncestor = commonAncestor.getSuperclass();
         }
-        if (commonAncestor == BecknObject.class || commonAncestor == Object.class){
+        if (!commonAncestor.isAssignableFrom(sourceType) || commonAncestor == BecknObject.class || commonAncestor == Object.class ){
             return false;
         }
+
+
         return true;
     }
 
