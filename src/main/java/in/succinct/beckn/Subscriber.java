@@ -157,5 +157,11 @@ public class Subscriber extends BecknObject{
         set("location",location);
     }
 
-
+    private BecknObject extendedAttributes = new BecknObject();
+    public String getAlias(){
+        return extendedAttributes.get("alias",getUniqueKeyId());
+    }
+    public void setAlias(String alias){
+        extendedAttributes.set("alias",alias);
+    }
 }
