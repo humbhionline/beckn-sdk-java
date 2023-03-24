@@ -14,6 +14,9 @@ public class Context extends BecknObject {
     public Context() {
         super();
     }
+    public Context(String payload){
+        super(payload);
+    }
 
     public String getDomain(){
         return get("domain");

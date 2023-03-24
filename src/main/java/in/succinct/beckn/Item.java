@@ -244,19 +244,19 @@ public class Item extends ExtendedBecknObjectWithId {
 
 
     public static class PackagedCommodity extends BecknObject {
-        public String getManufacturerOfPackerName() {
+        public String getManufacturerOrPackerName() {
             return get("manufacturer_or_packer_name");
         }
 
-        public void setManufacturerOfPackerName(String manufacturer_or_packer_name) {
+        public void setManufacturerOrPackerName(String manufacturer_or_packer_name) {
             set("manufacturer_or_packer_name", manufacturer_or_packer_name);
         }
 
-        public String getManufacturerOfPackerAddress() {
+        public String getManufacturerOrPackerAddress() {
             return get("manufacturer_or_packer_address");
         }
 
-        public void setManufacturerOfPackerAddress(String manufacturer_or_packer_address) {
+        public void setManufacturerOrPackerAddress(String manufacturer_or_packer_address) {
             set("manufacturer_or_packer_address", manufacturer_or_packer_address);
         }
 
