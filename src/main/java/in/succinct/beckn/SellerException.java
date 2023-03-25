@@ -139,7 +139,10 @@ public class SellerException {
 
     public static class OrderConfirmFailure extends BecknException {
         public OrderConfirmFailure() {
-            super("30020", makeSentence("OrderConfirmFailure"));
+            this(makeSentence("OrderConfirmFailure"));
+        }
+        public OrderConfirmFailure(String message){
+            super("30020",message);
         }
     }
 

@@ -39,6 +39,9 @@ public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<
             getInner().remove(t);
         }
     }
+    public void clear(){
+        getInner().clear();
+    }
 
     public T get(int index){
         Object element = getInner().get(index);
