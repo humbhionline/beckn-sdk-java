@@ -126,8 +126,11 @@ public class SellerException {
     }
 
     public static class InvalidOrder extends BecknException {
-        public InvalidOrder() {
-            super("30018", makeSentence("InvalidOrder"));
+        public InvalidOrder(){
+            this(makeSentence("InvalidOrder"));
+        }
+        public InvalidOrder(String message) {
+            super("30018", message);
         }
     }
 
