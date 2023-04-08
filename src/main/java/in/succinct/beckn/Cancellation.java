@@ -47,7 +47,7 @@ public class Cancellation extends BecknObject{
     public Option getSelectedReason(){
         return get(Option.class, "selected_reason");
     }
-    public void setReason(Option reason){
+    public void setSelectedReason(Option reason){
         set("selected_reason",reason);
     }
     

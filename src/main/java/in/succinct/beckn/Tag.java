@@ -54,13 +54,5 @@ public class Tag extends BecknObject{
     }
 
 
-    public static class List extends BecknObjects<Tag>{
 
-        public List() {
-        }
-
-        public List(JSONArray value) {
-            super(value);
-        }
-    }
 }

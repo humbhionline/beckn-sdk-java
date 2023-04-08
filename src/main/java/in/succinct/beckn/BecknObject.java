@@ -194,7 +194,7 @@ public class BecknObject extends BecknAware<JSONObject> {
     public Date getTime(String key){
         return getDate(key,TIME_FORMAT);
     }
-    private Date getDate(String key, DateFormat format){
+    public Date getDate(String key, DateFormat format){
         String value = get(key);
         if (value == null){
             return null;
@@ -401,7 +401,7 @@ public class BecknObject extends BecknAware<JSONObject> {
         return _flat(s," ");
     }
     protected String _flat(String s,String prefix){
-        return s == null ? "" : prefix + s ;
+        return prefix + (ObjectUtil.isVoid(s) ? " " : s) ;
     }
 
 }

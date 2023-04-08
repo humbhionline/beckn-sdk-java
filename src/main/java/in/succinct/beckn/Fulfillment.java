@@ -85,18 +85,6 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
         set("state", state);
     }
 
-    public static FulfillmentStatus getFulfillmentStatus(Status orderStatus){
-        FulfillmentStatus fulfillmentStatus = FulfillmentStatus.Pending;
-        if (orderStatus == Status.Out_for_delivery) {
-            fulfillmentStatus =FulfillmentStatus.Out_for_delivery;
-        }else if (orderStatus == Status.Completed){
-            fulfillmentStatus = FulfillmentStatus.Order_delivered;
-        }else if (orderStatus == Status.Cancelled){
-            fulfillmentStatus = null;
-        }
-
-        return fulfillmentStatus;
-    }
     public void setFulfillmentStatus(FulfillmentStatus state) {
         getState(true).getDescriptor(true).setEnum("code",state,new FulfillmentStatusConvertor());
     }
@@ -202,23 +190,16 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
 
     }
 
-    public static class List extends BecknObjects<Tag>{
 
-        public List() {
-        }
-
-        public List(JSONArray value) {
-            super(value);
-        }
-    }
 
     public enum FulfillmentStatus {
         serviceable,
         Pending,
-        /* Packed,*/
+        Packed,
         Out_for_delivery,
         Order_picked_up,
-        Order_delivered ;
+        Order_delivered,
+        Cancelled;
         public static class FulfillmentStatusConvertor extends EnumConvertor<FulfillmentStatus>{}
     }
 }

@@ -124,11 +124,11 @@ public class Order extends ExtendedBecknObjectWithId {
         /*
         In_progress,
         */
+        Out_for_delivery,
 
         Created,
         Accepted,
-        Packed,
-        Out_for_delivery,
+        In_progress,
         Completed,
         Cancelled;
 
