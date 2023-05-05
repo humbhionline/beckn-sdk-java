@@ -1,7 +1,6 @@
 package in.succinct.beckn;
 
 import com.venky.core.security.Crypt;
-import in.succinct.beckn.BecknObject.BecknObjectCreator;
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
 
@@ -10,16 +9,15 @@ import java.io.Serializable;
 public abstract class BecknAware<T extends JSONAware> implements Serializable {
 
     protected BecknAware(T value){
-        this.value = value;
         if (value == null){
             throw new NullPointerException();
         }
+        setInner(value);
     }
 
     @SuppressWarnings("unchecked")
     protected BecknAware(String payload){
-        this((T)parse(payload));
-        this.payload = payload;
+        setPayload(payload);
     }
 
     @SuppressWarnings("unchecked")
@@ -29,6 +27,12 @@ public abstract class BecknAware<T extends JSONAware> implements Serializable {
         }catch (Exception ex){
             throw new RuntimeException(ex);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void setPayload(String payload){
+        this.payload =payload;
+        setInner(parse(payload));
     }
 
     private String payload;
@@ -42,12 +46,26 @@ public abstract class BecknAware<T extends JSONAware> implements Serializable {
         return this.value;
     }
 
-    private BecknObjectCreator objectCreator = new BecknObjectCreator();
-    public BecknObjectCreator getObjectCreator(){
+    private BecknAwareCreator objectCreator = new BecknAwareCreator();
+    public BecknAwareCreator getObjectCreator(){
         return objectCreator;
     }
-    public void setObjectCreator(BecknObjectCreator objectCreator){
+    public void setObjectCreator(BecknAwareCreator objectCreator){
         this.objectCreator = objectCreator;
+    }
+
+    public static class BecknAwareCreator implements Serializable {
+        public <B> B create(Class<B> clazz){
+            try {
+                B b = clazz.getConstructor().newInstance();
+                if (b instanceof BecknAware){
+                    ((BecknAware)b).setObjectCreator(BecknAwareCreator.this);
+                }
+                return b;
+            }catch (Exception ex){
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     @Override

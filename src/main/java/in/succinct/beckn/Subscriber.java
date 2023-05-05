@@ -3,7 +3,6 @@ package in.succinct.beckn;
 import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONObject;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,7 +17,7 @@ public class Subscriber extends BecknObject{
     public static final String SUBSCRIBER_TYPE_BG = "BG";
     public static final String SUBSCRIBER_STATUS_SUBSCRIBED = "SUBSCRIBED";
 
-    public static final String[] BPP_ACTIONS = new String[]{"search", "select", "init", "confirm", "track",
+    public static final String[] BPP_ACTIONS = new String[]{"search", "select", "init", "confirm", "track", "issue", "issue_status",
             "cancel", "update", "status", "rating", "support","get_cancellation_reasons","get_return_reasons","get_rating_categories","get_feedback_categories"};
 
     public static final Set<String> BPP_ACTION_SET = Collections.unmodifiableSet(new HashSet<>(){{
@@ -157,11 +156,29 @@ public class Subscriber extends BecknObject{
         set("location",location);
     }
 
-    private BecknObject extendedAttributes = new BecknObject();
+    public boolean isExtendedAttributesDisplayed(){
+        return true;
+    }
     public String getAlias(){
         return extendedAttributes.get("alias",getUniqueKeyId());
     }
     public void setAlias(String alias){
         extendedAttributes.set("alias",alias);
+    }
+
+    public Organization getOrganization(){
+        return extendedAttributes.get(Organization.class, "organization");
+    }
+    public void setOrganization(Organization organization){
+        extendedAttributes.set("organization",organization);
+    }
+
+    public JSONObject getInner(boolean includeExtended) {
+        JSONObject inner = new JSONObject();
+        inner.putAll(super.getInner());
+        if (!includeExtended){
+            inner.remove("extended_attributes");
+        }
+        return inner;
     }
 }

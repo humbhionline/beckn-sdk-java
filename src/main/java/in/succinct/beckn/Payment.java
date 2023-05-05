@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Payment extends ExtendedBecknObjectWithId {
+public class Payment extends BecknObjectWithId {
     public Payment(){
         super();
     }
@@ -125,6 +125,9 @@ public class Payment extends ExtendedBecknObjectWithId {
         set("collected_by",collected_by == null ? null : collected_by.toString());
     }
 
+    public boolean isExtendedAttributesDisplayed(){
+        return true;
+    }
     public NegotiationStatus getCollectedByStatus(){
         String status =  extendedAttributes.get("collected_by_status");
         return status == null ? null : NegotiationStatus.valueOf(status);

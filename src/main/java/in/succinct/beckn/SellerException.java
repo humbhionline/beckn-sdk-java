@@ -206,14 +206,21 @@ public class SellerException {
 
     public static class CancellationNotPossible extends BecknException {
         public CancellationNotPossible() {
-            super("50001", makeSentence("CancellationNotPossible"));
+            this(makeSentence("CancellationNotPossible"));
+        }
+        public CancellationNotPossible(String message) {
+            super("50001", message);
         }
     }
 
     public static class UpdationNotPossible extends BecknException {
         public UpdationNotPossible() {
-            super("50002", makeSentence("UpdationNotPossible"));
+            this( makeSentence("UpdationNotPossible"));
         }
+        public UpdationNotPossible(String message) {
+            super("50002", message);
+        }
+
     }
 
     public static class UnsupportedRatingCategory extends BecknException {

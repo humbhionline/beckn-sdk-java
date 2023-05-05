@@ -1,12 +1,11 @@
 package in.succinct.beckn;
 
 import in.succinct.beckn.Fulfillment.FulfillmentStatus.FulfillmentStatusConvertor;
-import in.succinct.beckn.Order.Status;
 import org.json.simple.JSONArray;
 
 import java.time.Duration;
 
-public class Fulfillment extends ExtendedBecknObjectWithId {
+public class Fulfillment extends BecknObjectWithId {
 
     public Fulfillment() {
         super();
@@ -66,7 +65,7 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
     }
 
     public Agent getAgent() {
-        return get("agent");
+        return get(Agent.class,"agent");
     }
 
     public void setAgent(Agent agent) {
@@ -150,6 +149,9 @@ public class Fulfillment extends ExtendedBecknObjectWithId {
 
     //Extended attributes rationalized from networks
 
+    public boolean isExtendedAttributesDisplayed(){
+        return true;
+    }
     public String getCategory(){
         return extendedAttributes.get("category");
     }

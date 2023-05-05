@@ -3,7 +3,7 @@ package in.succinct.beckn;
 import java.time.Duration;
 import java.util.Date;
 
-public class Provider extends ExtendedBecknObjectWithId {
+public class Provider extends BecknObjectWithId {
     public Provider(){
         super();
     }
@@ -117,6 +117,9 @@ public class Provider extends ExtendedBecknObjectWithId {
         set("rateable",rateable);
     }
 
+    public boolean isExtendedAttributesDisplayed(){
+        return true;
+    }
     public String getFssaiLicenceNo(){
         return extendedAttributes.get("fssai_licence_no");
     }

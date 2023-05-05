@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 import java.time.Duration;
 
-public class Item extends ExtendedBecknObjectWithId {
+public class Item extends BecknObjectWithId {
     public Item() {
         super();
     }
@@ -162,6 +162,10 @@ public class Item extends ExtendedBecknObjectWithId {
 
     //Attributes added by all networks. Rationalized.
 
+
+    public boolean isExtendedAttributesDisplayed(){
+        return true;
+    }
 
     public Price getTax(){
         return extendedAttributes.get(Price.class, "tax");

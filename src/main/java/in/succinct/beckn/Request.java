@@ -15,14 +15,12 @@ import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCXDHPublicKey;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
 import org.bouncycastle.jcajce.spec.XDHParameterSpec;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.lang.reflect.Field;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -204,16 +202,6 @@ public class Request extends BecknObject {
         return map;
     }
 
-    private BecknObject extendedAttributes = new BecknObject();
-    public BecknObject getExtendedAttributes(){
-        return extendedAttributes;
-    }
-
-    @Override
-    public void setObjectCreator(BecknObjectCreator objectCreator) {
-        super.setObjectCreator(objectCreator);
-        extendedAttributes.setObjectCreator(objectCreator);
-    }
 
     public static String SIGNATURE_ALGO = EdDSAParameterSpec.Ed25519;
     public static int SIGNATURE_ALGO_KEY_LENGTH = 256;

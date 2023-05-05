@@ -4,7 +4,7 @@ import in.succinct.beckn.Order.Status.StatusConverter;
 
 import java.util.Date;
 
-public class Order extends ExtendedBecknObjectWithId {
+public class Order extends BecknObjectWithId {
     public Order() {
         super();
     }
@@ -112,6 +112,10 @@ public class Order extends ExtendedBecknObjectWithId {
         set("documents",documents);
     }
 
+    public boolean isExtendedAttributesDisplayed(){
+        return true;
+    }
+
     public Cancellation getCancellation(){
         return extendedAttributes.get(Cancellation.class, "cancellation");
     }
@@ -121,11 +125,11 @@ public class Order extends ExtendedBecknObjectWithId {
 
 
     public enum Status {
-        /*
-        In_progress,
-        */
-        Out_for_delivery,
+        Awaiting_Agent_Acceptance,
+        Reaching_Pickup_Location,
+        Reached_Pickup_Location,
 
+        Out_for_delivery,
         Created,
         Accepted,
         In_progress,

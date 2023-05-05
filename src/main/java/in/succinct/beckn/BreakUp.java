@@ -17,7 +17,7 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
 
 
 
-    public static class BreakUpElement extends ExtendedBecknObjectWithId {
+    public static class BreakUpElement extends BecknObject {
         public BreakUpElement(){
             super();
         }
@@ -46,6 +46,10 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         }
         public void setType(BreakUpCategory type){
             set("type",type == null ? null : type.toString());
+        }
+
+        public boolean isExtendedAttributesDisplayed(){
+            return true;
         }
 
         public String getItemId(){

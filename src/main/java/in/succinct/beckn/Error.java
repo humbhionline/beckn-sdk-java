@@ -27,6 +27,12 @@ public class Error extends BecknObject {
         set("message",message);
     }
 
+    public String getPath(){
+        return get("path");
+    }
+    public void setPath(String path){
+        set("path",path);
+    }
 
     public enum Type {
         CONTEXT_ERROR,
