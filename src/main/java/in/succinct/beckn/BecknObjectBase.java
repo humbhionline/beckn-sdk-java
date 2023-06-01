@@ -113,7 +113,7 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
             return enumRepresentation == null ? null : Enum.valueOf(getEnumClass(),enumRepresentation.replace('-','_'));
         }
         public String toString(T value){
-            return value == null ? null : value.toString().replace('_','-');
+            return value == null ? null : value.name().replace('_','-');
         }
     }
 
@@ -347,7 +347,7 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
 
 
                 if (BecknObject.class.isAssignableFrom(sourceFieldType) && BecknObject.class.isAssignableFrom(targetFieldType)) {
-                    if (((BecknObject)sourceField).hasAdditionalProperties()){
+                    if (((BecknObject)sourceField).hasAdditionalProperties() || sourceFieldType == targetFieldType){
                         ((BecknObject)targetField).setInner(((BecknObject)sourceField).getInner());
                     }else {
                         ((BecknObject) targetField).update((BecknObject) sourceField);
@@ -358,17 +358,21 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
                     for (Object o : sourceFields){
                         if (o instanceof BecknObject){
                             BecknObject listElement = (BecknObject) boCreator.create(o.getClass());
-                            listElement.update((BecknObject) o);
-                            if (listElement instanceof BecknObjectWithId){
-                                BecknObjectWithId lid = (BecknObjectWithId) listElement;
-                                BecknObjectsWithId lids = ((BecknObjectsWithId)targetFields);
-                                if (lids.get(lid.getId()) == null){
-                                    lids.add(lid);
-                                }else {
-                                    lids.get(lid.getId()).update(lid);
-                                }
+                            if (listElement.getClass() == o.getClass()){
+                                listElement.setInner(((BecknObject) o).getInner());
                             }else {
-                                targetFields.add(listElement);
+                                listElement.update((BecknObject) o);
+                                if (listElement instanceof BecknObjectWithId) {
+                                    BecknObjectWithId lid = (BecknObjectWithId) listElement;
+                                    BecknObjectsWithId lids = ((BecknObjectsWithId) targetFields);
+                                    if (lids.get(lid.getId()) == null) {
+                                        lids.add(lid);
+                                    } else {
+                                        lids.get(lid.getId()).update(lid);
+                                    }
+                                } else {
+                                    targetFields.add(listElement);
+                                }
                             }
                         }else {
                             targetFields.add(o);

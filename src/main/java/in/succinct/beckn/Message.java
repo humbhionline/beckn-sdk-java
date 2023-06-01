@@ -101,4 +101,11 @@ public class Message extends BecknObject {
         set("order_id",order_id);
     }
 
+    public Issue getIssue(){
+        return get(Issue.class, "issue");
+    }
+    public void setIssue(Issue issue){
+        set("issue",issue);
+    }
+
 }

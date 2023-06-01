@@ -6,9 +6,16 @@ public class Organization extends BecknObject {
     public String getName(){
         return get("name");
     }
+    public void setName(String name){
+        set("name",name);
+    }
     public String getEmail(){
         return get("email");
     }
+    public void setEmail(String email){
+        set("email",email);
+    }
+
     public BecknStrings getPhones(){
         return get(BecknStrings.class,"phones");
     }

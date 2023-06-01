@@ -152,4 +152,12 @@ public class Context extends BecknObject {
     public void setLocation(Location location){
         set("location",location);
     }
+
+
+    public String getNetworkId(){
+        return extendedAttributes.get("network_id");
+    }
+    public void setNetworkId(String network_id){
+        extendedAttributes.set("network_id",network_id);
+    }
 }

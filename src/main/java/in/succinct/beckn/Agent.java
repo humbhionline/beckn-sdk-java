@@ -1,6 +1,6 @@
 package in.succinct.beckn;
 
-public class Agent extends Person{
+public class Agent extends BecknObject{
     
     public Agent() {
     }
@@ -40,18 +40,6 @@ public class Agent extends Person{
         set("rateable",rateable);
     }
 
-    public String getName(){
-        return get("name");
-    }
-    public void setName(String name){
-        set("name",name);
-    }
-    public String getPhone(){
-        return get("phone");
-    }
-    public void setPhone(String phone){
-        set("phone",phone);
-    }
 
 
 }
