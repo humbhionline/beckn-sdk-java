@@ -116,7 +116,23 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
             return value == null ? null : value.name().replace('_','-');
         }
     }
+    public static class OrdinalBasedEnumConvertor<T extends Enum<T>> extends EnumConvertor<T> {
+        public OrdinalBasedEnumConvertor(Class<T> clazz) {
+            super(clazz);
+        }
 
+        protected OrdinalBasedEnumConvertor() {
+            super();
+        }
+
+        public T valueOf(String enumRepresentation) {
+            return getEnumClass().getEnumConstants()[Integer.parseInt(enumRepresentation) - 1];
+        }
+        public String toString(T value){
+            String fmt = String.format("%%0%dd",getEnumClass().getEnumConstants().length + 1);
+            return value == null ? null : String.format(fmt,value.ordinal() + 1);
+        }
+    }
     public void set(String key, JSONAware value){
         if (value == null) {
             rm(key);

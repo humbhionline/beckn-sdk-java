@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Rating.Ratings;
+
 public class Message extends BecknObject {
     public Message() {
         super();
@@ -64,7 +66,16 @@ public class Message extends BecknObject {
     public void setRating(Rating rating){
         set("rating",rating);
     }
-    
+
+    public Ratings getRatings(){
+        return get(Ratings.class, "ratings");
+    }
+    public void setRatings(Ratings ratings){
+        set("ratings",ratings);
+    }
+
+
+
     
     public String getPhone(){
         return get("phone");

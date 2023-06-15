@@ -115,7 +115,7 @@ public class Fulfillment extends BecknObjectWithId {
         set("tags", tags);
     }
 
-    public boolean getRateable() {
+    public boolean isRateable() {
         return getBoolean("rateable");
     }
 

@@ -110,7 +110,7 @@ public class Provider extends BecknObjectWithId {
         set("time",time);
     }
 
-    public boolean getRateable(){
+    public boolean isRateable(){
         return getBoolean("rateable");
     }
     public void setRateable(boolean rateable){

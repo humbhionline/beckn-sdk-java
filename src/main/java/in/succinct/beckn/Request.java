@@ -315,4 +315,12 @@ public class Request extends BecknObject {
     }
 
     public static final String CALLBACK_URL = "callback_url";
+
+    private boolean suppressed = false;
+    public boolean isSuppressed() {
+        return suppressed;
+    }
+    public void setSuppressed(boolean suppressed){
+        this.suppressed = suppressed;
+    }
 }

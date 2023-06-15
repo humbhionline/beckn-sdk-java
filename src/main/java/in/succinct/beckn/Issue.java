@@ -147,6 +147,12 @@ public class Issue extends BecknObjectWithId {
         public static final EnumConvertor<EscalationLevel>  convertor = new EnumConvertor<> (EscalationLevel.class);
     }
 
+    public enum Status {
+        OPEN,CLOSED;
+
+
+        public static final EnumConvertor<Status>  convertor = new EnumConvertor<> (Status.class);
+    }
 
 
 }

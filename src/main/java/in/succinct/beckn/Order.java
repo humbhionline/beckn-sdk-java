@@ -1,6 +1,8 @@
 package in.succinct.beckn;
 
 import in.succinct.beckn.Order.Status.StatusConverter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.util.Date;
 
@@ -138,6 +140,18 @@ public class Order extends BecknObjectWithId {
 
         public static class StatusConverter extends EnumConvertor<Status> {
 
+        }
+    }
+    public static class Orders extends BecknObjectsWithId<Order> {
+        public Orders() {
+        }
+
+        public Orders(JSONArray array) {
+            super(array);
+        }
+
+        public Orders(String payload) {
+            super(payload);
         }
     }
 }
