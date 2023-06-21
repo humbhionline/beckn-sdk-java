@@ -1,8 +1,10 @@
 package in.succinct.beckn;
 
+import in.succinct.json.ExtendedJSONAware;
+
 import java.lang.reflect.ParameterizedType;
 
-public class AdditionalProperties<T extends BecknAware> extends BecknObject{
+public class AdditionalProperties<T extends ExtendedJSONAware> extends BecknObject{
 
     Class<T> clazz;
     public AdditionalProperties(){
