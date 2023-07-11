@@ -30,11 +30,14 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
 
     public void add(T t){
         if (ObjectUtil.isVoid(t.getId())){
-            throw new RuntimeException("ID missing");
+            t.setDefaultId();
+        }
+        if (ObjectUtil.isVoid(t.getId())){
+            throw new RuntimeException("ID missing in " + t.getClass().getName());
         }
         if (null != map.put(t.getId(),t)){
             // There was a previous value.
-            throw new RuntimeException("ID Already exists");
+            throw new RuntimeException("ID Already exists" + t.getClass().getName());
         }
         super.add(t);
     }

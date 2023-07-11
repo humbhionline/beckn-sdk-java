@@ -57,5 +57,13 @@ public class Organization extends BecknObject {
     public void setAuthorizedSignatory(User authorized_signatory){
         extendedAttributes.set("authorized_signatory",authorized_signatory);
     }
+    
+    public String getFaqUrl(){
+        return extendedAttributes.get("faq_url");
+    }
+    public void setFaqUrl(String faq_url){
+        extendedAttributes.set("faq_url",faq_url);
+    }
+
 
 }

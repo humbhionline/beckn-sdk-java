@@ -9,6 +9,12 @@ import in.succinct.beckn.SelectedOdrs.SelectedOdrsList;
 import java.util.Date;
 
 public class Issue extends BecknObjectWithId {
+    public Issue(String payload){
+        super(payload);
+    }
+    public Issue(){
+
+    }
     public Complainant getComplainant(){
         return get(Complainant.class, "complainant");
     }

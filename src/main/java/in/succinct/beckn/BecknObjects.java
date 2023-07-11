@@ -65,6 +65,9 @@ public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<
     public int size(){
         return getInner().size();
     }
+    public boolean isEmpty(){
+        return getInner().isEmpty();
+    }
 
     @Override
     public boolean equals(Object o) {

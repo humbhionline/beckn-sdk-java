@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Order.Orders;
 import in.succinct.beckn.Rating.Ratings;
 
 public class Message extends BecknObject {
@@ -29,6 +30,14 @@ public class Message extends BecknObject {
 
     public void setOrder(Order order){
         set("order",order);
+    }
+
+
+    public Orders getOrders(){
+        return getExtendedAttributes().get(Orders.class, "orders");
+    }
+    public void setOrders(Orders orders){
+        getExtendedAttributes().set("orders",orders);
     }
 
     public Order getInitialized(){

@@ -9,6 +9,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class BGSignTest {
+
+    @Test
+    public void a() throws Exception{
+        Class.forName(Issue.Status.class.getName());
+    }
     @Test
     public void testnsdlJan82023()throws Exception{
         String key     = "ONtluFKk9FfVIePk0FJjCZE1XlTdcXtcWWRjqzllVSw=";

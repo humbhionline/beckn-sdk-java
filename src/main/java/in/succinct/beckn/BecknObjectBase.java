@@ -117,8 +117,13 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
         }
     }
     public static class OrdinalBasedEnumConvertor<T extends Enum<T>> extends EnumConvertor<T> {
-        public OrdinalBasedEnumConvertor(Class<T> clazz) {
+        String prefix = "" ;
+        public OrdinalBasedEnumConvertor(Class<T> clazz,String prefix) {
             super(clazz);
+            this.prefix = prefix;
+        }
+        public OrdinalBasedEnumConvertor(Class<T> clazz) {
+            this(clazz,"");
         }
 
         protected OrdinalBasedEnumConvertor() {
@@ -126,10 +131,10 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
         }
 
         public T valueOf(String enumRepresentation) {
-            return getEnumClass().getEnumConstants()[Integer.parseInt(enumRepresentation) - 1];
+            return enumRepresentation == null ? null : getEnumClass().getEnumConstants()[Integer.parseInt(enumRepresentation.substring(prefix.length())) - 1];
         }
         public String toString(T value){
-            String fmt = String.format("%%0%dd",getEnumClass().getEnumConstants().length + 1);
+            String fmt = String.format("%%%s0%dd", prefix,getEnumClass().getEnumConstants().length + 1);
             return value == null ? null : String.format(fmt,value.ordinal() + 1);
         }
     }
@@ -363,7 +368,8 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
 
 
                 if (BecknObject.class.isAssignableFrom(sourceFieldType) && BecknObject.class.isAssignableFrom(targetFieldType)) {
-                    if (((BecknObject)sourceField).hasAdditionalProperties() || sourceFieldType == targetFieldType){
+                    if (((BecknObject)sourceField).hasAdditionalProperties() ){
+                        //IGM Will bomb!! as we need to start right from request
                         ((BecknObject)targetField).setInner(((BecknObject)sourceField).getInner());
                     }else {
                         ((BecknObject) targetField).update((BecknObject) sourceField);
@@ -376,6 +382,7 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
                             BecknObject listElement = (BecknObject) boCreator.create(o.getClass());
                             if (listElement.getClass() == o.getClass()){
                                 listElement.setInner(((BecknObject) o).getInner());
+                                targetFields.add(listElement);
                             }else {
                                 listElement.update((BecknObject) o);
                                 if (listElement instanceof BecknObjectWithId) {

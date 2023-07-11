@@ -3,6 +3,8 @@ package in.succinct.beckn;
 import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONObject;
 
+import java.util.UUID;
+
 public class BecknObjectWithId extends BecknObject {
     public BecknObjectWithId(){
         super();
@@ -25,4 +27,7 @@ public class BecknObjectWithId extends BecknObject {
     }
 
 
+    protected void setDefaultId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

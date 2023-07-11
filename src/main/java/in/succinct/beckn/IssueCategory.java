@@ -5,11 +5,9 @@ import in.succinct.beckn.BecknObjectBase.EnumConvertor;
 public enum IssueCategory {
 
     ORDER,
-    TRANSACTION,
+    ITEM,
     FULFILLMENT,
-    PRODUCT,
-    PRODUCT_SERVICE,
-    SERVICE,
+    AGENT,
     PAYMENT;
 
 

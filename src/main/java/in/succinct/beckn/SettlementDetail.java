@@ -2,7 +2,9 @@ package in.succinct.beckn;
 
 import in.succinct.beckn.Payment.PaymentStatus;
 
-public class SettlementDetail extends BecknObjectWithId {
+import java.util.Date;
+
+public class SettlementDetail extends BecknObject{
 
     public enum SettlementCounterparty {
         BUYER,
@@ -61,6 +63,9 @@ public class SettlementDetail extends BecknObjectWithId {
     public void setSettlementType(SettlementType settlement_type){
         set("settlement_type",settlement_type == null ? null : settlement_type.toString());
     }
+
+
+
     public String getSettlementBankAccountNo(){
         return get("settlement_bank_account_no");
     }
@@ -118,6 +123,14 @@ public class SettlementDetail extends BecknObjectWithId {
         set("settlement_status",settlement_status == null ? null : settlement_status.toString());
     }
 
+    public String getSettlementId(){
+        return get("settlement_id");
+    }
+    public void setSettlementId(String settlement_id){
+        set("settlement_id",settlement_id);
+    }
+
+
     public String getSettlementReference(){
         return get("settlement_reference");
     }
@@ -125,10 +138,14 @@ public class SettlementDetail extends BecknObjectWithId {
         set("settlement_reference",settlement_reference);
     }
 
-    public String getSettlementTimestamp(){
-        return get("settlement_timestamp");
+    public Date getSettlementTimestamp(){
+        return getTimestamp("settlement_timestamp");
     }
-    public void setSettlementTimestamp(String settlement_timestamp){
-        set("settlement_timestamp",settlement_timestamp);
+    public void setSettlementTimestamp(Date settlement_timestamp){
+        set("settlement_timestamp",settlement_timestamp,TIMESTAMP_FORMAT);
     }
+    
+
+
+
 }

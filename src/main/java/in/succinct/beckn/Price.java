@@ -1,26 +1,8 @@
 package in.succinct.beckn;
 
-public class Price extends BecknObject {
+public class Price extends Amount {
     public Price() {
         super();
-    }
-    public String getCurrency(){
-        return get("currency");
-    }
-    public void setCurrency(String currency){
-        set("currency",currency);
-    }
-    public double getValue(){
-        return getDouble("value");
-    }
-    public void setValue(double value){
-        set("value",String.valueOf(value));
-    }
-    private double getValue(String prefix){
-        return getDouble(prefix+"_value");
-    }
-    private void setValue(String prefix,double value){
-        set(prefix+"_value",String.valueOf(value));
     }
 
     public double getMinimumValue(){
@@ -62,6 +44,12 @@ public class Price extends BecknObject {
         setValue("offered",value);
     }
 
+    private double getValue(String prefix){
+        return getDouble(prefix+"_value");
+    }
+    private void setValue(String prefix,double value){
+        set(prefix+"_value",String.valueOf(value));
+    }
 
 
 

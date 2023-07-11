@@ -53,43 +53,7 @@ public class Representative extends Agent {
 
 
 
-    public enum Role {
 
-        COMPLAINANT_PARTY(COMPLAINANT,0), // Buyer or seller
-        COMPLAINANT_PLATFORM(COMPLAINANT,1), //BAP OR BPP
-        COMPLAINANT_GRO(COMPLAINANT,2),
-
-        RESPONDENT_PARTY(RESPONDENT,0), // Seller or buyer
-        RESPONDENT_PLATFORM(RESPONDENT,1), // BPP OR BAP
-        RESPONDENT_GRO(RESPONDENT,2),
-
-        CASCADED_RESPONDENT_PARTY(RESPONDENT,0), //Could be drivber
-        CASCADED_RESPONDENT_PLATFORM(RESPONDENT,2), //LOGISTICS PARTY
-        CASCADED_RESPONDENT_GRO(RESPONDENT,2),
-
-        ODR_ARBITRATOR(BOTH,3);
-
-        int bits;
-        int escalation;
-        Role(int bits, int escalation){
-            this.bits = bits;
-            this.escalation = escalation;
-        }
-        public boolean isComplainant(){
-            return (this.bits & COMPLAINANT) > 0;
-        }
-
-        public boolean isRespondent(){
-            return (bits & RESPONDENT) > 0;
-        }
-
-        public int getEscalation() {
-            return  escalation;
-        }
-
-
-        public static final EnumConvertor<Role> convertor = new EnumConvertor<>(Role.class);
-    }
 
     public static class Respondent extends Representative {
 
