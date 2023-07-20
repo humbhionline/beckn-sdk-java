@@ -17,11 +17,7 @@ public class BecknObject extends BecknObjectBase{
     }
 
 
-
-
-
     protected BecknObjectBase extendedAttributes = getExtendedAttributes(true);
-
 
     public BecknObjectBase getExtendedAttributes(){
         return getExtendedAttributes(false);
@@ -43,7 +39,7 @@ public class BecknObject extends BecknObjectBase{
     }
 
     @Override
-    public void setObjectCreator(BecknAwareCreator objectCreator) {
+    public void setObjectCreator(JSONAwareWrapperCreator objectCreator) {
         super.setObjectCreator(objectCreator);
         extendedAttributes = getExtendedAttributes(true);
     }

@@ -1,8 +1,7 @@
 package in.succinct.beckn;
 
 import com.venky.core.util.Bucket;
-import in.succinct.beckn.BecknObjectBase.EnumConvertor;
-import in.succinct.beckn.BecknObjectBase.OrdinalBasedEnumConvertor;
+import in.succinct.json.JSONAwareWrapper.EnumConvertor;
 
 import java.util.HashMap;
 import java.util.Map;

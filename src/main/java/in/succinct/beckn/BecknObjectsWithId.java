@@ -22,8 +22,14 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
     @Override
     public T get(int index) {
         T t = super.get(index);
-        if (map != null ) {
-            return map.get(t.getId()); // Be careful changing this. possibility of recursion with loadMap()
+        if (map != null && t != null) {
+            //Make sure only one object exists for the id.
+            T t1  = map.get(t.getId()); // Be careful changing this. possibility of recursion with loadMap()
+            if (t1 == null){
+                map.put(t.getId(),t);
+            }else {
+                t = t1;
+            }
         }
         return t;
     }
@@ -39,6 +45,7 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
             // There was a previous value.
             throw new RuntimeException("ID Already exists" + t.getClass().getName());
         }
+        put(t.getId(),t);
         super.add(t);
     }
     public void remove(T t){
@@ -75,8 +82,5 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
         loadMap();
         map.put(id,t);
     }
-
-
-
 
 }

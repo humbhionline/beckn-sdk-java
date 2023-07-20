@@ -1,6 +1,6 @@
 package in.succinct.beckn;
 
-import in.succinct.beckn.BecknObjectBase.EnumConvertor;
+import in.succinct.json.JSONAwareWrapper.EnumConvertor;
 
 public enum Role {
 
