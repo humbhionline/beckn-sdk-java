@@ -39,21 +39,35 @@ public class SellerException {
         }
     }
 
+    public static class InvalidReturnRequest extends BecknException {
+        public InvalidReturnRequest(String message){
+            super("30005", message);
+        }
+        public InvalidReturnRequest() {
+            this(makeSentence("InvalidReturnRequest"));
+        }
+    }
+
+    /*
+
     public static class CategoryNotFound extends BecknException {
         public CategoryNotFound() {
             super("30005", makeSentence("CategoryNotFound"));
         }
     }
 
-    public static class OfferNotFound extends BecknException {
-        public OfferNotFound() {
-            super("30006", makeSentence("OfferNotFound"));
+     */
+
+
+    public static class OfferInvalid extends BecknException {
+        public OfferInvalid() {
+            super("30006", makeSentence("Offer code invalid"));
         }
     }
 
-    public static class AddOnNotFound extends BecknException {
-        public AddOnNotFound() {
-            super("30007", "Add on not found");
+    public static class OfferFulfillmentError extends BecknException {
+        public OfferFulfillmentError() {
+            super("30007", "Offer fulfillment error");
         }
     }
 
@@ -94,17 +108,18 @@ public class SellerException {
         }
     }
 
-    public static class UpdateInConsistency extends BecknException {
-        public UpdateInConsistency() {
-            super("30013", makeSentence("UpdateInConsistency"));
-        }
+    public static class InvalidFulfillmentTAT extends BecknException {
+        public InvalidFulfillmentTAT(){
+            super("30013",makeSentence("InvalidFulfillmentTAT"));
+        } 
     }
 
-    public static class EntityToRateNotFound extends BecknException {
-        public EntityToRateNotFound() {
-            super("30014", makeSentence("EntityToRateNotFound"));
-        }
+    public static class CancellationUnexceptable extends BecknException {
+        public CancellationUnexceptable(){
+            super("30014",makeSentence("CancellationUnexceptable"));
+        } 
     }
+
 
 
     public static class InvalidRatingValue extends BecknException {
@@ -113,11 +128,12 @@ public class SellerException {
         }
     }
 
-    public static class InvalidSignature extends BecknException {
-        public InvalidSignature() {
-            super("30016", makeSentence("InvalidSignature"));
+    public static class MinOrderValueError extends BecknException {
+        public MinOrderValueError(){
+            super("30016",makeSentence("MinOrderValueError"));
         }
     }
+
 
     public static class MerchantUnavailable extends BecknException {
         public MerchantUnavailable() {
@@ -148,6 +164,19 @@ public class SellerException {
             super("30020",message);
         }
     }
+    
+    public static class MetchantInactive extends BecknException {
+        public MetchantInactive(){
+            super("30021",makeSentence("MetchantInactive"));
+        } 
+    }
+    
+    public static class StaleRequest extends BecknException {
+        public StaleRequest(){
+            super("30022",makeSentence("StaleRequest"));
+        } 
+    }
+
 
     public static class GenericBusinessError extends BecknException {
         public GenericBusinessError() {
@@ -235,5 +264,22 @@ public class SellerException {
         }
     }
 
+    public static class TermsAndConditionsNotAcceptable extends BecknException {
+        public TermsAndConditionsNotAcceptable(){
+            super("50005",makeSentence("TermsAndConditionsNotAcceptable"));
+        } 
+    }
+    
+    public static class OrderTerminated extends BecknException {
+        public OrderTerminated(){
+            super("50006",makeSentence("OrderTerminated"));
+        } 
+    }
+    
+    public static class InvalidSignature extends BecknException {
+        public InvalidSignature(){
+            super("30016",makeSentence("InvalidSignature")); //TODO To be fixed after ondc creates the code.
+        } 
+    }
 
 }

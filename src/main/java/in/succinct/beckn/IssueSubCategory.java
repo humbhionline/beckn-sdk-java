@@ -8,8 +8,8 @@ import java.util.Map;
 
 public enum IssueSubCategory {
     ITEM_MISSING,
-    ITEM_MISMATCH,
     ITEM_QUANTITY_MISMATCH,
+    ITEM_MISMATCH,
     ITEM_QUALITY,
     ITEM_EXPIRED,
 

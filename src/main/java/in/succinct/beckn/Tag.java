@@ -13,10 +13,10 @@ public class Tag extends BecknObject{
     public Tag(String code, String name,Object value){
         setCode(code);
         if (name != null) setName(name);
-        if (value instanceof String) {
-            setValue((String)value);
-        }else if (value instanceof List){
+        if (value instanceof List){
             setList((List)value);
+        }else {
+            setValue(String.valueOf(value));
         }
 
     }

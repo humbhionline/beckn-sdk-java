@@ -167,8 +167,7 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
         return true;
     }
 
-    @Override
-    public void set(String key, Number value) {
+    public void set(String key, Double value) {
         super.set(key, value == null ? null : value.toString());
     }
 

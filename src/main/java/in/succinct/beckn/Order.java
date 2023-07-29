@@ -127,7 +127,12 @@ public class Order extends BecknObjectWithId {
         extendedAttributes.set("cancellation",cancellation);
     }
 
-
+    public Tags getTags(){
+        return get(Tags.class, "tags");
+    }
+    public void setTags(Tags tags){
+        set("tags",tags);
+    }
 
 
     public enum Status {

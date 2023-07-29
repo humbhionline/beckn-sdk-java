@@ -114,10 +114,13 @@ public class JSONAwareWrapper<T extends JSONAware> implements Serializable {
     public <W extends JSONAwareWrapper> W get(Class<W> clazz,String name,boolean createIfAbsent){
         if (attributeMap().containsKey(name)){
             Object value = attributeMap().get(name).get();
-            if (value != null && clazz.isAssignableFrom(value.getClass())){
-                return (W)value;
+            if (value != null ){
+                if (clazz.isAssignableFrom(value.getClass())) {
+                    return (W) value;
+                }else {
+                    return null;
+                }
             }
-            return null;
         }
         JSONObject inner = (JSONObject) getInner();
         JSONAware clazzInner = (JSONAware) inner.get(name);
@@ -230,7 +233,7 @@ public class JSONAwareWrapper<T extends JSONAware> implements Serializable {
     }
     @SuppressWarnings("all")
     public void set(String key, String value){
-        if (value == null) {
+        if (ObjectUtil.isVoid(value)) {
             rm(key);
             return;
         }

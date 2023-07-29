@@ -30,11 +30,18 @@ public class Cancellation extends BecknObject{
         set("time",time,TIMESTAMP_FORMAT);
     }
 
-    public String getCancelledBy(){
-        return get("cancelled_by");
+    public CancelledBy getCancelledBy(){
+        return getEnum(CancelledBy.class, "cancelled_by" ,CancelledBy.convertor);
     }
-    public void setCancelledBy(String cancelled_by){
-        set("cancelled_by",cancelled_by);
+    public void setCancelledBy(CancelledBy cancelled_by){
+        setEnum("cancelled_by",cancelled_by, CancelledBy.convertor);
+    }
+
+    public enum CancelledBy {
+        BUYER,
+        PROVIDER;
+
+        public static EnumConvertor<CancelledBy> convertor = new EnumConvertor(CancelledBy.class);
     }
 
     public Options getReasons(){

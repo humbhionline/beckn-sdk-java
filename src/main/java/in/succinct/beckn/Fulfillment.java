@@ -85,10 +85,29 @@ public class Fulfillment extends BecknObjectWithId {
     }
 
     public void setFulfillmentStatus(FulfillmentStatus state) {
-        getState(true).getDescriptor(true).setEnum("code",state,new FulfillmentStatusConvertor());
+        if (state != null ) {
+            getState(true).getDescriptor(true).setEnum("code", state, new FulfillmentStatusConvertor());
+        }else {
+            State s = getState();
+            if (s != null){
+                Descriptor d  = s.getDescriptor();
+                if (d != null){
+                    d.setEnum("code",null);
+                }
+
+            }
+        }
     }
     public FulfillmentStatus getFulfillmentStatus(){
-        return getState(true).getDescriptor(true).getEnum(FulfillmentStatus.class,"code", new FulfillmentStatusConvertor());
+        State s = getState();
+        if (s != null){
+            Descriptor d  = s.getDescriptor();
+            if (d != null){
+                d.getEnum(FulfillmentStatus.class,"code", new FulfillmentStatusConvertor());
+            }
+        }
+        return null;
+        //return getState(true).getDescriptor(true).getEnum(FulfillmentStatus.class,"code", new FulfillmentStatusConvertor());
     }
 
     public User getCustomer() {
@@ -195,11 +214,11 @@ public class Fulfillment extends BecknObjectWithId {
 
 
     public enum FulfillmentStatus {
-        serviceable,
+        Serviceable,
         Pending,
         Packed,
-        Out_for_delivery,
         Order_picked_up,
+        Out_for_delivery,
         Order_delivered,
         Cancelled;
         public static class FulfillmentStatusConvertor extends EnumConvertor<FulfillmentStatus>{}
