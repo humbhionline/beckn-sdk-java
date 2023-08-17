@@ -38,8 +38,8 @@ public class Order extends BecknObjectWithId {
         set("items",items);
     }
 
-    public static class NonUniqueItems extends Items {
-        public NonUniqueItems() { 
+    public static class NonUniqueItems extends BecknObjectsWithId<Item> {
+        public NonUniqueItems() {
             super(false);
         }
     }
