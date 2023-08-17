@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.CancellationReasons.CancellationReasonCode;
 import in.succinct.beckn.Order.Orders;
 import in.succinct.beckn.Rating.Ratings;
 
@@ -19,6 +20,21 @@ public class Message extends BecknObject {
     public Catalog getCatalog(){
         return get(Catalog.class,"catalog");
     }
+
+   public CancellationReasonCode getCancellationReasonCode(){
+       return getEnum(CancellationReasonCode.class, "cancellation_reason_id",CancellationReasonCode.convertor);
+   }
+   public void setCancellationReasonCode(CancellationReasonCode cancellation_reason_code){
+       setEnum("cancellation_reason_id",cancellation_reason_code,CancellationReasonCode.convertor);
+   }
+
+    public String getUpdateTarget(){
+        return get("update_target");
+    }
+    public void setUpdateTarget(String update_target){
+        set("update_target",update_target);
+    }
+
 
     public void setCatalog(Catalog catalog){
         set("catalog",catalog);

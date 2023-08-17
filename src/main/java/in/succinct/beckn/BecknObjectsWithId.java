@@ -1,58 +1,68 @@
 package in.succinct.beckn;
 
+import com.venky.cache.UnboundedCache;
 import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObjects<T> {
+    boolean unique ;
     public BecknObjectsWithId(){
         this(new JSONArray());
     }
-    public BecknObjectsWithId(JSONArray array){
-        super(array);
-        loadMap();
-    }
     public BecknObjectsWithId(String payload){
-        super(payload);
+        this((JSONArray) parse(payload));
+    }
+    public BecknObjectsWithId(JSONArray array){
+        this(array,true);
+    }
+    public BecknObjectsWithId(JSONArray array,boolean unique){
+        super(array);
+        this.unique= unique;
         loadMap();
     }
-
     @Override
     public T get(int index) {
         T t = super.get(index);
-        if (map != null && t != null) {
+        if (unique && map != null && t != null) {
             //Make sure only one object exists for the id.
-            T t1  = map.get(t.getId()); // Be careful changing this. possibility of recursion with loadMap()
-            if (t1 == null){
-                map.put(t.getId(),t);
+            List<T> values   = map.get(t.getId()); // Be careful changing this. possibility of recursion with loadMap()
+            if (values.isEmpty()){
+                values.add(t);
             }else {
-                t = t1;
+                t = values.get(0);
             }
         }
         return t;
     }
 
-    public void add(T t){
+    @Override
+    public void add(Object t1){
+        loadMap();
+        T t = (T)t1;
         if (ObjectUtil.isVoid(t.getId())){
             t.setDefaultId();
         }
-        if (ObjectUtil.isVoid(t.getId())){
-            throw new RuntimeException("ID missing in " + t.getClass().getName());
+        List<T> list = map.get(t.getId());
+        if (unique) {
+            if (!list.isEmpty()){
+                throw new RuntimeException("ID already exists");
+            }
         }
-        if (null != map.put(t.getId(),t)){
-            // There was a previous value.
-            throw new RuntimeException("ID Already exists" + t.getClass().getName());
-        }
-        put(t.getId(),t);
+        list.add(t);
         super.add(t);
     }
     public void remove(T t){
         if (ObjectUtil.isVoid(t.getId())){
             throw new RuntimeException("ID missing");
         }
-        if (null != map.remove(t.getId())) {
+        List<T> values = map.get(t.getId());
+        if (values.remove(t)){
             super.remove(t);
         }
     }
@@ -63,24 +73,34 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
         map = null;
     }
 
-    Map<String,T> map = null;
-    public T get(String id){
+    Map<String, List<T>> map = null;
+    public List<T> all(String id){
         loadMap();
-        return map.get(id);
+        return id == null ? null : map.get(id);
+    }
+    public T get(String id){
+
+        List<T> l = all(id);
+        if (l == null || l.isEmpty()){
+            return null;
+        }
+
+        return l.get(0);
     }
     private void loadMap(){
         if (map == null){
-            Map tmpMap =  new HashMap<>();
+            Map<String,List<T>> tmpMap =  new UnboundedCache<>() {
+                @Override
+                protected List<T> getValue(String Id) {
+                    return new ArrayList<>();
+                }
+            };
             for (int i = 0 ; i < size() ; i ++){
                 T t = get(i);
-                tmpMap.put(t.getId(),t);
+                tmpMap.get(t.getId()).add(t);
             }
             map = tmpMap;
         }
-    }
-    public void put(String id, T t){
-        loadMap();
-        map.put(id,t);
     }
 
 }

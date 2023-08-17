@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Issue.EscalationLevel;
 import in.succinct.json.JSONAwareWrapper.EnumConvertor;
 
 public enum Role {
@@ -13,10 +14,12 @@ public enum Role {
     RESPONDENT_GRO(Representative.RESPONDENT,2),
 
     CASCADED_RESPONDENT_PARTY(Representative.RESPONDENT,0), //Could be drivber
-    CASCADED_RESPONDENT_PLATFORM(Representative.RESPONDENT,2), //LOGISTICS PARTY
+    CASCADED_RESPONDENT_PLATFORM(Representative.RESPONDENT,1), //LOGISTICS PARTY
     CASCADED_RESPONDENT_GRO(Representative.RESPONDENT,2),
 
     ODR_ARBITRATOR(Representative.BOTH,3);
+
+
 
     int bits;
     int escalation;
@@ -32,10 +35,17 @@ public enum Role {
         return (bits & Representative.RESPONDENT) > 0;
     }
 
+    public static final int ESCALATION_LEVEL_PARTY = 0 ;
+    public static final int ESCALATION_LEVEL_PLATFORM = 1 ;
+    public static final int ESCALATION_LEVEL_GRO = 2 ;
+    public static final int ESCALATION_LEVEL_ODR = 3 ;
+
+
+
+
     public int getEscalation() {
         return  escalation;
     }
-
 
     public static final EnumConvertor<Role> convertor = new EnumConvertor<>(Role.class);
 }

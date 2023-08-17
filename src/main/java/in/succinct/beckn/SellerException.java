@@ -130,7 +130,7 @@ public class SellerException {
 
     public static class MinOrderValueError extends BecknException {
         public MinOrderValueError(){
-            super("30016",makeSentence("MinOrderValueError"));
+            super("30023",makeSentence("MinOrderValueError"));
         }
     }
 
@@ -278,7 +278,7 @@ public class SellerException {
     
     public static class InvalidSignature extends BecknException {
         public InvalidSignature(){
-            super("30016",makeSentence("InvalidSignature")); //TODO To be fixed after ondc creates the code.
+            super("30016",makeSentence("InvalidSignature"));
         } 
     }
 

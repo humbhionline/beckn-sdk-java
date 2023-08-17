@@ -115,12 +115,12 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
                                 targetFields.add(listElement);
                             }else {
                                 listElement.update((BecknObject) o);
-                                if (listElement instanceof BecknObjectWithId) {
+                                if (listElement instanceof BecknObjectWithId && targetFields instanceof BecknObjectsWithId) {
                                     BecknObjectWithId lid = (BecknObjectWithId) listElement;
                                     BecknObjectsWithId lids = ((BecknObjectsWithId) targetFields);
-                                    if (lids.get(lid.getId()) == null) {
+                                    if (lids.get(lid.getId()) == null || !lids.unique) {
                                         lids.add(lid);
-                                    } else {
+                                    } else  {
                                         lids.get(lid.getId()).update(lid);
                                     }
                                 } else {

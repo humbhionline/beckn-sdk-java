@@ -103,7 +103,7 @@ public class Fulfillment extends BecknObjectWithId {
         if (s != null){
             Descriptor d  = s.getDescriptor();
             if (d != null){
-                d.getEnum(FulfillmentStatus.class,"code", new FulfillmentStatusConvertor());
+                return d.getEnum(FulfillmentStatus.class,"code", new FulfillmentStatusConvertor());
             }
         }
         return null;

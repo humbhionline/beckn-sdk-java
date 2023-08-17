@@ -1,12 +1,12 @@
 package in.succinct.beckn;
 
-import com.venky.core.util.Bucket;
+import com.venky.cache.Cache;
 import in.succinct.beckn.Order.Status.StatusConverter;
-
-import in.succinct.beckn.Payment.PaymentStatus;
 import org.json.simple.JSONArray;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Order extends BecknObjectWithId {
     public Order() {
@@ -31,11 +31,25 @@ public class Order extends BecknObjectWithId {
         set("provider_location",location);
     }
 
-    public Items getItems(){
-        return get(Items.class,"items");
+    public NonUniqueItems getItems(){
+        return get(NonUniqueItems.class,"items");
     }
-    public void setItems(Items  items){
+    public void setItems(NonUniqueItems  items){
         set("items",items);
+    }
+
+    public static class NonUniqueItems extends BecknObjectsWithId<Item> {
+        public NonUniqueItems() {
+            this(new JSONArray());
+        }
+
+        public NonUniqueItems(String payload) {
+            this((JSONArray) parse(payload));
+        }
+
+        public NonUniqueItems(JSONArray value) {
+            super(value,false);
+        }
     }
 
     public AddOns getAddOns(){
@@ -331,6 +345,72 @@ public class Order extends BecknObjectWithId {
 
         public static EnumConvertor<OrderReconStatus> convertor = new OrdinalBasedEnumConvertor<>(OrderReconStatus.class);
 
+    }
+
+
+
+    public Returns getReturns(){
+        return extendedAttributes.get(Returns.class, "returns");
+    }
+    public void setReturns(Returns r){
+        extendedAttributes.set("returns",r);
+    }
+
+    public static class Returns extends BecknObjectsWithId<Return>{
+        public Returns() {
+            super();
+        }
+
+        public Returns(JSONArray array) {
+            super(array);
+        }
+
+        public Returns(String payload) {
+            super(payload);
+        }
+    }
+
+    public static class Return extends BecknObjectWithId{
+        public Return() {
+        }
+
+        public Return(String payload) {
+            super(payload);
+        }
+
+        public ReturnStatus getReturnStatus(){
+            return getEnum(ReturnStatus.class, "return_status");
+        }
+        public void setReturnStatus(ReturnStatus return_status){
+            setEnum("return_status",return_status);
+        }
+
+
+
+        public Amount getRefund(){
+            return get(Amount.class, "refund");
+        }
+        public void setRefund(Amount refund){
+            set("refund",refund);
+        }
+
+        public Items getItems(){
+            return get(Items.class, "items");
+        }
+        public void setItems(Items items){
+            set("items",items);
+        }
+
+        public enum ReturnStatus {
+            REQUESTED,
+            OPEN,
+            DECLINED,
+            REFUNDED,
+            CLOSED,
+            CANCELED;
+
+            public static EnumConvertor<ReturnStatus> convertor = new EnumConvertor<>(ReturnStatus.class);
+        }
     }
 
 }

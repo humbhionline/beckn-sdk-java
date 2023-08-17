@@ -46,10 +46,10 @@ public class Resolution extends BecknObject {
 
 
     public ResolutionAction getResolutionAction(){
-        return getEnum(ResolutionAction.class, "resolution_action");
+        return getEnum(ResolutionAction.class, "resolution_action", ResolutionAction.convertor);
     }
     public void setResolutionAction(ResolutionAction resolution_action){
-        setEnum("resolution_action",resolution_action);
+        setEnum("resolution_action",resolution_action,ResolutionAction.convertor);
     }
 
 
@@ -62,9 +62,16 @@ public class Resolution extends BecknObject {
         public String toString() {
             return convertor.toString(this);
         }
-        static final EnumConvertor<ResolutionAction> convertor = new EnumConvertor<>(ResolutionAction.class);
+        public static final EnumConvertor<ResolutionAction> convertor = new EnumConvertor<>(ResolutionAction.class);
     }
 
+
+    public Double getRefundAmount(){
+        return getDouble("refund_amount", null);
+    }
+    public void setRefundAmount(Double refund_amount){
+        set("refund_amount",refund_amount);
+    }
 
 
 }

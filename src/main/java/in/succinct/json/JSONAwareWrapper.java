@@ -216,7 +216,7 @@ public class JSONAwareWrapper<T extends JSONAware> implements Serializable {
             return enumRepresentation == null ? null : getEnumClass().getEnumConstants()[Integer.parseInt(enumRepresentation.substring(prefix.length())) - 1];
         }
         public String toString(T value){
-            String fmt = String.format("%%%s0%dd", prefix,getEnumClass().getEnumConstants().length + 1);
+            String fmt = String.format("%%%s0%dd", prefix,String.valueOf(getEnumClass().getEnumConstants().length).length() + 1);
             return value == null ? null : String.format(fmt,value.ordinal() + 1);
         }
     }
