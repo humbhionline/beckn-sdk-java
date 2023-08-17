@@ -38,17 +38,9 @@ public class Order extends BecknObjectWithId {
         set("items",items);
     }
 
-    public static class NonUniqueItems extends BecknObjectsWithId<Item> {
-        public NonUniqueItems() {
-            this(new JSONArray());
-        }
-
-        public NonUniqueItems(String payload) {
-            this((JSONArray) parse(payload));
-        }
-
-        public NonUniqueItems(JSONArray value) {
-            super(value,false);
+    public static class NonUniqueItems extends Items {
+        public NonUniqueItems() { 
+            super(false);
         }
     }
 

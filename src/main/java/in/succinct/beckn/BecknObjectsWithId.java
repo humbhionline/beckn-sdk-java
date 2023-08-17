@@ -21,6 +21,12 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
     public BecknObjectsWithId(JSONArray array){
         this(array,true);
     }
+    public BecknObjectsWithId(boolean unique){
+        this(new JSONArray(),unique);
+    }
+    public BecknObjectsWithId(String payload,boolean unique){
+        this((JSONArray) parse(payload),unique);
+    }
     public BecknObjectsWithId(JSONArray array,boolean unique){
         super(array);
         this.unique= unique;
