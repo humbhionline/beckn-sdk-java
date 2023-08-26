@@ -393,6 +393,14 @@ public class Order extends BecknObjectWithId {
             set("items",items);
         }
 
+        public Date getCreatedAt(){
+            return getTimestamp("created_at");
+        }
+        public void setCreatedAt(Date created_at){
+            set("created_at",created_at,TIMESTAMP_FORMAT);
+        }
+
+
         public enum ReturnStatus {
             REQUESTED,
             OPEN,
@@ -402,6 +410,13 @@ public class Order extends BecknObjectWithId {
             CANCELED;
 
             public static EnumConvertor<ReturnStatus> convertor = new EnumConvertor<>(ReturnStatus.class);
+        }
+
+        public String getRefundId(){
+            return get("refund_id");
+        }
+        public void setRefundId(String refund_id){
+            set("refund_id",refund_id);
         }
     }
 

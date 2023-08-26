@@ -192,6 +192,14 @@ public class SampleUseCase {
     }
 
     @Test
+    public void testSignatureBap() throws Exception{
+        String key = "Fe/QcJJIR/lu3CUWNp/tz1HwWYaRLedMD8XvuU/A2w8=";
+        //String key = "Fhjwaka1Za+ld+7Nms7S0C675r24mZoyWVn8JbYTjSs=";
+        PublicKey p  = Request.getSigningPublicKey(key);
+        Assert.assertNotNull(p);
+    }
+
+    @Test
     public void testSign() throws Exception{
         /*
         Two Parties generating key pair on their own servers.
