@@ -193,23 +193,6 @@ public class Fulfillment extends BecknObjectWithId {
         extendedAttributes.set("provider_name",provider_name);
     }
 
-    public ServiceablityTags getServiceablityTags(){
-        return extendedAttributes.get(ServiceablityTags.class, "tags");
-    }
-    public void setServiceablityTags(ServiceablityTags tags){
-        extendedAttributes.set("tags",tags);
-    }
-
-    public static class ServiceablityTags extends BecknObjects<Tag> {
-
-        public ServiceablityTags() {
-        }
-
-        public ServiceablityTags(JSONArray value) {
-            super(value);
-        }
-
-    }
 
 
 

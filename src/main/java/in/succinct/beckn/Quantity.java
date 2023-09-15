@@ -13,4 +13,8 @@ public class Quantity extends BecknObject{
     public void setCount(int count){
         set("count",count);
     }
+    public void setCount(String count){
+        set("count",count);
+    }
+
 }

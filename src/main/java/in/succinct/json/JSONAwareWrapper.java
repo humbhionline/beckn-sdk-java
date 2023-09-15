@@ -421,7 +421,7 @@ public class JSONAwareWrapper<T extends JSONAware> implements Serializable {
         }
     }
     @SuppressWarnings("all")
-    public <O> void add(O o){
+    public  <O> void add(O o, boolean reset){
         JSONArray inner = getInnerArray();
 
         if (o instanceof JSONAwareWrapper){
@@ -429,6 +429,9 @@ public class JSONAwareWrapper<T extends JSONAware> implements Serializable {
         }else {
             inner.add(o);
         }
+    }
+    public <O> void add(O o){
+        add(o,false);
     }
     @SuppressWarnings("all")
     public <O> void remove(O o){

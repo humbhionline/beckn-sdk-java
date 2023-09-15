@@ -48,20 +48,23 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
     }
 
     @Override
-    public void add(Object t1){
+    public void add(Object t1,boolean reset){
         loadMap();
         T t = (T)t1;
         if (ObjectUtil.isVoid(t.getId())){
             t.setDefaultId();
         }
         List<T> list = map.get(t.getId());
-        if (unique) {
-            if (!list.isEmpty()){
-                throw new RuntimeException("ID already exists");
+        if (unique && !list.isEmpty()){
+            if (list.size() == 1){
+                list.get(0).update(t,reset);
+            }else {
+                throw new RuntimeException("Multiple IDS found");
             }
+        }else {
+            list.add(t);
+            super.add(t,reset);
         }
-        list.add(t);
-        super.add(t);
     }
     public void remove(T t){
         if (ObjectUtil.isVoid(t.getId())){

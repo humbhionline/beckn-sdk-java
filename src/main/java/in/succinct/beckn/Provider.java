@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONArray;
+
 import java.time.Duration;
 import java.util.Date;
 
@@ -53,10 +55,10 @@ public class Provider extends BecknObjectWithId {
 
 
     public String getBppId(){
-        return get("bpp_id");
+        return extendedAttributes.get("bpp_id");
     }
     public void setBppId(String bpp_id){
-        set("bpp_id",bpp_id);
+        extendedAttributes.set("bpp_id",bpp_id);
     }
 
     public Tags getTags(){
@@ -126,4 +128,22 @@ public class Provider extends BecknObjectWithId {
     public void setFssaiLicenceNo(String fssai_licence_no){
         extendedAttributes.set("fssai_licence_no",fssai_licence_no);
     }
+    public ServiceablityTags getServiceablityTags(){
+        return extendedAttributes.get(ServiceablityTags.class, "tags");
+    }
+    public void setServiceablityTags(ServiceablityTags tags){
+        extendedAttributes.set("tags",tags);
+    }
+
+    public static class ServiceablityTags extends BecknObjects<Tag> {
+
+        public ServiceablityTags() {
+        }
+
+        public ServiceablityTags(JSONArray value) {
+            super(value);
+        }
+
+    }
+
 }

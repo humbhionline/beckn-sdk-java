@@ -21,16 +21,17 @@ public class Location extends BecknObjectWithId {
 
     ObjectHolder<GeoCoordinate> gps = null ;
     public GeoCoordinate getGps(){
-        if (this.gps == null){
-            this.gps = new ObjectHolder<>(null);
-            String gps = get("gps");
-            if (!ObjectUtil.isVoid(gps)) {
-                StringTokenizer tokenizer = new StringTokenizer(gps, ",");
-                String lat = tokenizer.nextToken().trim();
-                String lng = tokenizer.nextToken().trim();
-                this.gps.set(new GeoCoordinate(new BigDecimal(lat),new BigDecimal(lng)));
-            }
+        if (this.gps != null){
+            return this.gps.get();
         }
+        String gps = get("gps");
+        if (ObjectUtil.isVoid(gps)) {
+            return null;
+        }
+        StringTokenizer tokenizer = new StringTokenizer(gps, ",");
+        String lat = tokenizer.nextToken().trim();
+        String lng = tokenizer.nextToken().trim();
+        this.gps = new ObjectHolder<>(new GeoCoordinate(new BigDecimal(lat),new BigDecimal(lng)));
         return this.gps.get();
     }
     public void setGps(GeoCoordinate coordinate){

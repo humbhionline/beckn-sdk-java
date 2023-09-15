@@ -86,12 +86,13 @@ public class Address extends BecknObject {
     }
 
     public String getFull(){
-        String full=  get("full");
-        if (full == null && getInner().keySet().size() > 0){
+        return get("full");
+        /*if (full == null && getInner().keySet().size() > 0){
             full = flatten();
             setFull(full);
         }
         return full;
+        */
     }
     public void setFull(String full){
         set("full",full);

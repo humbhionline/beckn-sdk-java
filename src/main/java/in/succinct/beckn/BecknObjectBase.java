@@ -1,11 +1,11 @@
 package in.succinct.beckn;
 
-import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class BecknObjectBase extends BecknAware<JSONObject> {
     public BecknObjectBase(JSONObject value) {
@@ -15,6 +15,8 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
     public BecknObjectBase(String payload) {
         super(payload);
     }
+
+    //Called by Reflection! don't remove.!
     public BecknObjectBase(){
         this(new JSONObject());
     }
@@ -25,9 +27,7 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
     public <T extends  BecknObjectBase> void update(T from, boolean reset){
         update(from, getObjectCreator(),reset);
     }
-    private <T extends  BecknObjectBase> void update(T fromSource , JSONAwareWrapperCreator boCreator){
-        update(fromSource,boCreator,true);
-    }
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private <T extends  BecknObjectBase> void update(T fromSource , JSONAwareWrapperCreator boCreator, boolean reset){
         if (!hasCommonAncestor(this,fromSource)){
             throw new IllegalArgumentException("Incompatible type of the parameter");
@@ -100,9 +100,15 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
                 if (BecknObject.class.isAssignableFrom(sourceFieldType) && BecknObject.class.isAssignableFrom(targetFieldType)) {
                     if (((BecknObject)sourceField).hasAdditionalProperties() ){
                         //IGM Will bomb!! as we need to start right from request
-                        ((BecknObject)targetField).setInner(((BecknObject)sourceField).getInner());
+                        if (reset){
+                            ((BecknObject) targetField).setInner(((BecknObject) sourceField).getInner());
+                        }else {
+                            for (Entry fieldEntry : (Iterable<Entry>) (((BecknObject) sourceField).getInner()).entrySet()) {
+                                ((BecknObject) targetField).getInner().putIfAbsent(fieldEntry.getKey(), fieldEntry.getValue());
+                            }
+                        }
                     }else {
-                        ((BecknObject) targetField).update((BecknObject) sourceField);
+                        ((BecknObject) targetField).update((BecknObject) sourceField,reset);
                     }
                 } else if (BecknObjects.class.isAssignableFrom(sourceFieldType) && BecknObjects.class.isAssignableFrom(targetFieldType)){
                     BecknObjects sourceFields = (BecknObjects) sourceField;
@@ -112,7 +118,7 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
                             BecknObject listElement = (BecknObject) boCreator.create(targetFields.clazz);
                             if (listElement.getClass() == o.getClass()){
                                 listElement.setInner(((BecknObject) o).getInner());
-                                targetFields.add(listElement);
+                                targetFields.add(listElement,reset);
                             }else {
                                 listElement.update((BecknObject) o);
                                 if (listElement instanceof BecknObjectWithId && targetFields instanceof BecknObjectsWithId) {
@@ -124,11 +130,11 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
                                         lids.get(lid.getId()).update(lid);
                                     }
                                 } else {
-                                    targetFields.add(listElement);
+                                    targetFields.add(listElement,reset);
                                 }
                             }
                         }else {
-                            targetFields.add(o);
+                            targetFields.add(o,reset);
                         }
                     }
                 }
@@ -143,15 +149,10 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
 
     public static boolean hasCommonAncestor(Class<?> targetType, Class<?> sourceType) {
         Class<?> commonAncestor = targetType;
-        while (!commonAncestor.isAssignableFrom(sourceType)){
+        while (commonAncestor != null && !commonAncestor.isAssignableFrom(sourceType)){
             commonAncestor = commonAncestor.getSuperclass();
         }
-        if (!commonAncestor.isAssignableFrom(sourceType) || commonAncestor == BecknObjectBase.class || commonAncestor == Object.class ){
-            return false;
-        }
-
-
-        return true;
+        return commonAncestor != null && commonAncestor.isAssignableFrom(sourceType) && commonAncestor != BecknObjectBase.class && commonAncestor != Object.class;
     }
 
 
@@ -161,20 +162,11 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
         while (!commonAncestor.isAssignableFrom(sourceType)){
             commonAncestor = commonAncestor.getSuperclass();
         }
-        if (commonAncestor == BecknObjectBase.class){
-            return false;
-        }
-        return true;
+        return commonAncestor != BecknObjectBase.class;
     }
 
     public void set(String key, Double value) {
         super.set(key, value == null ? null : value.toString());
     }
 
-    protected String _flat(String s){
-        return _flat(s," ");
-    }
-    protected String _flat(String s,String prefix){
-        return prefix + (ObjectUtil.isVoid(s) ? " " : s) ;
-    }
 }

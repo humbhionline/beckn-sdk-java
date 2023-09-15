@@ -7,10 +7,27 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
     public BreakUp(){
         super();
     }
-    public BreakUpElement createElement(BreakUpCategory type, String title, Price price){
+    public BreakUpElement createElement(BreakUpCategory type, String title, Price unitPrice){
+        return createElement(type,title,unitPrice,1);
+    }
+    public BreakUpElement createElement(BreakUpCategory type, String title, Price unitPrice, int count){
+        if (count == 0){
+            count = 1;
+        }
         BreakUpElement element =new BreakUpElement();
         element.setTitle(title);
-        element.setPrice(price);
+
+        Price newPrice = new Price();
+        newPrice.update(unitPrice);
+        newPrice.setOfferedValue(newPrice.getOfferedValue() * count);
+        newPrice.setListedValue(newPrice.getListedValue() * count);
+        newPrice.setValue(newPrice.getValue() * count);
+        newPrice.setComputedValue(newPrice.getComputedValue() * count);
+        newPrice.setMaximumValue(newPrice.getMaximumValue() * count);
+        newPrice.setMinimumValue(newPrice.getMinimumValue() * count);
+
+        //Quote supposed to have unit price in breakup
+        element.setPrice(newPrice);
         element.setType(type);
         return element;
     }

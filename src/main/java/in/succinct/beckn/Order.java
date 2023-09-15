@@ -366,6 +366,19 @@ public class Order extends BecknObjectWithId {
         public Return() {
         }
 
+        public Fulfillment getFulfillment(){
+            return get(Fulfillment.class, "fulfillment");
+        }
+        public void setFulfillment(Fulfillment fulfillment){
+            set("fulfillment",fulfillment);
+        }
+
+        public String getReturnMessageId(){
+            return get("return_message_id");
+        }
+        public void setReturnMessageId(String return_message_id){
+            set("return_message_id",return_message_id);
+        }
         public Return(String payload) {
             super(payload);
         }

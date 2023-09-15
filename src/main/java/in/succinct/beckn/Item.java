@@ -3,6 +3,9 @@ package in.succinct.beckn;
 import org.json.simple.JSONObject;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Item extends BecknObjectWithId {
     public Item() {
@@ -248,6 +251,19 @@ public class Item extends BecknObjectWithId {
 
 
     public static class PackagedCommodity extends BecknObject {
+        public static final Set<String> CategoryNames = new HashSet<>(){{
+            add("Masala & Seasoning");
+            add("Oil & Ghee");
+            add("Foodgrains");
+            add("Eggs, Meat & Fish" );
+            add("Cleaning & Household");
+            add("Beauty & Hygiene" );
+            add("Kitchen Accessories" );
+            add("Baby Care" );
+            add("Pet Care" );
+            add("Stationery");
+        }};
+
         public String getManufacturerOrPackerName() {
             return get("manufacturer_or_packer_name");
         }
@@ -306,6 +322,11 @@ public class Item extends BecknObjectWithId {
     }
 
     public static class PrepackagedFood extends BecknObject {
+        public static final Set<String> CategoryNames = new HashSet<>(){{
+            addAll(Arrays.asList(
+                    "Gourmet & World Foods","Beverages","Bakery, Cakes & Dairy","Snacks & Branded Foods"
+            ));
+        }};
         public String getIngredientsInfo() {
             return get("ingredients_info");
         }
@@ -468,6 +489,9 @@ public class Item extends BecknObjectWithId {
     }
 
     public static class VeggiesFruits extends BecknObject {
+        public static final Set<String> CategoryNames = new HashSet<>(){{
+            add("Fruits And Vegetables");
+        }};
         public String getNetQuantity(){
             return get("net_quantity");
         }
