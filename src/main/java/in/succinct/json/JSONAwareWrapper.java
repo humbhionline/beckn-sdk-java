@@ -35,7 +35,7 @@ public class JSONAwareWrapper<T extends JSONAware> implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    protected static <T extends JSONAware> T parse(String payload){
+    public static <T extends JSONAware> T parse(String payload){
         try {
             return (T) JSONValue.parseWithException(payload);
         }catch (Exception ex){
@@ -47,6 +47,7 @@ public class JSONAwareWrapper<T extends JSONAware> implements Serializable {
         this.payload =payload;
         setInner(parse(payload));
     }
+
 
     private String payload;
     private T value ;

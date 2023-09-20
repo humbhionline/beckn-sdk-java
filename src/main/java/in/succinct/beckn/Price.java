@@ -5,50 +5,50 @@ public class Price extends Amount {
         super();
     }
 
-    public double getMinimumValue(){
+    public Double getMinimumValue(){
         return getValue("minimum");
     }
-    public void setMinimumValue(double minimum){
+    public void setMinimumValue(Double minimum){
         setValue("minimum",minimum);
     }
-    public double getMaximumValue(){
+    public Double getMaximumValue(){
         return getValue("maximum");
     }
-    public void setMaximumValue(double maximum){
+    public void setMaximumValue(Double maximum){
         setValue("maximum",maximum);
     }
     @Deprecated
-    public double getEstimatedValue(){
+    public Double getEstimatedValue(){
         return getValue("estimated");
     }
-    public void setEstimatedValue(double estimatedValue){
+    public void setEstimatedValue(Double estimatedValue){
         setValue("estimated",estimatedValue);
     }
 
-    public double getComputedValue(){
+    public Double getComputedValue(){
         return getValue("computed");
     }
-    public void setComputedValue(double value){
+    public void setComputedValue(Double value){
         setValue("computed",value);
     }
-    public double getListedValue(){
+    public Double getListedValue(){
         return getValue("listed");
     }
-    public void setListedValue(double value){
+    public void setListedValue(Double value){
         setValue("listed",value);
     }
-    public double getOfferedValue(){
+    public Double getOfferedValue(){
         return getValue("offered");
     }
-    public void setOfferedValue(double value){
+    public void setOfferedValue(Double value){
         setValue("offered",value);
     }
 
-    private double getValue(String prefix){
-        return getDouble(prefix+"_value");
+    private Double getValue(String prefix){
+        return getDouble(prefix+"_value",null);
     }
-    private void setValue(String prefix,double value){
-        set(prefix+"_value",String.valueOf(value));
+    private void setValue(String prefix,Double value){
+        set(prefix+"_value",value);
     }
 
 

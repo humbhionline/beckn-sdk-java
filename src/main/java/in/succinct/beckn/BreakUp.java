@@ -11,20 +11,17 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         return createElement(type,title,unitPrice,1);
     }
     public BreakUpElement createElement(BreakUpCategory type, String title, Price unitPrice, int count){
-        if (count == 0){
-            count = 1;
-        }
         BreakUpElement element =new BreakUpElement();
         element.setTitle(title);
 
         Price newPrice = new Price();
         newPrice.update(unitPrice);
-        newPrice.setOfferedValue(newPrice.getOfferedValue() * count);
-        newPrice.setListedValue(newPrice.getListedValue() * count);
-        newPrice.setValue(newPrice.getValue() * count);
-        newPrice.setComputedValue(newPrice.getComputedValue() * count);
-        newPrice.setMaximumValue(newPrice.getMaximumValue() * count);
-        newPrice.setMinimumValue(newPrice.getMinimumValue() * count);
+        newPrice.setOfferedValue(newPrice.getOfferedValue() == null ? null :newPrice.getOfferedValue() * count);
+        newPrice.setListedValue(newPrice.getListedValue() == null ? null  : newPrice.getListedValue() * count);
+        newPrice.setValue(newPrice.getValue() == null ? null  : newPrice.getValue() * count);
+        newPrice.setComputedValue(newPrice.getComputedValue() == null ? null  : newPrice.getComputedValue() * count);
+        newPrice.setMaximumValue(newPrice.getMaximumValue() == null ? null  : newPrice.getMaximumValue() * count);
+        newPrice.setMinimumValue(newPrice.getMinimumValue() == null ? null  : newPrice.getMinimumValue() * count);
 
         //Quote supposed to have unit price in breakup
         element.setPrice(newPrice);

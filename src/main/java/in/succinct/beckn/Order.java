@@ -1,12 +1,9 @@
 package in.succinct.beckn;
 
-import com.venky.cache.Cache;
 import in.succinct.beckn.Order.Status.StatusConverter;
 import org.json.simple.JSONArray;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Order extends BecknObjectWithId {
     public Order() {
@@ -364,6 +361,20 @@ public class Order extends BecknObjectWithId {
 
     public static class Return extends BecknObjectWithId{
         public Return() {
+        }
+
+        public boolean isOpen(){
+            ReturnStatus returnStatus = getReturnStatus();
+            return returnStatus != null && returnStatus.compareTo(ReturnStatus.OPEN) <= 0;
+        }
+
+        public boolean isRefunded(){
+            ReturnStatus returnStatus = getReturnStatus();
+            return returnStatus  == ReturnStatus.REFUNDED || getRefundId() != null;
+        }
+
+        public boolean isClosed(){
+            return !isOpen();
         }
 
         public Fulfillment getFulfillment(){

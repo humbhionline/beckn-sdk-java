@@ -1,8 +1,14 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONObject;
+
 public class FulfillmentStop extends BecknObject {
     public FulfillmentStop() {
         super();
+    }
+
+    public FulfillmentStop(JSONObject stop) {
+        super(stop);
     }
 
     public Location getLocation(){

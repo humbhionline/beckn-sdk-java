@@ -19,11 +19,11 @@ public class Amount extends BecknObject{
     public void setCurrency(String currency){
         set("currency",currency);
     }
-    public double getValue(){
-        return getDouble("value");
+    public Double getValue(){
+        return getDouble("value", null);
     }
-    public void setValue(double value){
-        set("value",String.valueOf(value));
+    public void setValue(Double value){
+        set("value",value);
     }
 
 
