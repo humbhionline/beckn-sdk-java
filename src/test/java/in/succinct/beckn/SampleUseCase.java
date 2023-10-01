@@ -67,6 +67,15 @@ public class SampleUseCase {
     }
 
     @Test
+    public void testTibil() throws Exception{
+        Request request = new Request("{\"context\": {\"domain\": \"dsep:jobs\", \"location\": {\"city\": {\"name\": \"BLR\"}, \"country\": {\"name\": \"IND\"}}, \"action\": \"search\", \"version\": \"1.1.0\", \"bap_id\": \"tibilsolutions.com\", \"bap_uri\": \"https://beckn.tibilprojects.com/bap/\", \"transaction_id\": \"38fc772f-df93-44e8-befb-bdf33d9ac9dd\", \"message_id\": \"28653c56-6886-4954-bd7e-93fbd372be06\"}, \"message\": {\"intent\": {\"provider\": {\"locations\": [{\"city\": \"Bangalore\"}]}, \"category\": {\"descriptor\": {\"code\": \"Programming\"}}, \"item\": {\"descriptor\": {\"name\": \"Python developer\"}, \"price\": {\"minimum_value\": \"10000\"}}}}}");
+        Map<String,String> headers = new HashMap<>();
+        headers.put("AUTHORIZATION","Signature keyId=\"tibilsolutions.com.jobs.BAP|tibilsolutions.com|ed25519\", algorithm=\"ed25519\", created=\"1695731541\", expires=\"1695733341\", headers=\"(created) (expires) digest\", signature=\"9oKShGnJgA6EEq7TNIiK/kPmNj+9b7iy37TxIPTCNpnXwJV6FVSODkgfxOn6XMCiSzKicgQ4CU53+HcMyVbVAQ==\"");
+        Map<String,String> params = request.extractAuthorizationParams("AUTHORIZATION",headers);
+        Assert.assertTrue(Request.verifySignature(params.get("signature"),request.toString(),"7YuymosnCNlxvAh7D+as9X/R/BNU1XZz2+/XBsSthV0="));
+    }
+
+    @Test
     public void testBikry()throws  Exception{
         String payload = StringUtil.read(getClass().getResourceAsStream("/message.txt"));
         payload=payload.trim();

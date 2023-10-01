@@ -22,6 +22,9 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
     }
 
     public <T extends  BecknObjectBase> void update(T from){
+        if (from == null){
+            return;
+        }
         update(from,true);
     }
     public <T extends  BecknObjectBase> void update(T from, boolean reset){

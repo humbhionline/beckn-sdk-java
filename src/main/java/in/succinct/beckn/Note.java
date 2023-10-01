@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Issue.EscalationLevel;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

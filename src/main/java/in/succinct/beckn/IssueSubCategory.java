@@ -40,7 +40,7 @@ public enum IssueSubCategory {
             if (b == null){
                 b = new Bucket();
                 counts.put(sc.getCategory(),b);
-            }
+                }
             b.increment();
             put(sc,String.format("%s%02d",sc.getPrefix(),b.intValue()));
 

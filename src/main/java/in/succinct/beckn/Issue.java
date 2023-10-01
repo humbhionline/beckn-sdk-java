@@ -110,10 +110,10 @@ public class Issue extends BecknObjectWithId {
         set("finalized_odr",finalized_odr);
     }
 
-    public boolean isSatisfied(){
-        return getBoolean("satisfied");
+    public Boolean isSatisfied(){
+        return getBoolean("satisfied", null);
     }
-    public void setSatisfied(boolean satisfied){
+    public void setSatisfied(Boolean satisfied){
         set("satisfied",satisfied);
     }
 
