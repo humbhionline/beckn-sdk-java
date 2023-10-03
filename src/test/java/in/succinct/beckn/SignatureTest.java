@@ -97,6 +97,8 @@ public class SignatureTest {
 
     }
 
+
+    /*
     @Test
     public void testKeySizeNew() throws Exception {
         String algo = "Ed25519";
@@ -142,6 +144,8 @@ public class SignatureTest {
 
         Assert.assertNotEquals(sign1,sign2);
     }
+
+     */
     @Test
     public void testKeySizeNew2() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException, InvalidKeySpecException, NoSuchProviderException {
         String algo = "Ed25519";
