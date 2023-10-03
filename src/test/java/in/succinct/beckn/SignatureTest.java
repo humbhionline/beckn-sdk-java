@@ -98,7 +98,7 @@ public class SignatureTest {
     }
 
 
-    /*
+
     @Test
     public void testKeySizeNew() throws Exception {
         String algo = "Ed25519";
@@ -116,7 +116,7 @@ public class SignatureTest {
         Crypt.getInstance().verifySignature(payload,sign1,Request.SIGNATURE_ALGO,key);
 
 
-
+        //pbk = Request.getRawSigningKey(key);
         Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pbk),0);
 
 
@@ -145,7 +145,6 @@ public class SignatureTest {
         Assert.assertNotEquals(sign1,sign2);
     }
 
-     */
     @Test
     public void testKeySizeNew2() throws NoSuchAlgorithmException, SignatureException, InvalidKeyException, IOException, InvalidKeySpecException, NoSuchProviderException {
         String algo = "Ed25519";
