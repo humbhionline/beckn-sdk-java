@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Item extends BecknObjectWithId {
+public class Item extends BecknObjectWithId implements TagGroupHolder {
     public Item() {
         super();
     }
@@ -87,12 +87,6 @@ public class Item extends BecknObjectWithId {
         set("fulfillment_id",fulfillment_id);
     }
 
-    public Tags getTags(){
-        return get(Tags.class, "tags");
-    }
-    public void setTags(Tags tags){
-        set("tags",tags);
-    }
 
 
     //
@@ -169,6 +163,35 @@ public class Item extends BecknObjectWithId {
     public boolean isExtendedAttributesDisplayed(){
         return true;
     }
+
+    public String getCountryOfOrigin(){
+        return extendedAttributes.get("country_of_origin");
+    }
+    public void setCountryOfOrigin(String country_of_origin){
+        extendedAttributes.set("country_of_origin",country_of_origin);
+    }
+
+    public String getHsnCode(){
+        return extendedAttributes.get("hsn_code");
+    }
+    public void setHsnCode(String hsn_code){
+        extendedAttributes.set("hsn_code",hsn_code);
+    }
+
+    public double getTaxRate(){
+        return extendedAttributes.getDouble("tax_rate");
+    }
+    public void setTaxRate(double tax_rate){
+        extendedAttributes.set("tax_rate",tax_rate);
+    }
+    
+    public Boolean isVeg(){
+        return extendedAttributes.getBoolean("veg", null);
+    }
+    public void setVeg(Boolean veg){
+        extendedAttributes.set("veg",veg);
+    }
+
 
     public Price getTax(){
         return extendedAttributes.get(Price.class, "tax");

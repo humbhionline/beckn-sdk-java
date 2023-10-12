@@ -3,6 +3,7 @@ package in.succinct.beckn;
 import org.json.simple.JSONArray;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -11,12 +12,23 @@ public class BecknObjects<T> extends BecknAware<JSONArray> implements  Iterable<
     public BecknObjects(){
         this(new JSONArray());
     }
-
     @SuppressWarnings("unchecked")
+    protected Class<T> getParameterizedType(){
+
+        Class<?> inspectedClass = getClass();
+        Type type = inspectedClass.getGenericSuperclass();
+        while (!(ParameterizedType.class.isAssignableFrom(type.getClass()))){
+            inspectedClass = inspectedClass.getSuperclass();
+            type = inspectedClass.getGenericSuperclass();
+        }
+        ParameterizedType pt = (ParameterizedType)type;
+        return (Class<T>) pt.getActualTypeArguments()[0];
+
+    }
+
     public BecknObjects(JSONArray value) {
         super(value);
-        ParameterizedType pt = (ParameterizedType)getClass().getGenericSuperclass();
-        this.clazz = (Class<T>) pt.getActualTypeArguments()[0];
+        this.clazz = getParameterizedType();
     }
 
     @SuppressWarnings("unchecked")

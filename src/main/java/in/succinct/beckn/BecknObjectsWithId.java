@@ -87,6 +87,7 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
         loadMap();
         return id == null ? null : map.get(id);
     }
+    @SuppressWarnings("unchecked")
     public T get(String id){
 
         List<T> l = all(id);

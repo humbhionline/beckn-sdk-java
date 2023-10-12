@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import com.venky.core.util.ObjectUtil;
 import org.json.simple.JSONObject;
 
 public class BecknObject extends BecknObjectBase{
@@ -49,4 +50,5 @@ public class BecknObject extends BecknObjectBase{
         super.setInner(value);
         extendedAttributes = getExtendedAttributes(true);
     }
+
 }

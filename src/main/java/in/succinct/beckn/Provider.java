@@ -135,7 +135,7 @@ public class Provider extends BecknObjectWithId {
         extendedAttributes.set("tags",tags);
     }
 
-    public static class ServiceablityTags extends BecknObjects<Tag> {
+    public static class ServiceablityTags extends TagGroups {
 
         public ServiceablityTags() {
         }

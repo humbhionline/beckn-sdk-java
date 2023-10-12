@@ -1,6 +1,33 @@
 package in.succinct.beckn;
 
-public class TagGroup extends BecknObject{
+public class TagGroup extends BecknObjectWithId{
+
+    public TagGroup(){
+        super();
+    }
+    public TagGroup(String code, Object value){
+        this(code,null,value);
+    }
+    public TagGroup(String code, String name,Object value){
+        setCode(code);
+        if (name != null) setName(name);
+        if (value instanceof TagGroups){
+            setList((TagGroups)value);
+        }else {
+            setValue(String.valueOf(value));
+        }
+
+    }
+    @Override
+    public String getId() {
+       return getCode();
+    }
+
+    @Override
+    public void setId(String id) {
+        setCode(id);
+    }
+
     public boolean getDisplay(){
         return getBoolean("display");
     }
@@ -8,10 +35,10 @@ public class TagGroup extends BecknObject{
         set("display",display);
     }
 
-    public String getCode(){
+    private String getCode(){
         return get("code");
     }
-    public void setCode(String code){
+    private void setCode(String code){
         set("code",code);
     }
     public String getName(){
@@ -21,10 +48,18 @@ public class TagGroup extends BecknObject{
         set("name",name);
     }
 
-    public Tags getList(){
-        return get(Tags.class, "list");
+
+    public String getValue(){
+        return get("value");
     }
-    public void setList(Tags tags){
+    public void setValue(String value){
+        set("value",value);
+    }
+
+    public TagGroups getList(){
+        return get(TagGroups.class, "list");
+    }
+    public void setList(TagGroups tags){
         set("list",tags);
     }
 }

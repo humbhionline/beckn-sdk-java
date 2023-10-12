@@ -1,10 +1,34 @@
 package in.succinct.beckn;
 
+import com.venky.core.util.ObjectUtil;
 import in.succinct.beckn.BecknObject;
 import in.succinct.beckn.Quantity;
+import org.json.simple.JSONObject;
 
 public class ItemQuantity extends BecknObject {
-    public ItemQuantity() {super();}
+    public ItemQuantity() {
+        super();
+        setUnitized(new Unitized());
+    }
+    
+    public Unitized getUnitized(){
+        return get(Unitized.class, "unitized");
+    }
+    public void setUnitized(Unitized unitized){
+        set("unitized",unitized);
+    }
+
+    public static class Unitized extends Quantity{
+        public Unitized() {
+            super();
+            setCount(1);
+            Measure measure = new Measure();
+            measure.setUnit("unit");
+            measure.setValue(1);
+            setMeasure(measure);
+        }
+
+    }
 
     public Quantity getAllocated(){
         return get(Quantity.class,"allocated");

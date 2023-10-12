@@ -4,7 +4,6 @@ import com.venky.core.collections.IgnoreCaseMap;
 import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
 import com.venky.core.util.ObjectHolder;
-import com.venky.extension.Extension;
 import com.venky.extension.Registry;
 import org.bouncycastle.asn1.DEROctetString;
 import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
@@ -12,7 +11,6 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.ec.CustomNamedCurves;
 import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
 import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
@@ -23,13 +21,10 @@ import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.encoders.Hex;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -41,18 +36,16 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.SignatureException;
-import java.security.spec.ECParameterSpec;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.NamedParameterSpec;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.security.spec.XECPrivateKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 
+@SuppressWarnings("ALL")
 public class SignatureTest {
     @org.junit.BeforeClass
     public static void setup(){
@@ -60,12 +53,9 @@ public class SignatureTest {
 
     @Test
     public void genKeys(){
-        Registry.instance().registerExtension("beckn.public.key.get", new Extension() {
-            @Override
-            public void invoke(Object... context) {
-                ObjectHolder<String> publicKeyHolder = (ObjectHolder<String>) context[2];
-                publicKeyHolder.set("bOVx9uLyvk4SfrFmsaTaGXbaubU8jTShsFyK0yr9D+s=");
-            }
+        Registry.instance().registerExtension("beckn.public.key.get", context -> {
+            ObjectHolder<String> publicKeyHolder = (ObjectHolder<String>) context[2];
+            publicKeyHolder.set("bOVx9uLyvk4SfrFmsaTaGXbaubU8jTShsFyK0yr9D+s=");
         });
         Request request = new Request("{\"context\":{\"domain\":\"local-retail\",\"country\":\"IND\",\"city\":\"*\",\"action\":\"search\",\"core_version\":\"0.9.2\",\"bap_id\":\"test.mockserver.in\",\"bap_uri\":\"http://13.233.115.209:9900/protocol\",\"transaction_id\":\"1239890341\",\"message_id\":\"123793824\",\"timestamp\":\"2021-03-23T10:00:40.065Z\"},\"message\":{\"intent\":{\"fulfillment\":{\"type\":\"STORE-PICKUP\",\"end\":{\"location\":{\"gps\":\"12.4535445,77.9283792\"}}}}}}");
         JSONObject object = new JSONObject();
@@ -116,7 +106,7 @@ public class SignatureTest {
         Crypt.getInstance().verifySignature(payload,sign1,Request.SIGNATURE_ALGO,key);
 
 
-        //pbk = Request.getRawSigningKey(key);
+        pbk = Request.getRawSigningKey(key);
         Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(Base64.getDecoder().decode(pbk),0);
 
 

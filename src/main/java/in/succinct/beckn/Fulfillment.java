@@ -5,7 +5,7 @@ import org.json.simple.JSONArray;
 
 import java.time.Duration;
 
-public class Fulfillment extends BecknObjectWithId {
+public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
 
     public Fulfillment() {
         super();
@@ -124,14 +124,6 @@ public class Fulfillment extends BecknObjectWithId {
 
     public void setVehicle(Vehicle vehicle) {
         set("vehicle", vehicle);
-    }
-
-    public Tags getTags() {
-        return get(Tags.class, "tags");
-    }
-
-    public void setTags(Tags tags) {
-        set("tags", tags);
     }
 
     public boolean isRateable() {
