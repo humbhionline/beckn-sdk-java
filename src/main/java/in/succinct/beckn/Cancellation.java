@@ -3,7 +3,7 @@ package in.succinct.beckn;
 
 import java.util.Date;
 
-public class Cancellation extends BecknObject{
+public class Cancellation extends BecknObjectWithId{
     public String getType(){
         return get("type");
     }

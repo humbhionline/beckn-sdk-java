@@ -4,10 +4,11 @@ import org.json.simple.JSONArray;
 
 public class TagGroups extends BecknObjectsWithId<TagGroup>{
     public TagGroups() {
+        super(false);
     }
 
     public TagGroups(JSONArray array) {
-        super(array);
+        super(array,false);
     }
 
     public String getTag(String tagGroup, String code) {

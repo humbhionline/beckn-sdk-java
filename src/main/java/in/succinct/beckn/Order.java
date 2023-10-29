@@ -5,7 +5,7 @@ import org.json.simple.JSONArray;
 
 import java.util.Date;
 
-public class Order extends BecknObjectWithId {
+public class Order extends BecknObjectWithId implements TagGroupHolder{
     public Order() {
         super();
     }
@@ -130,12 +130,6 @@ public class Order extends BecknObjectWithId {
         extendedAttributes.set("cancellation",cancellation);
     }
 
-    public Tags getTags(){
-        return get(Tags.class, "tags");
-    }
-    public void setTags(Tags tags){
-        set("tags",tags);
-    }
 
 
     public enum Status {
@@ -410,10 +404,10 @@ public class Order extends BecknObjectWithId {
             set("refund",refund);
         }
 
-        public Items getItems(){
-            return get(Items.class, "items");
+        public NonUniqueItems getItems(){
+            return get(NonUniqueItems.class, "items");
         }
-        public void setItems(Items items){
+        public void setItems(NonUniqueItems items){
             set("items",items);
         }
 
@@ -442,6 +436,20 @@ public class Order extends BecknObjectWithId {
         public void setRefundId(String refund_id){
             set("refund_id",refund_id);
         }
+    }
+
+    
+    public String getBppTaxNumber(){
+        return extendedAttributes.get("bpp_tax_number");
+    }
+    public void setBppTaxNumber(String bpp_tax_number){
+        extendedAttributes.set("bpp_tax_number",bpp_tax_number);
+    }
+    public String getBapTaxNumber(){
+        return extendedAttributes.get("bap_tax_number");
+    }
+    public void setBapTaxNumber(String bap_tax_number){
+        extendedAttributes.set("bap_tax_number",bap_tax_number);
     }
 
 }

@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import com.venky.core.util.ObjectUtil;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.Collections;
@@ -180,5 +181,41 @@ public class Subscriber extends BecknObject{
             inner.remove("extended_attributes");
         }
         return inner;
+    }
+
+    public Request getSubscribeRequest(){
+        return extendedAttributes.get(Request.class, "request");
+    }
+    public void setSubscribeRequest(Request request){
+        extendedAttributes.set("request",request);
+    }
+
+    public boolean isMsn(){
+        return extendedAttributes.getBoolean("msn");
+    }
+    public void setMsn(boolean msn){
+        extendedAttributes.set("msn",msn);
+    }
+
+
+    public Domains getDomains(){
+        return extendedAttributes.get(Domains.class, "domains");
+    }
+    public void setDomains(Domains domains){
+        extendedAttributes.set("domains",domains);
+    }
+
+
+    public static class Domains extends BecknObjects<String>{
+        public Domains() {
+        }
+
+        public Domains(JSONArray value) {
+            super(value);
+        }
+
+        public Domains(String payload) {
+            super(payload);
+        }
     }
 }

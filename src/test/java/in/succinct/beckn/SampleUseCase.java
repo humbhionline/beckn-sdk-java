@@ -104,6 +104,14 @@ public class SampleUseCase {
     }
 
     @Test
+    public void testVerifyFile(){
+        String sign  = "UKt1cobK6Lr1zdSTsgmLmNOosaFIvYVgxFM8/TaoGvy5zXceH1hT7/uREY2Av06/UtRJUBe2GXBzWyGDZ1LLAw==";
+        String payload = "5bdd596a-ede5-4180-803d-32f5dd311099";
+        String publicKey = "Z4AbOQfPRGz5uV4TrdzoHM408q7+4SWk9b64C2FoJr0=";
+        Assert.assertTrue(Request.verifySignature(sign,payload,publicKey));
+    }
+
+    @Test
     public void testIshitaPaytm(){
         String payload = "{\"context\":{\"domain\":\"nic2004:52110\",\"country\":\"IND\",\"city\":\"std:080\",\"action\":\"search\",\"core_version\":\"0.9.1\",\"bap_id\": \"ondc-staging.paytm.com\",\"bap_uri\": \"https://ondc-staging.paytm.com\",\"transaction_id\":\"txn_test\",\"message_id\":\"a2fe6d52-9fe4-4d1a-9d0b-dccb8b48522d\",\"timestamp\":\"2022-04-19T09:17:55.971Z\",\"ttl\":\"P1M\"},\"message\":{\"intent\":{\"fulfillment\":{\"start\":{\"location\":{\"gps\":\"10.108768, 76.347517\"}},\"end\":{\"location\":{\"gps\":\"10.102997, 76.353480\"}}}}}}";
         Request request = new Request(payload);
