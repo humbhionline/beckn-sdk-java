@@ -1,7 +1,13 @@
 package in.succinct.beckn;
 
+import com.venky.core.date.DateUtils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Time extends BecknObject {
     public Time() {
@@ -41,20 +47,37 @@ public class Time extends BecknObject {
     public void setDays(String days){
         set("days",days);
     }
-    
+
+
+    public static DateFormat TIME_FORMAT_NO_SEP =   new SimpleDateFormat("HHmm");
+
     public static class Range extends BecknObject {
         public Date getStart(){
-            return getTimestamp("start");
+            return parseDateTime(get("start"),TIMESTAMP_FORMAT,TIME_FORMAT_NO_SEP);
         }
         public void setStart(Date start){
-            set("start",start,TIMESTAMP_FORMAT);
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTime(start);
+            if (calendar.get(Calendar.YEAR) == 1970){
+                set("start",start,TIME_FORMAT_NO_SEP);
+            }else {
+                set("start",start,TIMESTAMP_FORMAT);
+            }
         }
 
         public Date getEnd(){
-            return getTimestamp("end");
+            return parseDateTime(get("end"),TIMESTAMP_FORMAT,TIME_FORMAT_NO_SEP);
         }
         public void setEnd(Date end){
-            set("end",end,TIMESTAMP_FORMAT);
+
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTime(end);
+            if (calendar.get(Calendar.YEAR) < 2000){
+                set("end",end,TIME_FORMAT_NO_SEP);
+            }else {
+                set("end",end,TIMESTAMP_FORMAT);
+            }
+
         }
 
     }

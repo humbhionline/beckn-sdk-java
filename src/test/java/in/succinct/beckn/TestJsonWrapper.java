@@ -1,7 +1,11 @@
 package in.succinct.beckn;
 
+import com.venky.core.date.DateUtils;
+import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Date;
 
 public class TestJsonWrapper {
     @Test
@@ -13,4 +17,18 @@ public class TestJsonWrapper {
         Assert.assertNotNull(r.getMessage().getOrder().getProvider().getLocations().get(0));
     }
 
+    @Test
+    public void testRange(){
+        Time.Range range = new Time.Range();
+        JSONObject r = new JSONObject();
+        r.put("start","0000");
+        r.put("end","2359");
+        range.setInner(r);
+
+        System.out.println(range.toString());
+        System.out.println(range.getStart());
+        System.out.println(range.getEnd());
+
+
+    }
 }
