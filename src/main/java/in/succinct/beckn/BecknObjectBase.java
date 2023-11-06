@@ -169,7 +169,9 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
     }
 
     public void set(String key, Double value) {
-        super.set(key, value == null ? null : value.toString());
+        super.set(key, value == null ? null :
+                    (value == value.intValue())? String.valueOf(value.intValue()) :
+                            String.valueOf(value));
     }
 
 }
