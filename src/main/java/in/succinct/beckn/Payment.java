@@ -235,9 +235,10 @@ public class Payment extends BecknObjectWithId {
     }
 
     public enum SettlementBasis {
-        Collection,
-        Shipment,
-        Delivery
+        collection,
+        shipment,
+        delivery,
+        return_window_expiry,
     }
 
 }

@@ -321,7 +321,7 @@ public class SampleUseCase {
 
        //Converting java publicKey to BC publicKeyParams
         BCEdDSAPublicKey k = (BCEdDSAPublicKey) key;
-        Field f = k.getClass().getDeclaredField("eddsaPublicKey");
+        Field f = k.getClass().getSuperclass().getDeclaredField("eddsaPublicKey");
         f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
         Ed25519PublicKeyParameters publicKeyParameters1 = (Ed25519PublicKeyParameters) f.get(k);
 
@@ -343,7 +343,7 @@ public class SampleUseCase {
 
         //Convert java PrivateKey to privateKeyParams
         BCEdDSAPrivateKey privateKey1 = (BCEdDSAPrivateKey) privateKey;
-        f = privateKey1.getClass().getDeclaredField("eddsaPrivateKey");
+        f = privateKey1.getClass().getSuperclass().getDeclaredField("eddsaPrivateKey");
         f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
         Ed25519PrivateKeyParameters privateKeyParameters1 = (Ed25519PrivateKeyParameters) f.get(privateKey1);
 
@@ -452,7 +452,8 @@ public class SampleUseCase {
         PrivateKey privateKey = getPrivateKey("Ed25519",Base64.getDecoder().decode(pv));
         Assert.assertNotNull(privateKey);
         BCEdDSAPrivateKey privateKey1 = (BCEdDSAPrivateKey)privateKey;
-        Field f = privateKey1.getClass().getDeclaredField("eddsaPrivateKey");
+        Field f = privateKey1.getClass().getSuperclass()
+                .getDeclaredField("eddsaPrivateKey");
         f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
         Ed25519PrivateKeyParameters privateKeyParameters1 = (Ed25519PrivateKeyParameters) f.get(privateKey1);
 
@@ -460,7 +461,7 @@ public class SampleUseCase {
         PublicKey publicKey = getPublicKey("Ed25519",Base64.getDecoder().decode(pb));
         Assert.assertNotNull(publicKey);
         BCEdDSAPublicKey publicKey1 = (BCEdDSAPublicKey)publicKey;
-        f = publicKey1.getClass().getDeclaredField("eddsaPublicKey");
+        f = publicKey1.getClass().getSuperclass().getDeclaredField("eddsaPublicKey");
         f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
         Ed25519PublicKeyParameters publicKeyParameters1 = (Ed25519PublicKeyParameters) f.get(publicKey1);
 
@@ -784,7 +785,7 @@ public class SampleUseCase {
 
         //Convert java PrivateKey to privateKeyParams
         BCEdDSAPrivateKey privateKey1 = (BCEdDSAPrivateKey) privateKey;
-        Field f = privateKey1.getClass().getDeclaredField("eddsaPrivateKey");
+        Field f = privateKey1.getClass().getSuperclass().getDeclaredField("eddsaPrivateKey");
         f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
         Ed25519PrivateKeyParameters privateKeyParameters1 = (Ed25519PrivateKeyParameters) f.get(privateKey1);
 
@@ -817,5 +818,13 @@ public class SampleUseCase {
         signer.init(false,pubKey);
         signer.update(signingBytes,0,signingBytes.length);
         Assert.assertTrue(signer.verifySignature(Base64.getDecoder().decode(sign)));
+    }
+
+    @Test
+    public void testAdyaKey() throws Exception{
+        String key = "Fe/QcJJIR/lu3CUWNp/tz1HwWYaRLedMD8XvuU/A2w8=";
+        PublicKey pKey = Request.getSigningPublicKey(key);
+        Signature s = Signature.getInstance(Request.SIGNATURE_ALGO,BouncyCastleProvider.PROVIDER_NAME);
+        s.initVerify(pKey);
     }
 }

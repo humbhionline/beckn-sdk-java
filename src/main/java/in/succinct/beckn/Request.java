@@ -23,6 +23,7 @@ import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -235,32 +236,38 @@ public class Request extends BecknObject {
     }
 
     public static PublicKey getSigningPublicKey(String keyFromRegistry){
+        PublicKey publicKey = null;
         try {
-            return Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO, keyFromRegistry);
+            publicKey = Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO, keyFromRegistry);
         }catch (Exception ex){
             try {
                 byte[] bcBytes = Base64.getDecoder().decode(keyFromRegistry);
                 byte[] jceBytes = new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_Ed25519), bcBytes).getEncoded();
                 String pemKey = Base64.getEncoder().encodeToString(jceBytes);
-                return Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO,pemKey);
+                publicKey = Crypt.getInstance().getPublicKey(Request.SIGNATURE_ALGO,pemKey);
             }catch (Exception jceEx){
-                return null;
+                //return null;
             }
         }
+        Logger.getLogger(Request.class.getName()).info(String.format("%s resolved to %s", keyFromRegistry,publicKey == null ? null : publicKey.getClass().getName() ));
+        return publicKey;
     }
     public static PublicKey getEncryptionPublicKey(String keyFromRegistry){
+        PublicKey publicKey = null;
         try {
-            return Crypt.getInstance().getPublicKey(Request.ENCRYPTION_ALGO, keyFromRegistry);
+            publicKey = Crypt.getInstance().getPublicKey(Request.ENCRYPTION_ALGO, keyFromRegistry);
         }catch (Exception ex){
             try {
                 byte[] bcBytes = Base64.getDecoder().decode(keyFromRegistry);
                 byte[] jceBytes = new SubjectPublicKeyInfo(new AlgorithmIdentifier(EdECObjectIdentifiers.id_X25519), bcBytes).getEncoded();
                 String pemKey = Base64.getEncoder().encodeToString(jceBytes);
-                return Crypt.getInstance().getPublicKey(Request.ENCRYPTION_ALGO,pemKey);
+                publicKey = Crypt.getInstance().getPublicKey(Request.ENCRYPTION_ALGO,pemKey);
             }catch (Exception jceEx){
-                return null;
+                //publicKey =  null;
             }
         }
+        Logger.getLogger(Request.class.getName()).info(String.format("%s resolved to %s", keyFromRegistry,publicKey == null ? null : publicKey.getClass().getName() ));
+        return publicKey;
     }
 
     public static String getRawSigningKey(PublicKey publicKey){
