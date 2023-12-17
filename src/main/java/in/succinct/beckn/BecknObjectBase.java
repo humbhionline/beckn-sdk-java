@@ -32,6 +32,9 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
     }
     @SuppressWarnings({"unchecked", "rawtypes"})
     private <T extends  BecknObjectBase> void update(T fromSource , JSONAwareWrapperCreator boCreator, boolean reset){
+        if (this == fromSource){
+            return;
+        }
         if (!hasCommonAncestor(this,fromSource)){
             throw new IllegalArgumentException("Incompatible type of the parameter");
         }

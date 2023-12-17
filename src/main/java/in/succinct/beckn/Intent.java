@@ -90,5 +90,14 @@ public class Intent extends BecknObject implements TagGroupHolder {
         extendedAttributes.set("end_time",end_time,TIMESTAMP_FORMAT);
     }
 
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
+    }
 
 }

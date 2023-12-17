@@ -28,7 +28,8 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         home_delivery(1),
         store_pickup(2),
         store_pickup_and_home_delivery(1|2),
-        return_to_origin(4);
+        return_to_origin(4),
+        cancel(8);
 
         int bits;
         FulfillmentType(int bits){
@@ -67,6 +68,7 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
     public Agent getAgent() {
         return get(Agent.class,"agent");
     }
+
 
     public void setAgent(Agent agent) {
         set("agent", agent);
@@ -186,6 +188,12 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
     }
 
 
+    public SettlementDetails getSettlementDetails(){
+        return extendedAttributes.get(SettlementDetails.class, "settlement_details");
+    }
+    public void setSettlementDetails(SettlementDetails settlement_details){
+        extendedAttributes.set("settlement_details",settlement_details);
+    }
 
 
     public enum FulfillmentStatus {
@@ -195,9 +203,25 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         Order_picked_up,
         Out_for_delivery,
         Order_delivered,
-        Cancelled;
+        Cancelled,
+        Return_Initiated,
+        Return_Liquidated,
+        Return_Approved,
+        Return_Rejected,
+        Return_Delivered;
         public static class FulfillmentStatusConvertor extends EnumConvertor<FulfillmentStatus>{}
     }
+
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
+    }
+
 }
 
 

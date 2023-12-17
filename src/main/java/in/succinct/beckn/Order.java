@@ -1,6 +1,8 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.Fulfillment.FulfillmentType;
 import in.succinct.beckn.Order.Status.StatusConverter;
+import in.succinct.beckn.ReturnReasons.ReturnRejectReason;
 import org.json.simple.JSONArray;
 
 import java.util.Date;
@@ -63,11 +65,32 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
         set("billing",billing);
     }
 
+
     public Fulfillment getFulfillment(){
         return get(Fulfillment.class,"fulfillment");
     }
     public void setFulfillment(Fulfillment fulfillment){
         set("fulfillment",fulfillment);
+    }
+
+    public Fulfillment getPrimaryFulfillment(){
+        Fulfillments fulfillments = getFulfillments();
+        if (fulfillments == null || fulfillments.isEmpty()){
+            return null;
+        }
+        for (Fulfillment f : fulfillments){
+            if (f.getType() != null && (f.getType().matches(FulfillmentType.store_pickup) || f.getType().matches(FulfillmentType.home_delivery) )){
+                return f;
+            }
+        }
+        return null;
+    }
+    public void setPrimaryFulfillment(Fulfillment primaryFulfillment){
+        Fulfillments fulfillments = getFulfillments();
+        if (fulfillments == null ){
+            fulfillments = new Fulfillments();
+        }
+        fulfillments.add(primaryFulfillment,true);
     }
 
     public Fulfillments getFulfillments(){
@@ -332,11 +355,20 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
 
 
 
+
+
     public Returns getReturns(){
         return extendedAttributes.get(Returns.class, "returns");
     }
     public void setReturns(Returns r){
         extendedAttributes.set("returns",r);
+    }
+
+    public Refunds getRefunds(){
+        return extendedAttributes.get(Refunds.class, "refunds");
+    }
+    public void setRefunds(Refunds refunds){
+        extendedAttributes.set("refunds",refunds);
     }
 
     public static class Returns extends BecknObjectsWithId<Return>{
@@ -371,11 +403,11 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
             return !isOpen();
         }
 
-        public Fulfillment getFulfillment(){
-            return get(Fulfillment.class, "fulfillment");
+        public String getFulfillmentId(){
+            return get("fulfillment_id");
         }
-        public void setFulfillment(Fulfillment fulfillment){
-            set("fulfillment",fulfillment);
+        public void setFulfillmentId(String fulfillment_id){
+            set("fulfillment_id",fulfillment_id);
         }
 
         public String getReturnMessageId(){
@@ -395,6 +427,12 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
             setEnum("return_status",return_status);
         }
 
+        public ReturnRejectReason getReturnRejectReason(){
+            return getEnum(ReturnRejectReason.class, "return_reject_reason");
+        }
+        public void setReturnRejectReason(ReturnRejectReason return_reject_reason){
+            setEnum("return_reject_reason",return_reject_reason);
+        }
 
 
         public Amount getRefund(){
@@ -438,6 +476,44 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
         }
     }
 
+    public static class Refunds extends BecknObjectsWithId<Refund> {
+        public Refunds() {
+        }
+
+        public Refunds(String payload) {
+            super(payload);
+        }
+
+        public Refunds(JSONArray array) {
+            super(array);
+        }
+    }
+
+    public static class Refund extends BecknObjectWithId{
+
+        public Date getCreatedAt(){
+            return getTimestamp("created_at");
+        }
+        public void setCreatedAt(Date created_at){
+            set("created_at",created_at,TIMESTAMP_FORMAT);
+        }
+
+        public String getFulfillmentId(){
+            return get("fulfillment_id");
+        }
+        public void setFulfillmentId(String fulfillment_id){
+            set("fulfillment_id",fulfillment_id);
+        }
+
+        public NonUniqueItems getItems(){
+            return get(NonUniqueItems.class, "items");
+        }
+        public void setItems(NonUniqueItems items){
+            set("items",items);
+        }
+
+    }
+
     
     public String getBppTaxNumber(){
         return extendedAttributes.get("bpp_tax_number");
@@ -452,4 +528,14 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
         extendedAttributes.set("bap_tax_number",bap_tax_number);
     }
 
+
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
+    }
 }

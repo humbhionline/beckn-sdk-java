@@ -50,13 +50,14 @@ public class ReturnReasons extends BecknObjectsWithId<Option>{
         ITEM_PACKAGING_DAMAGED(IssueSubCategory.FULFILLMENT_PACKAGING_BAD),
         ITEM_USED(IssueSubCategory.ITEM_QUALITY),
         ITEM_INCOMPLETE(IssueSubCategory.ITEM_QUALITY),
-        ITEM_MISMATCH(IssueSubCategory.ITEM_MISMATCH)
-        ;
+        ITEM_MISMATCH(IssueSubCategory.ITEM_MISMATCH),
+        RETURN_PERIOD_ENDED(null),
+        FINAL_SALE(null);
 
         final IssueSubCategory issueSubCategory;
         ReturnRejectReason(IssueSubCategory issueSubCategory){
             this.issueSubCategory = issueSubCategory;
         }
-        EnumConvertor<ReturnRejectReason> convertor = new OrdinalBasedEnumConvertor<>(ReturnRejectReason.class);
+        public static final EnumConvertor<ReturnRejectReason> convertor = new OrdinalBasedEnumConvertor<>(ReturnRejectReason.class);
     }
 }

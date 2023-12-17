@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.Duration;
 import java.util.Date;
 
 public class TestJsonWrapper {
@@ -30,5 +31,10 @@ public class TestJsonWrapper {
         System.out.println(range.getEnd());
 
 
+    }
+
+    @Test
+    public void testDuration(){
+        System.out.println(Duration.ofDays(3));
     }
 }

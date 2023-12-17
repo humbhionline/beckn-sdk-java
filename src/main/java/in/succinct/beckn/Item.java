@@ -524,4 +524,15 @@ public class Item extends BecknObjectWithId implements TagGroupHolder {
     }
 
 
+    /* Tage Group s*/
+
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
+    }
 }
