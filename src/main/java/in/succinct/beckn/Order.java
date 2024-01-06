@@ -322,18 +322,20 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
     }
 
 
-    public ReconStatus getCounterPartyReconStatus(){
-        return extendedAttributes.getEnum(ReconStatus.class, "counter_party_recon_status");
+    public ReconStatus getCounterpartyReconStatus(){
+        return extendedAttributes.getEnum(ReconStatus.class, "counterparty_recon_status");
     }
-    public void setCounterPartyReconStatus(ReconStatus counter_party_recon_status){
-        extendedAttributes.setEnum("counter_party_recon_status",counter_party_recon_status);
+    public void setCounterpartyReconStatus(ReconStatus counterparty_recon_status){
+        extendedAttributes.setEnum("counterparty_recon_status",counterparty_recon_status);
     }
 
-    public Double getCounterPartyDiffAmount(){
-        return extendedAttributes.getDouble("counter_party_diff_amount",null);
+
+
+    public Amount getCounterpartyDiffAmount(){
+        return get(Amount.class, "counterparty_diff_amount");
     }
-    public void setCounterPartyDiffAmount(Double counter_party_diff_amount){
-        extendedAttributes.set("counter_party_diff_amount",counter_party_diff_amount);
+    public void setCounterpartyDiffAmount(Amount counterparty_diff_amount){
+        set("counterparty_diff_amount",counterparty_diff_amount);
     }
 
     public Descriptor getReconMessage(){
@@ -388,6 +390,7 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
     public static class Return extends BecknObjectWithId{
         public Return() {
         }
+
 
         public boolean isOpen(){
             ReturnStatus returnStatus = getReturnStatus();
@@ -456,6 +459,12 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
             set("created_at",created_at,TIMESTAMP_FORMAT);
         }
 
+        public boolean isLiquidated(){
+            return getBoolean("liquidated");
+        }
+        public void setLiquidated(boolean liquidated){
+            set("liquidated",liquidated);
+        }
 
         public enum ReturnStatus {
             REQUESTED,

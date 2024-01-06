@@ -86,9 +86,13 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         set("state", state);
     }
 
+    private static final FulfillmentStatusConvertor convertor = new FulfillmentStatusConvertor();
+    public EnumConvertor<FulfillmentStatus> getFulfillmentStatusConvertor(){
+        return convertor;
+    }
     public void setFulfillmentStatus(FulfillmentStatus state) {
         if (state != null ) {
-            getState(true).getDescriptor(true).setEnum("code", state, new FulfillmentStatusConvertor());
+            getState(true).getDescriptor(true).setEnum("code", state, getFulfillmentStatusConvertor());
         }else {
             State s = getState();
             if (s != null){
@@ -105,7 +109,7 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         if (s != null){
             Descriptor d  = s.getDescriptor();
             if (d != null){
-                return d.getEnum(FulfillmentStatus.class,"code", new FulfillmentStatusConvertor());
+                return d.getEnum(FulfillmentStatus.class,"code", getFulfillmentStatusConvertor());
             }
         }
         return null;

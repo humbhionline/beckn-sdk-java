@@ -210,7 +210,10 @@ public class SellerException {
 
     public static class PaymentNotSupported extends BecknException {
         public PaymentNotSupported() {
-            super("40004", makeSentence("PaymentNotSupported"));
+            this(makeSentence("PaymentNotSupported"));
+        }
+        public PaymentNotSupported(String message){
+            super("40004", message);
         }
     }
 

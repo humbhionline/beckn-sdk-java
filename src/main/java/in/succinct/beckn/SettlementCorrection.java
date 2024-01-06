@@ -5,13 +5,34 @@ import in.succinct.beckn.Order.Status;
 
 
 public class SettlementCorrection extends BecknObject {
-    public String getIssueId() {
-        return get("issue_id");
+
+    public String getIssueInitiatorRef(){
+        return get("issue_initiator_ref");
+    }
+    public void setIssueInitiatorRef(String issue_initiator_ref){
+        set("issue_initiator_ref",issue_initiator_ref);
+    }
+    
+    public String getIssueResponderRef(){
+        return get("issue_responder_ref");
+    }
+    public void setIssueResponderRef(String issue_responder_ref){
+        set("issue_responder_ref",issue_responder_ref);
     }
 
-    public void setIssueId(String issue_id) {
-        set("issue_id", issue_id);
+    public String getIssueType(){
+        return get("issue_type");
     }
+    public void setIssueType(String issue_type){
+        set("issue_type",issue_type);
+    }
+    public String getIssueSubtype(){
+        return get("issue_subtype");
+    }
+    public void setIssueSubtype(String issue_subtype){
+        set("issue_subtype",issue_subtype);
+    }
+
 
     public String getOrderId() {
         return get("order_id");
@@ -29,6 +50,7 @@ public class SettlementCorrection extends BecknObject {
         set("order_amount", order_amount);
     }
 
+
     public Amount getOrderCorrectionAmount() {
         return get(Amount.class, "order_correction_amount");
     }
@@ -45,20 +67,20 @@ public class SettlementCorrection extends BecknObject {
         setEnum("order_state", order_state);
     }
 
-    public double getPreviousSettledAmount() {
-        return getDouble("previous_settled_amount");
+
+
+    public Amount getPreviousSettledAmount(){
+        return get(Amount.class, "previous_settled_amount");
+    }
+    public void setPreviousSettledAmount(Amount previous_settled_amount){
+        set("previous_settled_amount",previous_settled_amount);
     }
 
-    public void setPreviousSettledAmount(double previous_settled_amount) {
-        set("previous_settled_amount", previous_settled_amount);
+    public BecknStrings getPrevSettlementReferenceNo(){
+        return get(BecknStrings.class, "prev_settlement_reference_no");
     }
-
-    public String getPreviousSettlementReference() {
-        return get("previous_settlement_reference");
-    }
-
-    public void setPreviousSettlementReference(String previous_settlement_reference) {
-        set("previous_settlement_reference", previous_settlement_reference);
+    public void setPrevSettlementReferenceNo(BecknStrings prev_settlement_reference_no){
+        set("prev_settlement_reference_no",prev_settlement_reference_no);
     }
 
     public String getSettlementId() {
@@ -85,14 +107,12 @@ public class SettlementCorrection extends BecknObject {
         setEnum("recon_status", recon_status, ReconStatus.convertor);
     }
 
-    public Double getDiffAmount() {
-        return getDouble("diff_amount", null);
+    public Amount getDiffAmount(){
+        return get(Amount.class, "diff_amount");
     }
-
-    public void setDiffAmount(Double diff_amount) {
-        set("diff_amount", diff_amount);
+    public void setDiffAmount(Amount diff_amount){
+        set("diff_amount",diff_amount);
     }
-
     public Descriptor getMessage() {
         return get(Descriptor.class, "message");
     }
