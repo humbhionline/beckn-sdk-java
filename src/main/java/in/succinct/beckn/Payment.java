@@ -25,6 +25,8 @@ public class Payment extends BecknObjectWithId {
     static final Set<String> TL_METHODS = new HashSet<>(){{
        add("http/get");
        add("http/post");
+       add("upi");
+       add("payto");
     }};
     public void setTlMethod(String tl_method){
         if  (tl_method == null || TL_METHODS.contains(tl_method)) {

@@ -7,8 +7,9 @@ import java.util.Set;
 public class Scalar extends BecknObject {
     public Scalar() { super(); }
 
+
     public double getValue(){
-        return get("value");
+        return get("value",0D);
     }
     public void setValue(double value){
         set("value",value);

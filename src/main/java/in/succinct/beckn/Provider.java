@@ -5,7 +5,7 @@ import org.json.simple.JSONArray;
 import java.time.Duration;
 import java.util.Date;
 
-public class Provider extends BecknObjectWithId {
+public class Provider extends BecknObjectWithId implements TagGroupHolder {
     public Provider(){
         super();
     }
@@ -61,12 +61,6 @@ public class Provider extends BecknObjectWithId {
         extendedAttributes.set("bpp_id",bpp_id);
     }
 
-    public Tags getTags(){
-        return get(Tags.class, "tags");
-    }
-    public void setTags(Tags tags){
-        set("tags",tags);
-    }
 
     public long getTtl(){
         String ttl = get("ttl");

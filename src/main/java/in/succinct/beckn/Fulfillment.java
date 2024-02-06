@@ -1,7 +1,6 @@
 package in.succinct.beckn;
 
 import in.succinct.beckn.Fulfillment.FulfillmentStatus.FulfillmentStatusConvertor;
-import org.json.simple.JSONArray;
 
 import java.time.Duration;
 
@@ -31,7 +30,7 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         return_to_origin(4),
         cancel(8);
 
-        int bits;
+        final int bits;
         FulfillmentType(int bits){
             this.bits = bits;
         }
