@@ -16,8 +16,8 @@ public class BecknException extends RuntimeException {
         return errorCode;
     }
 
-
     public static String makeSentence(String camel) {
+
 
         List<Integer> upper = new ArrayList<Integer>();
         byte[] bytes = camel.getBytes();

@@ -17,6 +17,11 @@ public class Subscriber extends BecknObject{
     public static final String SUBSCRIBER_TYPE_ROOT_REGISTRY = "RREG";
     public static final String SUBSCRIBER_TYPE_BG = "BG";
     public static final String SUBSCRIBER_STATUS_SUBSCRIBED = "SUBSCRIBED";
+    public static final String SUBSCRIBER_STATUS_INITIATED = "INITIATED";
+    public static final String SUBSCRIBER_STATUS_UNDER_SUBSCRIPTION = "UNDER_SUBSCRIPTION";
+    public static final String SUBSCRIBER_STATUS_INVALID_SSL = "INVALID_SSL";
+    public static final String SUBSCRIBER_STATUS_UNSUBSCRIBED = "UNSUBSCRIBED";
+
 
     public static final String[] BPP_ACTIONS = new String[]{"search", "select", "init", "confirm", "track", "issue", "issue_status",
             "cancel", "update", "status", "rating", "support","get_cancellation_reasons","get_return_reasons","get_rating_categories","get_feedback_categories"};
@@ -27,7 +32,7 @@ public class Subscriber extends BecknObject{
         }
     }});
 
-    public static final String[] BAP_ACTIONS = new String[]{"on_search", "on_select", "on_init", "on_confirm", "on_track",
+    public static final String[] BAP_ACTIONS = new String[]{"on_search", "on_select", "on_init", "on_confirm", "on_track", "on_issue","on_issue_status",
             "on_cancel", "on_update", "on_status", "on_rating", "on_support","cancellation_reasons","return_reasons","rating_categories","feedback_categories"};
 
     public static final Set<String> BAP_ACTION_SET = Collections.unmodifiableSet(new HashSet<>(){{
@@ -142,6 +147,19 @@ public class Subscriber extends BecknObject{
         set("valid_until",valid_to,TIMESTAMP_FORMAT);
     }
 
+    public Date getCreated(){
+        return getTimestamp("created");
+    }
+    public void setCreated(Date created){
+        set("created",created,TIMESTAMP_FORMAT);
+    }
+    public Date getUpdated(){
+        return getTimestamp("updated");
+    }
+    public void setUpdated(Date updated){
+        set("updated",updated,TIMESTAMP_FORMAT);
+    }
+
     public Set<String> getSupportedActions(){
         if (ObjectUtil.equals(getType(),Subscriber.SUBSCRIBER_TYPE_BAP)){
             return BAP_ACTION_SET;
@@ -218,4 +236,6 @@ public class Subscriber extends BecknObject{
             super(payload);
         }
     }
+
+
 }

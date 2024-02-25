@@ -89,15 +89,16 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
         Fulfillments fulfillments = getFulfillments();
         if (fulfillments == null ){
             fulfillments = new Fulfillments();
+            setFulfillments(fulfillments);
         }
         fulfillments.add(primaryFulfillment,true);
     }
 
     public Fulfillments getFulfillments(){
-        return get(Fulfillments.class, "fulfillments");
+        return extendedAttributes.get(Fulfillments.class, "fulfillments");
     }
     public void setFulfillments(Fulfillments fulfillments){
-        set("fulfillments",fulfillments);
+        extendedAttributes.set("fulfillments",fulfillments);
     }
 
     public Quote getQuote(){

@@ -26,30 +26,30 @@ public class Item extends BecknObjectWithId implements TagGroupHolder {
     }
 
     public BecknStrings getCategoryIds(){
-        return get(BecknStrings.class, "category_ids");
+        return extendedAttributes.get(BecknStrings.class, "category_ids");
     }
     public void setCategoryIds(BecknStrings category_ids){
-        set("category_ids",category_ids);
+        extendedAttributes.set("category_ids",category_ids);
     }
 
     public BecknStrings getLocationIds(){
-        return get(BecknStrings.class, "location_ids");
+        return extendedAttributes.get(BecknStrings.class, "location_ids");
     }
     public void setLocationIds(BecknStrings location_ids){
-        set("location_ids",location_ids);
+       extendedAttributes.set("location_ids",location_ids);
     }
 
     public BecknStrings getPaymentIds(){
-        return get(BecknStrings.class, "payment_ids");
+        return extendedAttributes.get(BecknStrings.class, "payment_ids");
     }
     public void setPaymentIds(BecknStrings payment_ids){
-        set("payment_ids",payment_ids);
+        extendedAttributes.set("payment_ids",payment_ids);
     }
     public BecknStrings getFulfillmentIds(){
-        return get(BecknStrings.class, "fulfillment_ids");
+        return extendedAttributes.get(BecknStrings.class, "fulfillment_ids");
     }
     public void setFulfillmentIds(BecknStrings fulfillment_ids){
-        set("fulfillment_ids",fulfillment_ids);
+        extendedAttributes.set("fulfillment_ids",fulfillment_ids);
     }
 
     public Descriptor getDescriptor(){
@@ -108,6 +108,19 @@ public class Item extends BecknObjectWithId implements TagGroupHolder {
     public void setItemQuantity(ItemQuantity quantity){
         set("quantity",quantity);
     }
+
+    public ItemQuantity getTentativeItemQuantity(){
+        JSONObject q = extendedAttributes.get("quantity");
+        if (q == null || q.containsKey("count") || q.keySet().isEmpty()){
+            return null;
+        }
+        return extendedAttributes.get(ItemQuantity.class,"quantity");
+    }
+    public void setTentativeItemQuantity(ItemQuantity quantity){
+        extendedAttributes.set("quantity",quantity);
+    }
+
+
 
     public Quantity getQuantity(){
         JSONObject q = get("quantity");

@@ -114,17 +114,17 @@ public class Payment extends BecknObjectWithId {
         }
     }
 
-    public CollectedBy getCollectedBy(){
-        String s = get("collected_by");
-        return s == null ? null : CollectedBy.valueOf(s);
-    }
-
     public enum CollectedBy {
         BAP,
         BPP
     }
+    public CollectedBy getCollectedBy(){
+        String s = extendedAttributes.get("collected_by");
+        return s == null ? null : CollectedBy.valueOf(s);
+    }
+
     public void setCollectedBy(CollectedBy collected_by){
-        set("collected_by",collected_by == null ? null : collected_by.toString());
+        extendedAttributes.set("collected_by",collected_by == null ? null : collected_by.toString());
     }
 
     public boolean isExtendedAttributesDisplayed(){

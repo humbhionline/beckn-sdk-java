@@ -9,7 +9,7 @@ public class Scalar extends BecknObject {
 
 
     public double getValue(){
-        return get("value",0D);
+        return getDouble("value" ,0D);
     }
     public void setValue(double value){
         set("value",value);
@@ -23,14 +23,14 @@ public class Scalar extends BecknObject {
     }
 
     public double getEstimatedValue(){
-        return get("estimated_value");
+        return getDouble("estimated_value",0D);
     }
     public void setEstimatedValue(double estimated_value){
         set("estimated_value",estimated_value);
     }
 
     public double getComputedValue(){
-        return get("computed_value");
+        return getDouble("computed_value",0D);
     }
     public void setComputedValue(double computed_value){
         set("computed_value",computed_value);

@@ -63,12 +63,13 @@ public class Provider extends BecknObjectWithId implements TagGroupHolder {
 
 
     public long getTtl(){
-        String ttl = get("ttl");
+        String ttl = extendedAttributes.get("ttl");
         return ttl == null ? 10 : Duration.parse(ttl).getSeconds();
     }
     public void setTtl(long seconds){
-        set("ttl",Duration.ofSeconds(seconds).toString());
+        extendedAttributes.set("ttl",Duration.ofSeconds(seconds).toString());
     }
+
 
     public Offers getOffers(){
         return get(Offers.class, "offers");

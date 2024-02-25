@@ -285,4 +285,11 @@ public class SellerException {
         } 
     }
 
+    public static class NoDataAvailable extends BecknException {
+        public NoDataAvailable(){
+            super("90001",makeSentence("No data available"));
+        }
+    }
+
+
 }

@@ -194,7 +194,7 @@ public class Request extends BecknObject {
         map.put("keyId",keyBuilder.toString());
         map.put("algorithm","ed25519");
         long created_at = System.currentTimeMillis()/1000L;
-        long expires_at = created_at + (getContext() == null ? 10 : getContext().getTtl());
+        long expires_at = created_at + (getContext() == null ? 10 : getContext().getTtl())*1000L;
         map.put("created",Long.toString(created_at));
         map.put("expires",Long.toString(expires_at));
         map.put("headers","(created) (expires) digest");
