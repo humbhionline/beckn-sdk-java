@@ -42,10 +42,10 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
             set("title",title);
         }
         public Item getItem(){
-            return get(Item.class, "item");
+            return extendedAttributes.get(Item.class, "item");
         }
         public void setItem(Item item){
-            set("item",item);
+            extendedAttributes.set("item",item);
         }
         public Price getPrice(){
             return get(Price.class, "price");
@@ -55,11 +55,11 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
         }
 
         public BreakUpCategory getType(){
-            String s = get("type");
+            String s = extendedAttributes.get("type");
             return s == null ? null : BreakUpCategory.valueOf(s);
         }
         public void setType(BreakUpCategory type){
-            set("type",type == null ? null : type.toString());
+            extendedAttributes.set("type",type == null ? null : type.toString());
         }
 
         public boolean isExtendedAttributesDisplayed(){

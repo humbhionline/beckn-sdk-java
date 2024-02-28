@@ -107,10 +107,10 @@ public class Provider extends BecknObjectWithId implements TagGroupHolder {
         set("time",time);
     }
 
-    public boolean isRateable(){
-        return getBoolean("rateable");
+    public Boolean isRateable(){
+        return getBoolean("rateable",null);
     }
-    public void setRateable(boolean rateable){
+    public void setRateable(Boolean rateable){
         set("rateable",rateable);
     }
 

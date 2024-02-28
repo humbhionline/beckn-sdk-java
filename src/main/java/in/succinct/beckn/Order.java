@@ -23,11 +23,11 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
     }
 
     public Location getProviderLocation(){
-        return get(Location.class,"provider_location");
+        return extendedAttributes.get(Location.class,"provider_location");
     }
 
     public void setProviderLocation(Location location){
-        set("provider_location",location);
+        extendedAttributes.set("provider_location",location);
     }
 
     public NonUniqueItems getItems(){
