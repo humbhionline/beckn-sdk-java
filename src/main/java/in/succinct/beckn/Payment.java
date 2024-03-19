@@ -1,6 +1,7 @@
 package in.succinct.beckn;
 
 import in.succinct.beckn.Payment.PaymentType.PaymentTypeConverter;
+import org.json.simple.JSONObject;
 
 import java.time.Duration;
 import java.util.HashSet;
@@ -12,6 +13,9 @@ public class Payment extends BecknObjectWithId {
     }
     public Payment(String payload){
         super(payload);
+    }
+    public Payment(JSONObject payment){
+        super(payment);
     }
     public String getUri(){
         return get("uri");
