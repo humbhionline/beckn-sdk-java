@@ -6,6 +6,9 @@ public class Catalog extends BecknObjectWithId {
     public Catalog(){
         super();
     }
+    public Catalog(String payload){
+        super(payload);
+    }
 
     public Descriptor getDescriptor(){
         return get(Descriptor.class,"bpp/descriptor");

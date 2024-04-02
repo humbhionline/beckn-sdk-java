@@ -22,9 +22,6 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
     }
 
     public <T extends  BecknObjectBase> void update(T from){
-        if (from == null){
-            return;
-        }
         update(from,true);
     }
     public <T extends  BecknObjectBase> void update(T from, boolean reset){
@@ -32,6 +29,9 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
     }
     @SuppressWarnings({"unchecked", "rawtypes"})
     private <T extends  BecknObjectBase> void update(T fromSource , JSONAwareWrapperCreator boCreator, boolean reset){
+        if (fromSource == null){
+            return;
+        }
         if (this == fromSource){
             return;
         }
@@ -106,10 +106,10 @@ public class BecknObjectBase extends BecknAware<JSONObject> {
                 if (BecknObject.class.isAssignableFrom(sourceFieldType) && BecknObject.class.isAssignableFrom(targetFieldType)) {
                     if (((BecknObject)sourceField).hasAdditionalProperties() ){
                         //IGM Will bomb!! as we need to start right from request
-                        if (reset){
-                            ((BecknObject) targetField).setInner(((BecknObject) sourceField).getInner());
-                        }else {
-                            for (Entry fieldEntry : (Iterable<Entry>) (((BecknObject) sourceField).getInner()).entrySet()) {
+                        for (Entry fieldEntry : (Iterable<Entry>) (((BecknObject) sourceField).getInner()).entrySet()) {
+                            if (reset){
+                                ((BecknObject) targetField).getInner().put(fieldEntry.getKey(), fieldEntry.getValue());
+                            }else {
                                 ((BecknObject) targetField).getInner().putIfAbsent(fieldEntry.getKey(), fieldEntry.getValue());
                             }
                         }

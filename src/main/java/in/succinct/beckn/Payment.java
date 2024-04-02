@@ -42,6 +42,7 @@ public class Payment extends BecknObjectWithId {
     public Params getParams(){
         return get(Params.class,"params");
     }
+
     public void setParams(Params params){
         set("params",params);
     }
@@ -67,8 +68,8 @@ public class Payment extends BecknObjectWithId {
 
     public enum PaymentStatus {
         PAID,
-        NOT_PAID,
-        PENDING;
+        NOT_PAID;
+        //PENDING;
 
         public String toString(){
             return super.toString().replace('_','-');

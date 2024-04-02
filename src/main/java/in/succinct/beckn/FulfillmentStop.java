@@ -10,6 +10,9 @@ public class FulfillmentStop extends BecknObject {
     public FulfillmentStop(JSONObject stop) {
         super(stop);
     }
+    public FulfillmentStop(String payload){
+        super(payload);
+    }
 
     public Location getLocation(){
         return get(Location.class,"location");
