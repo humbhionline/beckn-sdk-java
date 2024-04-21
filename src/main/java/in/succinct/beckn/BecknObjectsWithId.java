@@ -55,16 +55,19 @@ public class BecknObjectsWithId<T extends BecknObjectWithId> extends BecknObject
             t.setDefaultId();
         }
         List<T> list = map.get(t.getId());
-        if (unique && !list.isEmpty()){
-            if (list.size() == 1){
-                list.get(0).update(t,reset);
-            }else {
+        if (list.size() == 1){
+            if (unique || reset) {
+                list.get(0).update(t, reset);
+                return;
+            }
+        }else if (list.size() > 1){
+            if (unique) {
                 throw new RuntimeException("Multiple IDS found");
             }
-        }else {
-            list.add(t);
-            super.add(t,reset);
         }
+
+        list.add(t);
+        super.add(t,false);
     }
     public void remove(T t){
         if (ObjectUtil.isVoid(t.getId())){

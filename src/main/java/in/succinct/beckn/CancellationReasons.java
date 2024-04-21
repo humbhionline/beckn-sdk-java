@@ -73,6 +73,10 @@ public class CancellationReasons extends BecknObjectsWithId<Option>{
             return (bits & USABLE_BY_BUYER_PARTY) > 0;
         }
 
+        public boolean isUsedForReturns(){
+            return (bits & TRIGGERS_RTO) > 0;
+        }
+
         public static final EnumConvertor<CancellationReasonCode> convertor = new OrdinalBasedEnumConvertor<>(CancellationReasonCode.class);
     }
 }

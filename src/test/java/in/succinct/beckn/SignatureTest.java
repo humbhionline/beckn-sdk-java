@@ -3,6 +3,7 @@ package in.succinct.beckn;
 import com.venky.core.collections.IgnoreCaseMap;
 import com.venky.core.collections.SequenceMap;
 import com.venky.core.security.Crypt;
+import com.venky.core.string.StringUtil;
 import com.venky.core.util.ObjectHolder;
 import com.venky.extension.Registry;
 import org.bouncycastle.asn1.DEROctetString;
@@ -16,6 +17,8 @@ import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPrivateKey;
+import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jcajce.provider.digest.Blake2b.Blake2b512;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -25,6 +28,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.ObjectInputFilter.Config;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -69,24 +74,54 @@ public class SignatureTest {
 
     @Test
     public void testsign() throws Exception{
-        String payload = "{\"subscriber_id\":\"mandi.succinct.in\",\"challenge\":\"P+3enc5zd44uKYIs3mg8yqOHpHPH+zJjap9buhrHg+Gx+rXFyRgVSoeXJADXmqbOGwXjJ9hkv\\/y++FG3LuSNcSw6GMv8uwhapuTbcdhIgZo6JUBgBaiHJMzaoes0euyogGyY7ktWWNiH7mti6b2N3ZTOtYlGkFM+rlImSEBEX\\/skaoH4mlvIu448sup1EjRwqQqVq\\/PMacrHJgoLk72QyOH41U\\/Gv46NBmB5lgqmrQc3O+WW5iCGht9yqC2cWaSytK0E7Xp7d2LKtQLgUGHj\\/DNk9i6\\/oPuIN5NSIwaUkC2H1UQ7N0iLEoTyS+X7zHYMcpXGDtQk5Y35iAuoozpuvA==\"}";
+        //String payload = "{\"subscriber_id\":\"mandi.succinct.in\",\"challenge\":\"P+3enc5zd44uKYIs3mg8yqOHpHPH+zJjap9buhrHg+Gx+rXFyRgVSoeXJADXmqbOGwXjJ9hkv\\/y++FG3LuSNcSw6GMv8uwhapuTbcdhIgZo6JUBgBaiHJMzaoes0euyogGyY7ktWWNiH7mti6b2N3ZTOtYlGkFM+rlImSEBEX\\/skaoH4mlvIu448sup1EjRwqQqVq\\/PMacrHJgoLk72QyOH41U\\/Gv46NBmB5lgqmrQc3O+WW5iCGht9yqC2cWaSytK0E7Xp7d2LKtQLgUGHj\\/DNk9i6\\/oPuIN5NSIwaUkC2H1UQ7N0iLEoTyS+X7zHYMcpXGDtQk5Y35iAuoozpuvA==\"}";
+        String payload = StringUtil.read(getClass().getResourceAsStream("/messages/sathiclap.json"));
+        //payload.setLength(payload.length()-1);
 
         Request request = new Request();
         KeyPair pair = Crypt.getInstance().generateKeyPair(EdDSAParameterSpec.Ed25519,256);
-        KeyPair pair2 = Crypt.getInstance().generateKeyPair("X25519",256);
 
         String privateKey = Crypt.getInstance().getBase64Encoded(pair.getPrivate());
         String publicKey  = Crypt.getInstance().getBase64Encoded(pair.getPublic());
 
 
-        String sign = Request.generateSignature(payload,privateKey);
-        Assert.assertTrue(Request.verifySignature(sign,payload,publicKey));
+        String created="1712224043";
+        String expires="1712254043";
 
+        String signingString = new Request(payload.toString()).getSigningString(Long.parseLong(created),Long.parseLong(expires));
 
-        Assert.assertTrue(Request.verifySignature(sign,payload,publicKey));
+        String sign = Request.generateSignature(signingString,privateKey);
+        Assert.assertTrue(Request.verifySignature(sign,signingString,publicKey));
+
+        System.out.println(String.format("Payload:\n--\n%s\n--" , payload));
+        System.out.println(String.format("Private:\n--\n\tPem: %s\nor\n\tRaw: %s\n--" , privateKey, getRawPrivateKey(privateKey)));
+        System.out.println(String.format("PublicKey:\n--\n\tPem: %s\nor\n\tRaw: %s\n--" , publicKey, getRawPublicKey(publicKey)));
+
+        System.out.println(String.format("Signing String:\n--\n%s\n--" , signingString));
+        System.out.println(String.format("Signature: \n--\n%s\n--" , sign));
 
     }
 
+    public String getRawPrivateKey(String pem) throws Exception{
+        PrivateKey privateKey = Crypt.getInstance().getPrivateKey("Ed25519",pem);
+        Assert.assertNotNull(privateKey);
+        BCEdDSAPrivateKey privateKey1 = (BCEdDSAPrivateKey)privateKey;
+        Field f = privateKey1.getClass().getSuperclass()
+                .getDeclaredField("eddsaPrivateKey");
+        f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+        Ed25519PrivateKeyParameters privateKeyParameters1 = (Ed25519PrivateKeyParameters) f.get(privateKey1);
+        return Crypt.getInstance().toBase64(privateKeyParameters1.getEncoded());
+    }
+
+    public String getRawPublicKey (String pem) throws Exception{
+        PublicKey publicKey = Crypt.getInstance().getPublicKey("Ed25519", pem);
+        Assert.assertNotNull(publicKey);
+        BCEdDSAPublicKey publicKey1 = (BCEdDSAPublicKey)publicKey;
+        Field f = publicKey1.getClass().getSuperclass().getDeclaredField("eddsaPublicKey");
+        f.setAccessible(true); //BC Desnot expose this hence this reflection stuff.
+        Ed25519PublicKeyParameters publicKeyParameters1 = (Ed25519PublicKeyParameters) f.get(publicKey1);
+        return Crypt.getInstance().toBase64(publicKeyParameters1.getEncoded());
+    }
 
 
     @Test
@@ -313,4 +348,7 @@ public class SignatureTest {
         Map<String,String> map = new Request().extractAuthorizationParams("Authorization",httpHeaders);
         System.out.println(map.toString());
     }
+
+
+
 }
