@@ -22,7 +22,15 @@ public class Context extends BecknObject {
     }
 
     public String getCountry(){
-        return get("country");
+        if (!ObjectUtil.isVoid(getVersion()) ){
+            if(getLocation() != null && getLocation().getCountry() != null ){
+                return getLocation().getCountry().getCode();
+            }else {
+                return null;
+            }
+        }else {
+            return get("country");
+        }
     }
 
     public String getVersion(){
@@ -133,13 +141,23 @@ public class Context extends BecknObject {
         if (ObjectUtil.isVoid(getVersion())){
             set("city",city);
         }else {
-            setLocation(new Location());
+            if (getLocation() == null) {
+                setLocation(new Location());
+            }
             getLocation().setCity(new City());
             getLocation().getCity().setCode(city);
         }
     }
     public void setCountry(String country){
-        set("country",country);
+        if (ObjectUtil.isVoid(getVersion())){
+            set("country",country);
+        }else {
+            if (getLocation() == null) {
+                setLocation(new Location());
+            }
+            getLocation().setCountry(new Country());
+            getLocation().getCountry().setCode(country);
+        }
     }
 
     public Location getLocation(){
