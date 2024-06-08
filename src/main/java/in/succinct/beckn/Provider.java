@@ -123,6 +123,17 @@ public class Provider extends BecknObjectWithId implements TagGroupHolder {
     public void setFssaiLicenceNo(String fssai_licence_no){
         extendedAttributes.set("fssai_licence_no",fssai_licence_no);
     }
+
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
+    }
+
     public ServiceablityTags getServiceablityTags(){
         return extendedAttributes.get(ServiceablityTags.class, "tags");
     }

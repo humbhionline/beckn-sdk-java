@@ -1,5 +1,7 @@
 package in.succinct.beckn;
 
+import com.venky.core.string.StringUtil;
+
 public class TagGroup extends BecknObjectWithId{
 
     public TagGroup(){
@@ -50,7 +52,7 @@ public class TagGroup extends BecknObjectWithId{
 
 
     public String getValue(){
-        return get("value");
+        return StringUtil.valueOf(get("value"));
     }
     public void setValue(String value){
         set("value",value);

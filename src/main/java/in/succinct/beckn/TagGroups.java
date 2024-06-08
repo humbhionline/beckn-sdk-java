@@ -20,20 +20,20 @@ public class TagGroups extends BecknObjectsWithId<TagGroup>{
     public void setTag(String tagGroup, String code, String value){
         TagGroup tg = get(tagGroup);
         if (tg == null){
-            tg = new TagGroup();
+            tg = getObjectCreator().create(TagGroup.class);
             tg.setId(tagGroup);
             add(tg);
         }
         TagGroups tagList = tg.getList();
         if (tagList == null){
-            tagList = new TagGroups();
+            tagList = getObjectCreator().create(TagGroups.class);
             tg.setList(tagList);
         }
 
         TagGroup tag = tagList.get(code);
         if (tag == null){
             if (value != null) {
-                tag = new TagGroup();
+                tag = getObjectCreator().create(TagGroup.class);
                 tag.setId(code);
                 tag.setValue(value);
                 tagList.add(tag);
