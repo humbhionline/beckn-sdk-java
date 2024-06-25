@@ -1,6 +1,8 @@
 package in.succinct.beckn;
 
-public class Category extends BecknObjectWithId{
+import java.time.Duration;
+
+public class Category extends BecknObjectWithId implements  TagGroupHolder{
     public Category(){
         super();
     }
@@ -40,5 +42,36 @@ public class Category extends BecknObjectWithId{
             setDescriptor(descriptor);
         }
         descriptor.setCode(category_code.toString());
+    }
+
+    public String getParentCategoryId(){
+        return get("parent_category_id");
+    }
+    public void setParentCategoryId(String parent_category_id){
+        set("parent_category_id",parent_category_id);
+    }
+    public Long getTtl(){
+        String ttl = get("ttl");
+        return ttl == null ? null : Duration.parse(ttl).getSeconds();
+    }
+    public void setTtl(Long ttl){
+        set("ttl",ttl == null ? null  :Duration.ofSeconds(ttl).toString());
+    }
+
+    public Time getTime(){
+        return get(Time.class,"time");
+    }
+    public void setTime(Time time){
+        set("time",time);
+    }
+
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
     }
 }

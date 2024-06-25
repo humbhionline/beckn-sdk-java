@@ -13,5 +13,12 @@ public class AddOn extends BecknObjectWithId{
     public void setPrice(Price price){
         set("price",price);
     }
+    public ItemQuantity getItemQuantity(){
+        return get(ItemQuantity.class, "quantity");
+    }
+    public void setItemQuantity(ItemQuantity quantity){
+        set("quantity",quantity);
+    }
+
 
 }

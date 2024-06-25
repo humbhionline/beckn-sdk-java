@@ -30,19 +30,7 @@ public class Rating extends BecknObjectWithId{
         set("value",value);
     }
 
-    public FeedbackForm getFeedbackForm(){
-        return get(FeedbackForm.class,"feedback_form");
-    }
-    public void setFeedbackForm(FeedbackForm feedback_form){
-        set("feedback_form",feedback_form);
-    }
 
-    public String getFeedbackId(){
-        return get("feedback_id");
-    }
-    public void setFeedbackId(String feedback_id){
-        set("feedback_id",feedback_id);
-    }
 
 
     public enum RatingCategory {

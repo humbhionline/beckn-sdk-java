@@ -2,15 +2,12 @@ package in.succinct.beckn;
 
 import com.venky.core.util.ObjectHolder;
 import com.venky.core.util.ObjectUtil;
-import com.venky.geo.GeoCoder;
 import com.venky.geo.GeoCoordinate;
-import com.venky.geo.GeoLocation;
-import org.json.simple.JSONObject;
 
 import java.math.BigDecimal;
 import java.util.StringTokenizer;
 
-public class Location extends BecknObjectWithId {
+public class Location extends BecknObjectWithId implements AddressHolder{
     public Location() {
         super();
     }
@@ -47,11 +44,26 @@ public class Location extends BecknObjectWithId {
         }
     }
 
+    public String getDistrict(){
+        return get("district");
+    }
+    public void setDistrict(String district){
+        set("district",district);
+    }
+
+
     public City getCity(){
         return get(City.class,"city");
     }
     public void setCity(City city){
         set("city",city);
+    }
+
+    public State getState(){
+        return get(State.class, "state");
+    }
+    public void setState(State state){
+        set("state",state);
     }
 
     public Country getCountry(){
@@ -68,11 +80,13 @@ public class Location extends BecknObjectWithId {
         set("circle",circle);
     }
 
+
+
     public Address getAddress(){
-        return get(Address.class,"address");
+        return AddressHolder.super.getAddress();
     }
     public void setAddress(Address address){
-        set("address",address);
+        AddressHolder.super.setAddress(address);
     }
 
     public Descriptor getDescriptor(){
@@ -89,4 +103,33 @@ public class Location extends BecknObjectWithId {
     public void setTime(Time time){
         set("time",time);
     }
+
+    public String getMapUrl(){
+        return get("map_url");
+    }
+    public void setMapUrl(String map_url){
+        set("map_url",map_url);
+    }
+
+    public String getAreaCode(){
+        return get("area_code");
+    }
+    public void setAreaCode(String area_code){
+        set("area_code",area_code);
+    }
+
+    public String getPinCode(){
+        return getAreaCode();
+    }
+    public void setPinCode(String pin_code){
+        setAreaCode(pin_code);
+    }
+
+    public int getRating(){
+        return getInteger("rating");
+    }
+    public void setRating(int rating){
+        set("rating",rating);
+    }
+
 }

@@ -1,8 +1,9 @@
 package in.succinct.beckn;
 
 import java.util.Date;
+import java.util.StringTokenizer;
 
-public class Billing extends BecknObject {
+public class Billing extends BecknObject implements AddressHolder {
     public Billing(){
         super();
     }
@@ -22,12 +23,42 @@ public class Billing extends BecknObject {
     }
 
 
+
+    public City getCity(){
+        return get(City.class, "city");
+    }
+    public void setCity(City city){
+        set("city",city);
+    }
+
+    public State getState(){
+        return get(State.class, "state");
+    }
+    public void setState(State state){
+        set("state",state);
+    }
+
+    public Country getCountry(){
+        return get(Country.class, "country");
+    }
+    public void setCountry(Country country){
+        set("country",country);
+    }
+
+    public String getPinCode(){
+        return get("pin_code");
+    }
+    public void setPinCode(String pin_code){
+        set("pin_code",pin_code);
+    }
+
     public Address getAddress(){
-        return get(Address.class, "address");
+        return AddressHolder.super.getAddress();
     }
     public void setAddress(Address address){
-        set("address",address);
+        AddressHolder.super.setAddress(address);
     }
+
 
     public String getEmail(){
         return get("email");

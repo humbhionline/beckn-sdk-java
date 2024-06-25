@@ -1,6 +1,22 @@
 package in.succinct.beckn;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class Descriptor extends BecknObject {
+    public static class Descriptors extends BecknObjects<Descriptor>{
+        public Descriptors() {
+        }
+
+        public Descriptors(JSONArray value) {
+            super(value);
+        }
+
+        public Descriptors(String payload) {
+            super(payload);
+        }
+    }
+
     public Descriptor(){
         super();
     }
@@ -55,5 +71,89 @@ public class Descriptor extends BecknObject {
     }
     public void set3dRender(String render3d){
         set("3d_render",render3d);
+    }
+
+    public AdditionalDesc getAdditionalDesc(){
+        return get(AdditionalDesc.class, "additional_desc");
+    }
+    public void setAdditionalDesc(AdditionalDesc additional_desc){
+        set("additional_desc",additional_desc);
+    }
+
+    public MediaFile getMediaFile(){
+        return get(MediaFile.class, "media");
+    }
+    public void setMediaFile(MediaFile media_file){
+        set("media",media_file);
+    }
+
+    public static class MediaFile extends BecknObject {
+        public MediaFile() {
+        }
+
+        public MediaFile(String payload) {
+            super(payload);
+        }
+
+        public MediaFile(JSONObject object) {
+            super(object);
+        }
+
+        public String getMimeType(){
+            return get("mime_type");
+        }
+        public void setMimeType(String mime_type){
+            set("mime_type",mime_type);
+        }
+
+        public String getUrl(){
+            return get("url");
+        }
+        public void setUrl(String url){
+            set("url",url);
+        }
+        
+        public String getSignature(){
+            return get("signature");
+        }
+        public void setSignature(String signature){
+            set("signature",signature);
+        }
+
+        public String getDsa(){
+            return get("dsa");
+        }
+        public void setDsa(String dsa){
+            set("dsa",dsa);
+        }
+
+    }
+
+
+    public static class AdditionalDesc extends BecknObject {
+        public AdditionalDesc() {
+        }
+
+        public AdditionalDesc(String payload) {
+            super(payload);
+        }
+
+        public AdditionalDesc(JSONObject object) {
+            super(object);
+        }
+        
+        public String getUrl(){
+            return get("url");
+        }
+        public void setUrl(String url){
+            set("url",url);
+        }
+        public String getContentType(){
+            return get("content_type");
+        }
+        public void setContentType(String content_type){
+            set("content_type",content_type);
+        }
+
     }
 }

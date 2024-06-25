@@ -14,6 +14,27 @@ public class FulfillmentStop extends BecknObject {
         super(payload);
     }
 
+    public String getId(){
+        return get("id");
+    }
+    public void setId(String id){
+        set("id",id);
+    }
+
+    public String getParentStopId(){
+        return get("parent_stop_id");
+    }
+    public void setParentStopId(String parent_stop_id){
+        set("parent_stop_id",parent_stop_id);
+    }
+
+    public String getType(){
+        return get("type");
+    }
+    public void setType(String type){
+        set("type",type);
+    }
+
     public Location getLocation(){
         return get(Location.class,"location");
     }
@@ -47,12 +68,14 @@ public class FulfillmentStop extends BecknObject {
         set("person",person);
     }
 
-    public String getAuthorization(){
-        return get("authorization");
+    public Authorization getAuthorization(){
+        return get(Authorization.class, "authorization");
     }
-    public void setAuthorization(String authorization){
+    public void setAuthorization(Authorization authorization){
         set("authorization",authorization);
     }
+
+
 
 
 }

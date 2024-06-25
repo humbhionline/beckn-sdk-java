@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import java.time.Duration;
 import java.util.Date;
 
 public class Catalog extends BecknObjectWithId {
@@ -51,6 +52,14 @@ public class Catalog extends BecknObjectWithId {
     }
     public void setExp(Date exp){
         set("exp",exp,TIMESTAMP_FORMAT);
+    }
+
+    public long getTtl(){
+        String ttl = get("ttl");
+        return ttl == null ? 24L*60L*60L : Duration.parse(ttl).getSeconds();
+    }
+    public void setTtl(long ttl){
+        set("ttl",Duration.ofSeconds(ttl).toString());
     }
 
 }

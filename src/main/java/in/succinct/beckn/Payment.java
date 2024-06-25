@@ -1,5 +1,6 @@
 package in.succinct.beckn;
 
+import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer.Tag;
 import in.succinct.beckn.Payment.PaymentType.PaymentTypeConverter;
 import org.json.simple.JSONObject;
 
@@ -7,7 +8,7 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Payment extends BecknObjectWithId {
+public class Payment extends BecknObjectWithId implements TagGroupHolder {
     public Payment(){
         super();
     }
@@ -111,6 +112,61 @@ public class Payment extends BecknObjectWithId {
         }
         public void setCurrency(String currency){
             set("currency",currency);
+        }
+
+        public String getBankCode(){
+            return get("bank_code");
+        }
+        public void setBankCode(String bank_code){
+            set("bank_code",bank_code);
+        }
+        public String getBankAccountNumber(){
+            return get("bank_account_number");
+        }
+        public void setBankAccountNumber(String bank_account_number){
+            set("bank_account_number",bank_account_number);
+        }
+
+        public String getBankAccountName(){
+            return get("bank_account_name");
+        }
+        public void setBankAccountName(String bank_account_name){
+            set("bank_account_name",bank_account_name);
+        }
+
+        public String getVirtualPaymentAddress(){
+            return get("virtual_payment_address");
+        }
+        public void setVirtualPaymentAddress(String virtual_payment_address){
+            set("virtual_payment_address",virtual_payment_address);
+        }
+
+        public String getSourceBankCode(){
+            return get("source_bank_code");
+        }
+        public void setSourceBankCode(String source_bank_code){
+            set("source_bank_code",source_bank_code);
+        }
+
+        public String getSourceBankAccountName(){
+            return get("source_bank_account_name");
+        }
+        public void setSourceBankAccountName(String source_bank_account_name){
+            set("source_bank_account_name",source_bank_account_name);
+        }
+
+        public String getSourceBankAccountNumber(){
+            return get("source_bank_account_number");
+        }
+        public void setSourceBankAccountNumber(String source_bank_account_number){
+            set("source_bank_account_number",source_bank_account_number);
+        }
+
+        public String getSourceVirtualPaymentAddress(){
+            return get("source_virtual_payment_address");
+        }
+        public void setSourceVirtualPaymentAddress(String source_virtual_payment_address){
+            set("source_virtual_payment_address",source_virtual_payment_address);
         }
 
         @Override
@@ -247,5 +303,16 @@ public class Payment extends BecknObjectWithId {
         delivery,
         return_window_expiry,
     }
+
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
+    }
+
 
 }

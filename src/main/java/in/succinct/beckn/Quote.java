@@ -4,10 +4,12 @@ import org.json.simple.JSONObject;
 
 import java.time.Duration;
 
-public class Quote extends BecknObject {
+public class Quote extends BecknObjectWithId {
     public Quote() {
         super();
     }
+
+
 
     public void setPrice(Price price) {
         set("price",price);

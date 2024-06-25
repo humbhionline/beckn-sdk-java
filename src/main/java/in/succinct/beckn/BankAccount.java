@@ -1,6 +1,6 @@
 package in.succinct.beckn;
 
-public class BankAccount extends BecknObject {
+public class BankAccount extends BecknObject implements AddressHolder{
     public BankAccount() {
     }
     public String getPrefix(){
@@ -18,6 +18,39 @@ public class BankAccount extends BecknObject {
         }
     }
 
+    public Address getAddress(){
+        return AddressHolder.super.getAddress();
+    }
+    public void setAddress(Address address){
+        AddressHolder.super.setAddress(address);
+    }
+
+    public City getCity(){
+        return get(City.class, "city");
+    }
+    public void setCity(City city){
+        set("city",city);
+    }
+    public State getState(){
+        return get(State.class, "state");
+    }
+    public void setState(State state){
+        set("state",state);
+    }
+    public Country getCountry(){
+        return get(Country.class, "country");
+    }
+    public void setCountry(Country country){
+        set("country",country);
+    }
+
+    public String getPinCode(){
+        return get("pin_code");
+    }
+    public void setPinCode(String pin_code){
+        set("pin_code",pin_code);
+    }
+
     public String getName() {
         return get(key("name"));
     }
@@ -26,13 +59,6 @@ public class BankAccount extends BecknObject {
         set(key("name"), name);
     }
 
-    public String getAddress() {
-        return get(key("address"));
-    }
-
-    public void setAddress(String address) {
-        set(key("address"), address);
-    }
 
     public String getAccountNo() {
         return get(key("account_no"));

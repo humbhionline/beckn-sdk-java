@@ -30,11 +30,11 @@ public class TagGroup extends BecknObjectWithId{
         setCode(id);
     }
 
-    public boolean getDisplay(){
-        return getBoolean("display");
-    }
     public void setDisplay(boolean display){
         set("display",display);
+    }
+    public boolean getDisplay(){
+        return getBoolean("display");
     }
 
     private String getCode(){
@@ -49,6 +49,9 @@ public class TagGroup extends BecknObjectWithId{
     public void setName(String name){
         set("name",name);
     }
+
+
+
 
 
     public String getValue(){

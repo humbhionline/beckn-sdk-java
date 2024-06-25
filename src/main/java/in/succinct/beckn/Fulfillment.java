@@ -73,15 +73,15 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         set("agent", agent);
     }
 
-    public State getState() {
+    public FulfillmentState getState() {
         return getState(false);
     }
 
-    public State getState(boolean create) {
-        return get(State.class, "state", create);
+    public FulfillmentState getState(boolean create) {
+        return get(FulfillmentState.class, "state", create);
     }
 
-    public void setState(State state) {
+    public void setState(FulfillmentState state) {
         set("state", state);
     }
 
@@ -93,7 +93,7 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         if (state != null ) {
             getState(true).getDescriptor(true).setEnum("code", state, getFulfillmentStatusConvertor());
         }else {
-            State s = getState();
+            FulfillmentState s = getState();
             if (s != null){
                 Descriptor d  = s.getDescriptor();
                 if (d != null){
@@ -104,7 +104,7 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         }
     }
     public FulfillmentStatus getFulfillmentStatus(){
-        State s = getState();
+        FulfillmentState s = getState();
         if (s != null){
             Descriptor d  = s.getDescriptor();
             if (d != null){
@@ -140,11 +140,11 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
     }
 
     public String getProviderId() {
-        return get("provider_id");
+        return extendedAttributes.get("provider_id");
     }
 
     public void setProviderId(String provider_id) {
-        set("provider_id", provider_id);
+        extendedAttributes.set("provider_id", provider_id);
     }
 
     public Integer getRating() {

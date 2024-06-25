@@ -1,5 +1,9 @@
 package in.succinct.beckn;
 
+import in.succinct.beckn.CancellationTerm.CancellationTerms;
+import in.succinct.beckn.RefundTerm.RefundTerms;
+import in.succinct.beckn.ReplacementTerm.ReplacementTerms;
+import in.succinct.beckn.ReturnTerm.ReturnTerms;
 import org.json.simple.JSONObject;
 
 import java.time.Duration;
@@ -38,6 +42,7 @@ public class Item extends BecknObjectWithId implements TagGroupHolder {
     public void setLocationIds(BecknStrings location_ids){
        extendedAttributes.set("location_ids",location_ids);
     }
+
 
     public BecknStrings getPaymentIds(){
         return extendedAttributes.get(BecknStrings.class, "payment_ids");
@@ -96,6 +101,20 @@ public class Item extends BecknObjectWithId implements TagGroupHolder {
     }
     public void setParentItemId(String parent_item_id){
         set("parent_item_id",parent_item_id);
+    }
+
+    public ItemQuantity getParentItemQuantity(){
+        return get(ItemQuantity.class, "parent_item_quantity");
+    }
+    public void setParentItemQuantity(ItemQuantity parent_item_quantity){
+        set("parent_item_quantity",parent_item_quantity);
+    }
+
+    public Organization getCreator(){
+        return get(Organization.class, "creator");
+    }
+    public void setCreator(Organization creator){
+        set("creator",creator);
     }
 
     public ItemQuantity getItemQuantity(){
@@ -548,4 +567,57 @@ public class Item extends BecknObjectWithId implements TagGroupHolder {
     public void setTags(TagGroups tags) {
         TagGroupHolder.super.setTags(tags);
     }
+
+    public AddOns getAddOns(){
+        return get(AddOns.class, "add_ons");
+    }
+    public void setAddOns(AddOns add_ons){
+        set("add_ons",add_ons);
+    }
+
+    public CancellationTerms getCancellationTerms(){
+        return get(CancellationTerms.class, "cancellation_terms");
+    }
+    public void setCancellationTerms(CancellationTerms cancellation_terms){
+        set("cancellation_terms",cancellation_terms);
+    }
+
+    public RefundTerms getRefundTerms(){
+        return get(RefundTerms.class, "refund_terms");
+    }
+    public void setRefundTerms(RefundTerms refund_terms){
+        set("refund_terms",refund_terms);
+    }
+
+
+    public ReplacementTerms getReplacementTerms(){
+        return get(ReplacementTerms.class, "replacement_terms");
+    }
+    public void setReplacementTerms(ReplacementTerms replacement_terms){
+        set("replacement_terms",replacement_terms);
+    }
+
+    public ReturnTerms getReturnTerms(){
+        return get(ReturnTerms.class, "return_terms");
+    }
+    public void setReturnTerms(ReturnTerms return_terms){
+        set("return_terms",return_terms);
+    }
+
+
+    public Xinput getXinput(){
+        return get(Xinput.class, "xinput");
+    }
+    public void setXinput(Xinput xinput){
+        set("xinput",xinput);
+    }
+
+    public Long getTtl(){
+        String ttl = get("ttl");
+        return ttl == null ? null : Duration.parse(ttl).getSeconds();
+    }
+    public void setTtl(Long ttl){
+        set("ttl",ttl == null ? null : Duration.ofSeconds(ttl).toString());
+    }
+
 }

@@ -67,10 +67,10 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
 
 
     public Fulfillment getFulfillment(){
-        return get(Fulfillment.class,"fulfillment");
+        return extendedAttributes.get(Fulfillment.class,"fulfillment");
     }
     public void setFulfillment(Fulfillment fulfillment){
-        set("fulfillment",fulfillment);
+        extendedAttributes.set("fulfillment",fulfillment);
     }
 
     public Fulfillment getPrimaryFulfillment(){
@@ -109,11 +109,19 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
     }
 
     public Payment getPayment(){
-        return get(Payment.class,"payment");
+        return extendedAttributes.get(Payment.class,"payment");
     }
     public void setPayment(Payment payment){
-        set("payment",payment);
+        extendedAttributes.set("payment",payment);
     }
+
+    public Payments getPayments(){
+        return get(Payments.class, "payments");
+    }
+    public void setPayments(Payments payments){
+        set("payments",payments);
+    }
+
 
     public Date getCreatedAt(){
         return getTimestamp("created_at");
@@ -133,6 +141,8 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
     public Status getState(){
         return getEnum(Status.class, "state", new StatusConverter());
     }
+
+
 
 
 
@@ -536,6 +546,13 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
     }
     public void setBapTaxNumber(String bap_tax_number){
         extendedAttributes.set("bap_tax_number",bap_tax_number);
+    }
+
+    public BecknStrings getRefOrderIds(){
+        return get(BecknStrings.class,"ref_order_ids",true);
+    }
+    public void setRefOrderIds(BecknStrings ref_order_ids){
+        set("ref_order_ids",ref_order_ids);
     }
 
 

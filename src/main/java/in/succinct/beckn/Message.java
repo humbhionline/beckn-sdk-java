@@ -144,4 +144,11 @@ public class Message extends BecknObject {
         set("issue",issue);
     }
 
+    public Xinput getFeedbackForm(){
+        return get(Xinput.class, "feedback_form");
+    }
+    public void setFeedbackForm(Xinput feedback_form){
+        set("feedback_form",feedback_form);
+    }
+
 }

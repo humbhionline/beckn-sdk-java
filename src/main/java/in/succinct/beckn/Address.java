@@ -85,32 +85,23 @@ public class Address extends BecknObject {
         setPinCode(areaCode);
     }
 
-    public String getFull(){
-        return get("full");
-        /*if (full == null && getInner().keySet().size() > 0){
-            full = flatten();
-            setFull(full);
-        }
-        return full;
-        */
-    }
-    public void setFull(String full){
-        set("full",full);
-    }
 
     public String flatten() {
         StringBuilder s = new StringBuilder();
-        s.append(_flat(getName(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getDoor(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getBuilding(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getStreet(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getLocality(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getWard(), s.length() > 0 ?  "," : ""));
+        /*
+        s.append(_flat(getName(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getCity(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getState(), s.length() > 0 ?  "," : ""));
 
         s.append(_flat(getCountry(), s.length() > 0 ?  "," : ""));
         s.append(_flat(getPinCode(), s.length() > 0 ?  "," : ""));
+
+         */
         return s.toString();
     }
 

@@ -60,14 +60,12 @@ public class Provider extends BecknObjectWithId implements TagGroupHolder {
     public void setBppId(String bpp_id){
         extendedAttributes.set("bpp_id",bpp_id);
     }
-
-
-    public long getTtl(){
-        String ttl = extendedAttributes.get("ttl");
-        return ttl == null ? 10 : Duration.parse(ttl).getSeconds();
+    public Long getTtl(){
+        String ttl = get("ttl");
+        return ttl == null ? null : Duration.parse(ttl).getSeconds();
     }
-    public void setTtl(long seconds){
-        extendedAttributes.set("ttl",Duration.ofSeconds(seconds).toString());
+    public void setTtl(Long ttl){
+        set("ttl", ttl == null ? null : Duration.ofSeconds(ttl).toString());
     }
 
 

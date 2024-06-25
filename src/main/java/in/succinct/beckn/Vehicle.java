@@ -57,4 +57,37 @@ public class Vehicle extends BecknObject{
         set("registration",registration);
     }
 
+    public Integer getWheelsCount(){
+        return getInteger("wheels_count");
+    }
+    public void setWheelsCount(Integer wheels_count){
+        set("wheels_count",wheels_count == null ? null  :String.valueOf(wheels_count));
+    }
+    
+    public String getCargoVolume(){
+        return get("cargo_volume");
+    }
+    public void setCargoVolume(String cargo_volume){
+        set("cargo_volume",cargo_volume);
+    }
+
+    public String getWheelchairAccess(){
+        return get("wheelchair_access");
+    }
+    public void setWheelchairAccess(String wheelchair_access){
+        set("wheelchair_access",wheelchair_access);
+    }
+    public String getCode(){
+        return get("code");
+    }
+    public void setCode(String code){
+        set("code",code);
+    }
+    public String getEmissionStandard(){
+        return get("emission_standard");
+    }
+    public void setEmissionStandard(String emission_standard){
+        set("emission_standard",emission_standard);
+    }
+
 }

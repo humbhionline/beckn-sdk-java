@@ -2,7 +2,63 @@ package in.succinct.beckn;
 
 import java.util.Date;
 
-public class Organization extends BecknObject {
+public class Organization extends BecknObject implements AddressHolder {
+
+    public Descriptor getDescriptor(){
+        return get(Descriptor.class, "descriptor");
+    }
+    public void setDescriptor(Descriptor descriptor){
+        set("descriptor",descriptor);
+    }
+    public Descriptor getDescriptor(boolean create){
+        return get(Descriptor.class, "descriptor",create);
+    }
+
+    public Country getCountry(){
+        return get(Country.class, "country");
+    }
+    public void setCountry(Country country){
+        set("country",country);
+    }
+
+    public String getPinCode(){
+        return get("pin_code");
+    }
+    public void setPinCode(String pin_code){
+        set("pin_code",pin_code);
+    }
+
+
+    public State getState(){
+        return get(State.class, "state");
+    }
+    public void setState(State state){
+        set("state",state);
+    }
+
+    public City getCity(){
+        return get(City.class, "city");
+    }
+    public void setCity(City city){
+        set("city",city);
+    }
+
+    public Contact getContact(boolean create){
+        return get(Contact.class, "contact", create);
+    }
+    public Contact getContact(){
+        return get(Contact.class, "contact");
+    }
+    public void setContact(Contact contact){
+        set("contact",contact);
+    }
+
+    public Address getAddress(){
+        return AddressHolder.super.getAddress();
+    }
+    public void setAddress(Address address){
+        AddressHolder.super.setAddress(address);
+    }
     public String getName(){
         return get("name");
     }
@@ -23,12 +79,9 @@ public class Organization extends BecknObject {
         return true;
     }
 
-    public Address getAddress(){
-        return extendedAttributes.get(Address.class, "address");
-    }
-    public void setAddress(Address address){
-        extendedAttributes.set("address",address);
-    }
+
+
+
 
     public String getIncomeTaxId(){
         return extendedAttributes.get("income_tax_id");

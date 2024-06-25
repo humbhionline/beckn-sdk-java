@@ -6,11 +6,11 @@ import com.venky.core.security.Crypt;
 import com.venky.core.util.ObjectHolder;
 import com.venky.core.util.ObjectUtil;
 import com.venky.extension.Registry;
-import org.bouncycastle.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.params.X25519PublicKeyParameters;
+import org.bouncycastle.internal.asn1.edec.EdECObjectIdentifiers;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCEdDSAPublicKey;
 import org.bouncycastle.jcajce.provider.asymmetric.edec.BCXDHPublicKey;
 import org.bouncycastle.jcajce.spec.EdDSAParameterSpec;
@@ -67,19 +67,9 @@ public class Request extends BecknObject {
         set("rating_categories",rating_categories);
     }
 
-    public FeedbackCategories getFeedbackCategories(){
-        return get(FeedbackCategories.class, "feedback_categories");
-    }
-    public void setFeedbackCategories(FeedbackCategories feedback_categories){
-        set("feedback_categories",feedback_categories);
-    }
 
-    public Feedback getFeedback(){
-        return get(Feedback.class, "feedback");
-    }
-    public void setFeedback(Feedback feedback){
-        set("feedback",feedback);
-    }
+
+
 
     public CancellationReasons getCancellationReasons(){
         return get(CancellationReasons.class, "cancellation_reasons");

@@ -36,18 +36,16 @@ public class Scalar extends BecknObject {
         set("computed_value",computed_value);
     }
 
-    public String getType(){
-        return get("type");
+    public Type getType(){
+        return getEnum(Type.class, "type");
     }
-    static final Set<String> TYPES = new HashSet<String>(){{
-        add("CONSTANT");
-        add("VARIABLE");
-    }};
-    public void setType(String type){
-        if (!TYPES.contains(type)){
-            throw new IllegalArgumentException();
-        }
-        set("type",type);
+    public void setType(Type type){
+        setEnum("type",type);
+    }
+
+    public enum Type {
+        CONSTANT,
+        VARIABLE
     }
 
     public Range getRange(){

@@ -42,10 +42,10 @@ public class BreakUp extends BecknObjects<BreakUpElement> {
             set("title",title);
         }
         public Item getItem(){
-            return extendedAttributes.get(Item.class, "item");
+            return get(Item.class, "item");
         }
         public void setItem(Item item){
-            extendedAttributes.set("item",item);
+            set("item",item);
         }
         public Price getPrice(){
             return get(Price.class, "price");

@@ -1,6 +1,6 @@
 package in.succinct.beckn;
 
-public class Offer extends BecknObjectWithId{
+public class Offer extends BecknObjectWithId implements TagGroupHolder{
     public Descriptor getDescriptor(){
         return get(Descriptor.class, "descriptor");
     }
@@ -36,4 +36,13 @@ public class Offer extends BecknObjectWithId{
         set("time",time);
     }
 
+    @Override
+    public TagGroups getTags() {
+        return TagGroupHolder.super.getTags();
+    }
+
+    @Override
+    public void setTags(TagGroups tags) {
+        TagGroupHolder.super.setTags(tags);
+    }
 }

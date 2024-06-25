@@ -20,6 +20,15 @@ public class User extends BecknObject{
         set("contact",contact);
     }
 
+
+    public Organization getOrganization(){
+        return get(Organization.class, "organization");
+    }
+    public void setOrganization(Organization organization){
+        set("organization",organization);
+    }
+
+
     /** Not in Spec **/
 
     public Location getLocation(){
