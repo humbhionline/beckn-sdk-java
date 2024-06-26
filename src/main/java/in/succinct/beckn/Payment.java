@@ -1,7 +1,7 @@
 package in.succinct.beckn;
 
-import com.esotericsoftware.kryo.serializers.TaggedFieldSerializer.Tag;
-import in.succinct.beckn.Payment.PaymentType.PaymentTypeConverter;
+
+import in.succinct.beckn.PaymentType.PaymentTypeConverter;
 import org.json.simple.JSONObject;
 
 import java.time.Duration;
@@ -52,14 +52,7 @@ public class Payment extends BecknObjectWithId implements TagGroupHolder {
     public PaymentType getType(){
        return getEnum(PaymentType.class,"type", new PaymentTypeConverter());
     }
-    public enum PaymentType {
-        ON_ORDER ,
-        ON_FULFILLMENT,
-        PRE_FULFILLMENT,
-        POST_FULFILLMENT;
 
-        public static class PaymentTypeConverter extends EnumConvertor<PaymentType>{}
-    }
 
 
 

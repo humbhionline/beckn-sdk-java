@@ -3,7 +3,7 @@ package in.succinct.beckn;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Descriptor extends BecknObject {
+public class Descriptor extends BecknObject implements ImagesHolder{
     public static class Descriptors extends BecknObjects<Descriptor>{
         public Descriptors() {
         }
@@ -54,11 +54,12 @@ public class Descriptor extends BecknObject {
         set("long_desc",long_desc);
     }
     public Images getImages(){
-        return get(Images.class, "images");
+        return ImagesHolder.super.getImages();
     }
     public void setImages(Images images){
-        set("images",images);
+        ImagesHolder.super.setImages(images);
     }
+
     public String getAudio(){
         return get("audio");
     }
