@@ -14,16 +14,16 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         super(payload);
     }
 
-    public FulfillmentType getType() {
+    public String getType() {
         String s = get("type");
-        return s == null ? null : FulfillmentType.valueOf(s.replace('-','_').toLowerCase());
+        return s == null ? null : s.replace('-','_').toLowerCase();
     }
 
-    public void setType(FulfillmentType type) {
-        set("type", type == null ? null : type.toString().replace('_','-').toUpperCase());
+    public void setType(String type) {
+        set("type", type == null ? null : type.replace('_','-').toUpperCase());
     }
 
-    public enum FulfillmentType {
+    public enum RetailFulfillmentType {
         home_delivery(1),
         store_pickup(2),
         store_pickup_and_home_delivery(1|2),
@@ -31,10 +31,10 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         cancel(8);
 
         final int bits;
-        FulfillmentType(int bits){
+        RetailFulfillmentType(int bits){
             this.bits = bits;
         }
-        public boolean matches(FulfillmentType other){
+        public boolean matches(RetailFulfillmentType other){
             return (other == null || (other.bits & bits) > 0);
         }
 

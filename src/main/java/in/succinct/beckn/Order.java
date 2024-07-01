@@ -1,6 +1,6 @@
 package in.succinct.beckn;
 
-import in.succinct.beckn.Fulfillment.FulfillmentType;
+import in.succinct.beckn.Fulfillment.RetailFulfillmentType;
 import in.succinct.beckn.Order.Status.StatusConverter;
 import in.succinct.beckn.ReturnReasons.ReturnRejectReason;
 import org.json.simple.JSONArray;
@@ -79,7 +79,11 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
             return null;
         }
         for (Fulfillment f : fulfillments){
-            if (f.getType() != null && (f.getType().matches(FulfillmentType.store_pickup) || f.getType().matches(FulfillmentType.home_delivery) )){
+            try {
+                if (f.getType() != null && (RetailFulfillmentType.valueOf(f.getType()).matches(RetailFulfillmentType.store_pickup) || RetailFulfillmentType.valueOf(f.getType()).matches(RetailFulfillmentType.home_delivery))) {
+                    return f;
+                }
+            }catch (Exception ex){
                 return f;
             }
         }
