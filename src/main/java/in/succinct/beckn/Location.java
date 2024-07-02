@@ -57,6 +57,10 @@ public class Location extends BecknObjectWithId implements AddressHolder{
     }
     public void setCity(City city){
         set("city",city);
+        if (getAddress() != null){
+            getAddress().setCity(city.getName() == null ?
+                    city.getCode() : city.getName());
+        }
     }
 
     public State getState(){
@@ -64,6 +68,11 @@ public class Location extends BecknObjectWithId implements AddressHolder{
     }
     public void setState(State state){
         set("state",state);
+        if (getAddress() != null){
+            getAddress().setState(state.getName() == null ?
+                    state.getCode() : state.getName());
+        }
+
     }
 
     public Country getCountry(){
@@ -71,6 +80,10 @@ public class Location extends BecknObjectWithId implements AddressHolder{
     }
     public void setCountry(Country country){
         set("country",country);
+        if (getAddress() != null ){
+            getAddress().setCountry(country.getName() == null ?
+                    country.getCode() : country.getName());
+        }
     }
 
     public Circle getCircle(){

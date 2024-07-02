@@ -47,7 +47,7 @@ public class Address extends BecknObject {
     }
 
     public String getCity(){
-        return get("city","");
+        return get("city");
     }
     public void setCity(String city){
         set("city",city);
