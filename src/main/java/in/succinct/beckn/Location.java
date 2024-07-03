@@ -138,10 +138,10 @@ public class Location extends BecknObjectWithId implements AddressHolder{
         setAreaCode(pin_code);
     }
 
-    public int getRating(){
-        return getInteger("rating");
+    public String getRating(){
+        return get("rating");
     }
-    public void setRating(int rating){
+    public void setRating(String rating){
         set("rating",rating);
     }
 
