@@ -3,6 +3,7 @@ package in.succinct.beckn;
 import org.json.simple.JSONObject;
 
 public class FulfillmentStop extends BecknObject {
+
     public FulfillmentStop() {
         super();
     }

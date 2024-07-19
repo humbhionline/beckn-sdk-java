@@ -53,6 +53,13 @@ public class Intent extends BecknObject implements TagGroupHolder {
         set("payment",payment);
     }
 
+    public Location getLocation(){
+        return get(Location.class, "location");
+    }
+    public void setLocation(Location location){
+        set("location",location);
+    }
+
     @Override
     public boolean isExtendedAttributesDisplayed() {
         return true;
