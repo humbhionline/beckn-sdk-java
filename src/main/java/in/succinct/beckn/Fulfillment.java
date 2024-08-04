@@ -20,10 +20,10 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
     }
 
     public FulfillmentStops getFulfillmentStops(){
-        return get(FulfillmentStops.class, "fulfillment_stops");
+        return get(FulfillmentStops.class, "stops");
     }
     public void setFulfillmentStops(FulfillmentStops fulfillment_stops){
-        set("fulfillment_stops",fulfillment_stops);
+        set("stops",fulfillment_stops);
     }
     public void setType(String type) {
         set("type", type == null ? null : type.replace('_','-').toUpperCase());
