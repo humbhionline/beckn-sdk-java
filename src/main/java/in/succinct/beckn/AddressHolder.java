@@ -26,28 +26,28 @@ public interface AddressHolder {
 
     default Address getAddress(String oAddress) {
         Address address = getObjectCreator().create(Address.class);
-        StringTokenizer tokenizer = new StringTokenizer((String) oAddress, ",");
+        StringTokenizer tokenizer = new StringTokenizer((String) oAddress, " ,");
         if (tokenizer.hasMoreTokens()) address.setDoor(tokenizer.nextToken());
         if (tokenizer.hasMoreTokens()) address.setBuilding(tokenizer.nextToken());
         if (tokenizer.hasMoreTokens()) address.setStreet(tokenizer.nextToken());
         if (tokenizer.hasMoreTokens()) address.setLocality(tokenizer.nextToken());
         if (tokenizer.hasMoreTokens()) address.setWard(tokenizer.nextToken());
         if (getCountry() != null) {
-            address.setCountry(getCountry().getCode());
+            address.setCountry(getCountry().getName());
             if (address.getCountry() == null) {
-                address.setCountry(getCountry().getName());
+                address.setCountry(getCountry().getCode());
             }
         }
         if (getState() != null) {
-            address.setState(getState().getCode());
+            address.setState(getState().getName());
             if (address.getState() == null) {
-                address.setState(getState().getName());
+                address.setState(getState().getCode());
             }
         }
         if (getCity() != null) {
-            address.setCity(getCity().getCode());
+            address.setCity(getCity().getName());
             if (address.getCity() == null) {
-                address.setCity(getCity().getName());
+                address.setCity(getCity().getCode());
             }
         }
         address.setPinCode(getPinCode());
