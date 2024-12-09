@@ -179,8 +179,22 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
         Created,
         Accepted,
         In_progress,
-        Completed,
-        Cancelled;
+        Completed(){
+            @Override
+            public boolean isOpen() {
+                return false;
+            }
+        },
+        Cancelled(){
+            @Override
+            public boolean isOpen() {
+                return false;
+            }
+        };
+        
+        public boolean isOpen(){
+            return true;
+        }
 
         public static class StatusConverter extends EnumConvertor<Status> {
 
