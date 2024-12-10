@@ -190,11 +190,21 @@ public class Order extends BecknObjectWithId implements TagGroupHolder{
             public boolean isOpen() {
                 return false;
             }
+            @Override
+            public boolean isPaymentRequired() {
+                return false;
+            }
         };
         
         public boolean isOpen(){
             return true;
         }
+        
+        
+        public boolean isPaymentRequired(){
+            return true;
+        }
+        
 
         public static class StatusConverter extends EnumConvertor<Status> {
 
