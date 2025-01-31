@@ -209,9 +209,42 @@ public class Payment extends BecknObjectWithId implements TagGroupHolder {
         extendedAttributes.set("buyer_finder_fee",buyer_finder_fee);
     }
     
+    //Old Payment Types
+    final String ON_ORDER = "ON_ORDER";
+    final String ON_FULFILLMENT = "ON_FULFILLMENT";
+    final String PRE_FULFILLMENT = "PRE_FULFILLMENT";
+    final String POST_FULFILLMENT = "POST_FULFILLMENT";
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated
+    public String getPaymentType(){
+        return get("payment_type",POST_FULFILLMENT);
+    }
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated
+    public void setPaymentType(String payment_type){
+        set("payment_type",payment_type);
+        switch (payment_type){
+            case ON_ORDER -> {
+                setInvoiceEvent(FulfillmentStatus.Created);
+            }
+            case PRE_FULFILLMENT -> {
+                setInvoiceEvent(FulfillmentStatus.Prepared);
+            }
+            default -> {
+                setInvoiceEvent(FulfillmentStatus.Completed);
+            }
+        }
+    }
+    
+    
     //Invoice Event
     public FulfillmentStatus getInvoiceEvent(){
-        return extendedAttributes.getEnum(FulfillmentStatus.class,"invoice_event", new FulfillmentStatusConvertor());
+        FulfillmentStatus status =  extendedAttributes.getEnum(FulfillmentStatus.class,"invoice_event", new FulfillmentStatusConvertor());
+        if (status == null){
+            setPaymentType(getPaymentType()); // Derived from payment type for bc.
+            status = extendedAttributes.getEnum(FulfillmentStatus.class,"invoice_event", new FulfillmentStatusConvertor());
+        }
+        return status;
     }
     
     public void setInvoiceEvent(FulfillmentStatus event){
