@@ -146,11 +146,11 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
     }
 
     public String getProviderId() {
-        return extendedAttributes.get("provider_id");
+        return getTag("provider","id");
     }
 
     public void setProviderId(String provider_id) {
-        extendedAttributes.set("provider_id", provider_id);
+        setTag("provider", "id",provider_id);
     }
 
     public Integer getRating() {
@@ -190,34 +190,23 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
     }
 
     public String getProviderName(){
-        return extendedAttributes.get("provider_name");
+        return getTag("provider","name");
     }
     public void setProviderName(String provider_name){
-        extendedAttributes.set("provider_name",provider_name);
+        setTag("provider","name",provider_name);
     }
 
-
-    public SettlementDetails getSettlementDetails(){
-        return extendedAttributes.get(SettlementDetails.class, "settlement_details");
-    }
-    public void setSettlementDetails(SettlementDetails settlement_details){
-        extendedAttributes.set("settlement_details",settlement_details);
-    }
 
 
     public enum FulfillmentStatus {
-        Serviceable,
-        Pending,
-        Packed,
-        Order_picked_up,
-        Out_for_delivery,
-        Order_delivered,
-        Cancelled,
-        Return_Initiated,
-        Return_Liquidated,
-        Return_Approved,
-        Return_Rejected,
-        Return_Delivered;
+        Created, // PRE_ORDER
+        Preparing,
+        Prepared, // PRE_FULFILLMENT
+        In_Transit,
+        Completed, // POST_FULFILLMENT
+        Cancelled;
+        
+        
         public static class FulfillmentStatusConvertor extends EnumConvertor<FulfillmentStatus>{}
     }
 
