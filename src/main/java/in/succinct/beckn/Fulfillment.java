@@ -203,11 +203,25 @@ public class Fulfillment extends BecknObjectWithId implements TagGroupHolder{
         Preparing,
         Prepared, // PRE_FULFILLMENT
         In_Transit,
-        Completed, // POST_FULFILLMENT
-        Cancelled;
+        Completed(){
+            @Override
+            public boolean isOpen() {
+                return false;
+            }
+        }, // POST_FULFILLMENT
+        Cancelled() {
+            @Override
+            public boolean isOpen() {
+                return false;
+            }
+        };
         
+        public boolean isOpen(){
+            return true;
+        }
         
         public static class FulfillmentStatusConvertor extends EnumConvertor<FulfillmentStatus>{}
+        
     }
 
     @Override
