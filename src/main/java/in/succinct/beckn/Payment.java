@@ -3,6 +3,7 @@ package in.succinct.beckn;
 
 import in.succinct.beckn.Fulfillment.FulfillmentStatus;
 import in.succinct.beckn.Fulfillment.FulfillmentStatus.FulfillmentStatusConvertor;
+import in.succinct.beckn.Payment.PaymentStatus.PaymentStatusConvertor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -89,6 +90,15 @@ public class Payment extends BecknObjectWithId implements TagGroupHolder {
         public String toString(){
             return lit.replace('_','-');
         }
+        
+        public String literal(){
+            return lit;
+        }
+        public static class PaymentStatusConvertor extends EnumConvertor<PaymentStatus> {
+            public String toString(PaymentStatus value){
+                return value == null ? null : value.literal().replace('_','-');
+            }
+        }
     }
     
     public static class PaymentTransaction extends Params {
@@ -148,10 +158,10 @@ public class Payment extends BecknObjectWithId implements TagGroupHolder {
     }
     
     public PaymentStatus getStatus(){
-        return getEnum(PaymentStatus.class, "status");
+        return getEnum(PaymentStatus.class, "status",new PaymentStatusConvertor());
     }
     public void setStatus(PaymentStatus payment_status){
-        setEnum("status",payment_status);
+        setEnum("status",payment_status,new PaymentStatusConvertor());
     }
     
     
